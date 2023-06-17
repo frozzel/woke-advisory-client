@@ -1,0 +1,52 @@
+import React, { useEffect } from "react";
+import { useTv } from "../../hooks";
+import MovieListItem from "../MovieListItem";
+import NextAndPrevButton from "../NextAndPrevButton";
+
+
+let currentPageNo = 0;
+
+export default function Tv() {
+ 
+  const {
+    fetchMovies,
+    movies: newMovies,
+    fetchPrevPage,
+    fetchNextPage,
+  } = useTv();
+
+ 
+  const handleUIUpdate = () => {
+    fetchMovies();
+  };
+
+  useEffect(() => {
+    fetchMovies(currentPageNo);
+  }, []);
+
+  return (
+    <>
+      <div className="space-y-3 p-5">
+        {newMovies.map((movie) => {
+          return (
+            <MovieListItem
+              key={movie.id}
+              movie={movie}
+              afterDelete={handleUIUpdate}
+              afterUpdate={handleUIUpdate}
+              // onEditClick={() => handleOnEditClick(movie)}
+              // onDeleteClick={() => handleOnDeleteClick(movie)}
+            />
+          );
+        })}
+
+        <NextAndPrevButton
+          className="mt-5"
+          onNextClick={fetchNextPage}
+          onPrevClick={fetchPrevPage}
+        />
+      </div>
+
+    </>
+  );
+}
