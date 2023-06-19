@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSingleMovie } from "../../api/movie1";
-import { useAuth } from "../../hooks";
+import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import AddRatingModal from "../models/AddRatingModal";
@@ -46,6 +46,7 @@ export default function SingleMovie() {
   const [movie, setMovie] = useState({});
 
   const { movieId } = useParams();
+  const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
 
@@ -53,7 +54,7 @@ export default function SingleMovie() {
 
   const fetchMovie = async () => {
     const { error, movie } = await getSingleMovie(movieId);
-    if (error) return console.log(error);
+    if (error) return updateNotification("error", error);
 
     setReady(true);
     setMovie(movie);

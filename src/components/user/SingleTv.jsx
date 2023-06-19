@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSingleTv } from "../../api/movie1";
-import { useAuth } from "../../hooks";
+import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import AddRatingModalTv from "../models/AddRatingModalTv";
@@ -43,6 +43,7 @@ export default function SingleTv() {
  
 
   const { movieId } = useParams();
+  const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
   
@@ -50,7 +51,7 @@ export default function SingleTv() {
 
   const fetchMovie = async () => {
     const { error, movie } = await getSingleTv(movieId);
-    if (error) return console.log(error);
+    if (error) return updateNotification("error", error);
 
     setReady(true);
     setMovie(movie);

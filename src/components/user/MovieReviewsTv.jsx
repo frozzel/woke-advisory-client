@@ -31,7 +31,7 @@ export default function MovieReviewsTv() {
 
   const fetchReviews = async () => {
     const { movie, error } = await getReviewByMovieTv(movieId);
-    if (error) return updateNotification("error", error);
+    if (error) return console.log("Reviews Error:", error);
     setReviews([...movie.reviews]);
     setMovieTitle(movie.title);
   };
