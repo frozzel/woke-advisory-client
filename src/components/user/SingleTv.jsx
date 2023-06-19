@@ -51,7 +51,7 @@ export default function SingleTv() {
 
   const fetchMovie = async () => {
     const { error, movie } = await getSingleTv(movieId);
-    if (error) return updateNotification("error", error);
+    if (error) return console.log(error);
 
     setReady(true);
     setMovie(movie);

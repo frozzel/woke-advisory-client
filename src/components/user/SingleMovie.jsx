@@ -54,7 +54,7 @@ export default function SingleMovie() {
 
   const fetchMovie = async () => {
     const { error, movie } = await getSingleMovie(movieId);
-    if (error) return updateNotification("error", error);
+    if (error) return console.log(error);
 
     setReady(true);
     setMovie(movie);
