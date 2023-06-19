@@ -16,6 +16,7 @@ import TMDB from "../TMDB";
 
 
 
+
 const convertReviewCount = (count = 0) => {
   if (count <= 999) return count;
 
@@ -214,7 +215,22 @@ export default function SingleMovie() {
               <CustomButtonLink label={g} key={g} clickable={false} rating={null}/>
             ))}
           </ListWithLabel>
-
+              <div className="lg:hidden md:hidden  space-y-3 px-3">
+              <h1 className="font-semibold text-2xl text-primary dark:text-white">
+                Trailers
+              </h1>
+              {trailer ? (  
+                  <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer}  playing/>
+              ) : null
+              }{trailer2 ? (
+                <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer2}  playing/>
+              ) : null
+                }{trailer3 ? (
+                  <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer3}  playing/>
+              ) : null
+                }
+              
+          </div>
           <RelatedMovies movieId={movieId} />
           <TopRatedTVSeries movieId={movieId} />
         </div>
