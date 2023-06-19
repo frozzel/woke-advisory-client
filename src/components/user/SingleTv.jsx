@@ -79,7 +79,7 @@ export default function SingleTv() {
     return (
       <div className="h-screen flex justify-center items-center dark:bg-primary bg-white">
         <p className="text-light-subtle dark:text-dark-subtle animate-pulse">
-          Please wait
+          Please wait! Fetching movie details...
         </p>
       </div>
     );
