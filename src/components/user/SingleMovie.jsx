@@ -76,7 +76,7 @@ export default function SingleMovie() {
   };
 
   useEffect(() => {
-    if (movieId) fetchMovie() 
+    if (movieId) fetchMovie() && window.scrollTo(0, 0);
   }, [movieId]);
 
 
