@@ -40,7 +40,7 @@ export const getSingleMovie = async (id) => {
     const { data } = await client("/movie1/single/" + id);
     return data;
   } catch (error) {
-    return catchError(error);
+    return console.log(error);
   }
 };
 export const getRelatedMovies = async (id) => {
@@ -74,7 +74,7 @@ export const getSingleTv = async (id) => {
     const { data } = await client("/movie1/singleTv/" + id);
     return data;
   } catch (error) {
-    return catchError(error);
+    return console.log(error);
   }
 };
 export const searchTv = async (title) => {
