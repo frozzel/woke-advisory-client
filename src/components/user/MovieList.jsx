@@ -1,7 +1,5 @@
 import React from "react";
-// import { FaRadiation } from "react-icons/fa";
 import { Link } from "react-router-dom";
-// import { getPoster } from "../../utils/helper";
 import GridContainer from "../GridContainer";
 import RatingStar from "../RatingStar";
 

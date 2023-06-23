@@ -2,10 +2,9 @@ import { catchError} from "../utils/helper";
 import client from "./client";
 
 export const getUpcomingMovies = async () => {
- 
+    
     try {
       const { data } = await client("/movie1/upcoming");
-      
       return data;
       
     } catch (error) {
