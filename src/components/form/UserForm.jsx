@@ -15,7 +15,7 @@ const defaultUserInfo = {
 
 const validateActor = ({ avatar, name, bio }) => {
   if (!name.trim()) return { error: "Actor name is missing!" };
-  if (!bio.trim()) return { error: "About section is empty!" };
+  if (!bio) return { error: "About section is empty!" };
   
   if (avatar && !avatar.type?.startsWith("image"))
     return { error: "Invalid image / avatar file!" };
@@ -40,14 +40,14 @@ export default function UserForm({
   };
 
   const handleChange = ({ target }) => {
-    const { value, files, name } = target;
+    const { value, files, name, bio} = target;
     if (name === "avatar") {
       const file = files[0];
       updatePosterForUI(file);
       return setUserInfo({ ...userInfo, avatar: file });
     }
 
-    setUserInfo({ ...userInfo, [name]: value });
+    setUserInfo({ ...userInfo, [name]: value, [bio]: value });
   };
 
   const handleSubmit = (e) => {
@@ -107,7 +107,7 @@ export default function UserForm({
             onChange={handleChange}
           />
           <textarea
-            name="about"
+            name="bio"
             value={bio}
             onChange={handleChange}
             placeholder="About"

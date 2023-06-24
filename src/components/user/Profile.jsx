@@ -12,6 +12,7 @@ import { BsPencilSquare } from 'react-icons/bs';
 
 
 
+
 export default function Profile() {
     const [user, setUser] = useState({});
     const { authInfo } = useAuth();
@@ -51,6 +52,7 @@ export default function Profile() {
         ...user,
         name: user.name,
         bio: user.bio,
+        avatar: user.avatar,
         
       };
   
@@ -91,7 +93,7 @@ export default function Profile() {
             }
           </div>
           <div className=''>
-              <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
+              <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
               <p className="text-light-subtle dark:text-dark-subtle flex  p-1 ">{bio}</p>
           </div>
           
@@ -103,11 +105,14 @@ export default function Profile() {
         onSuccess={handleOnUserUpdate}
         onClose={hideEditModal}
       />
-       <div className='flex-row items-right text-right mr-10'>
-                <button onClick={handleOnEditClick} type="button" className='text-light-subtle dark:text-dark-subtle font-semibold'>
+       <div className='flex-row items-right text-right mr-10 mt-5'>
+                {/* <button onClick={handleOnEditClick} type="button" className='text-light-subtle dark:text-dark-subtle font-semibold'>
                 <BsPencilSquare />
-              </button>
-            </div>
+              </button> */}
+              <button onClick={handleOnEditClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
+                type="button">Edit</button>
+        </div>
      
 
       </Container>

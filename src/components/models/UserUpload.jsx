@@ -20,7 +20,7 @@ export default function UpdateActor({
     setBusy(false);
     if (error) return updateNotification("error", error);
     onSuccess(actor);
-    updateNotification("success", "Actor updated successfully.");
+    updateNotification("success", "User updated successfully.");
     onClose();
   };
 
