@@ -15,3 +15,16 @@ export const getProfile = async (userId) => {
         return catchError(error);
     }
 };
+export const updateUser = async (userId, userData) => {
+    const token = getToken();
+    try {
+      const { data } = await client.patch(`/user/update/${userId}`, userData, {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      });
+      return data;
+    } catch (error) {
+      return catchError(error);
+    }
+  };
