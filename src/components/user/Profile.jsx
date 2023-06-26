@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Container from '../Container';
 import UserUpload from '../models/UserUpload';
-import { BsPencilSquare } from 'react-icons/bs';
+import ProfileReviewTabs from './ProfileReviewTabs';
 
 
 
@@ -21,10 +21,11 @@ export default function Profile() {
     const { updateNotification } = useNotification();
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+
   
 
     const fetchProfile = async () => {
-        const { error, user } = await getProfile(userId);
+      const { error, user } = await getProfile(userId);
         if (error) return updateNotification("error", error);
 
         setUser(user);
@@ -86,7 +87,7 @@ export default function Profile() {
         <div className="flex-row lg:flex  space-x-4">
           <div className='mb-4 flex justify-center'>
             {avatar ? (<img
-                className=" w-40 aspect-square object-cover rounded-full "
+                className=" w-40 h-auto aspect-square object-cover rounded-full mb-3"
                 src={avatar}
                 alt="{name}"
               />):( null)
@@ -94,25 +95,29 @@ export default function Profile() {
           </div>
           <div className=''>
               <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
-              <p className="text-light-subtle dark:text-dark-subtle flex  p-1 ">{bio}</p>
+              <p className="text-light-subtle dark:text-dark-subtle flex  p-1 mb-3">{bio}</p>
+              <button onClick={handleOnEditClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
+                type="button">Edit</button>
           </div>
           
         </div>
       </div>
+
+      {/* <div className='flex-row items-right text-right mr-4 mt-5'>
+              <button onClick={handleOnEditClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
+                type="button">Edit</button>
+        </div> */}
+      <ProfileReviewTabs />
+
       <UserUpload
         visible={showEditModal}
         initialState={selectedUser}
         onSuccess={handleOnUserUpdate}
         onClose={hideEditModal}
       />
-       <div className='flex-row items-right text-right mr-10 mt-5'>
-                {/* <button onClick={handleOnEditClick} type="button" className='text-light-subtle dark:text-dark-subtle font-semibold'>
-                <BsPencilSquare />
-              </button> */}
-              <button onClick={handleOnEditClick}
-                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
-                type="button">Edit</button>
-        </div>
+
      
 
       </Container>
