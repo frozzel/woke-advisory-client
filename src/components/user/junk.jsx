@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
-import { deleteReview, getReviewByUser } from "../../api/review";
+import { deleteReviewTv, getReviewByUser } from "../../api/reviewtv";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
-import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModal from "../models/EditRatingModal";
+import {Link} from "react-router-dom"
 
 
-export default function UserReviews() {
+export default function UserReviewsTv() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
@@ -37,7 +37,7 @@ export default function UserReviews() {
   const findProfileOwnersReview = () => {
     if (profileOwnersReview) return setProfileOwnersReview(null);
 
-    const matched = reviews.find((review) => review.owner.id === profileId);
+    const matched = reviews.find((review) => review.owner === profileId);
     if (!matched)
       return updateNotification("error", "You don't have any review!");
     
@@ -58,7 +58,7 @@ export default function UserReviews() {
   
   const handleDeleteConfirm = async () => {
     setBusy(true);
-    const { error, message } = await deleteReview(profileOwnersReview.id);
+    const { error, message } = await deleteReviewTv(profileOwnersReview.id);
     setBusy(false);
     if (error) return updateNotification("error", error);
 
@@ -107,17 +107,17 @@ export default function UserReviews() {
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
-              Movie Reviews: 
+              TV Reviews: 
             </span>{" "}
             {movieTitle}
           </h1>
-
+{/* 
           {profileId ? (
             <CustomButtonLink
               label={profileOwnersReview ? "View All" : "Find My Review"}
               onClick={findProfileOwnersReview}
             />
-          ) : null}
+          ) : null} */}
         </div>
 
         <NotFoundText text="No Reviews!" visible={!reviews.length} />
@@ -165,9 +165,10 @@ export default function UserReviews() {
 const ReviewCard = ({ review }) => {
   if (!review) return null;
 
-  const { content, rating, parentMovie } = review;
-  const { title, backdrop_path } = parentMovie;
+  const { content, rating, parentTv } = review;
+  const { title, backdrop_path, TMDB_Id } = parentTv;
   return (
+    <Link to={"/tv/" + TMDB_Id}>
     <div className="flex space-x-3">
        <div className="w-16 lg:w-24">
       <img
@@ -182,8 +183,9 @@ const ReviewCard = ({ review }) => {
           {title}
         </h1>
         <RatingStar rating={rating} />
-        <p className="text-light-subtle dark:text-dark-subtle">{content}</p>
+        <p className="text-light-subtle dark:text-dark-subtle mb-2">{content}</p>
       </div>
     </div>
+    </Link>
   );
 };
