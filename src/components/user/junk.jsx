@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
-import { deleteReviewTv, getReviewByMovieTv } from "../../api/reviewtv";
+import { deleteReview, getReviewByUser } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
-import EditRatingModalTv from "../models/EditRatingModalTv";
-import {Link} from "react-router-dom"
+import EditRatingModal from "../models/EditRatingModal";
 
-// const getNameInitial = (name = "") => {
-//   return name[0].toUpperCase();
-// };
 
-export default function MovieReviewsTv() {
+export default function UserReviews() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
@@ -24,15 +20,16 @@ export default function MovieReviewsTv() {
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
 
-  const { movieId } = useParams();
+  const { userId } = useParams();
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
   
   const { updateNotification } = useNotification();
 
   const fetchReviews = async () => {
-    const { movie, error } = await getReviewByMovieTv(movieId);
+    const { movie, error } = await getReviewByUser(userId);
     if (error) return console.log("Reviews Error:", error);
+
     setReviews([...movie.reviews]);
     setMovieTitle(movie.title);
   };
@@ -43,6 +40,7 @@ export default function MovieReviewsTv() {
     const matched = reviews.find((review) => review.owner.id === profileId);
     if (!matched)
       return updateNotification("error", "You don't have any review!");
+    
     setProfileOwnersReview(matched);
   };
 
@@ -60,7 +58,7 @@ export default function MovieReviewsTv() {
   
   const handleDeleteConfirm = async () => {
     setBusy(true);
-    const { error, message } = await deleteReviewTv(profileOwnersReview.id);
+    const { error, message } = await deleteReview(profileOwnersReview.id);
     setBusy(false);
     if (error) return updateNotification("error", error);
 
@@ -100,16 +98,16 @@ export default function MovieReviewsTv() {
   };
 
   useEffect(() => {
-    if (movieId) fetchReviews();
-  }, [movieId]);
+    if (userId) fetchReviews();
+  }, [userId]);
 
   return (
-    <div className="dark:bg-primary bg-white min-h-screen pb-10">
-      <Container className="xl:px-0 px-2 py-8 ">
+    <div className="dark:bg-primary bg-white  min-h-screen pb-10">
+      <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold dark:text-white text-secondary  md:text-xl lg:text-2xl sm:text-[10px]">
+          <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
-              Reviews for: 
+              Movie Reviews: 
             </span>{" "}
             {movieTitle}
           </h1>
@@ -154,7 +152,7 @@ export default function MovieReviewsTv() {
         subtitle="This action will remove this review permanently."
       />
 
-      <EditRatingModalTv
+      <EditRatingModal
         visible={showEditModal}
         initialState={selectedReview}
         onSuccess={handleOnReviewUpdate}
@@ -167,30 +165,25 @@ export default function MovieReviewsTv() {
 const ReviewCard = ({ review }) => {
   if (!review) return null;
 
-  const { owner, content, rating } = review;
-  const avatar = owner.avatar.url;
-  const userId = owner.id;
+  const { content, rating, parentMovie } = review;
+  const { title, backdrop_path } = parentMovie;
   return (
-    <>
-    <Link to={`/profile/${userId}`}>
     <div className="flex space-x-3">
-      <div className='mb-4 flex justify-center'>
-            {avatar ? (<img
-                className=" w-16 lg:w-20 aspect-square object-cover rounded-full "
-                src={avatar}
-                alt="{name}"
-              />):( null)
-            }
-          </div>
+       <div className="w-16 lg:w-24">
+      <img
+                className="w-full aspect-video"
+                src={backdrop_path}
+                alt={title}
+              />
+        {/* {getNameInitial(owner.name)} */}
+      </div>
       <div>
         <h1 className="dark:text-white text-secondary font-semibold text-lg">
-          {owner.name}
+          {title}
         </h1>
         <RatingStar rating={rating} />
         <p className="text-light-subtle dark:text-dark-subtle">{content}</p>
       </div>
     </div>
-    </Link>
-    </>
   );
 };

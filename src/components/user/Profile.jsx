@@ -85,7 +85,7 @@ export default function Profile() {
       <Container className="px-2 xl:p-0">
       <div className=" pt-4 flex ">
         <div className="flex-row lg:flex  space-x-4">
-          <div className='mb-4 flex justify-center'>
+          <div className='mb-4 flex justify-center '>
             {avatar ? (<img
                 className=" w-40 h-auto aspect-square object-cover rounded-full mb-3"
                 src={avatar}
@@ -102,14 +102,15 @@ export default function Profile() {
           </div>
           
         </div>
+        
       </div>
-
+      
       {/* <div className='flex-row items-right text-right mr-4 mt-5'>
               <button onClick={handleOnEditClick}
                 className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
                 type="button">Edit</button>
         </div> */}
-      <ProfileReviewTabs />
+      
 
       <UserUpload
         visible={showEditModal}
@@ -118,35 +119,57 @@ export default function Profile() {
         onClose={hideEditModal}
       />
 
-     
-
+        <div className="z-0"><ProfileReviewTabs /></div>
+         
       </Container>
+      
     </div>
+    
     </>
   )
     } else {  
     return (<>
-      <div className="dark:bg-primary bg-white min-h-screen pb-10 pt-3">
+    <div className="dark:bg-primary bg-white min-h-screen pb-10 pt-3">
       <Container className="px-2 xl:p-0">
       <div className=" pt-4 flex ">
         <div className="flex-row lg:flex  space-x-4">
-          <div className='mb-4 flex justify-center'>
+          <div className='mb-4 flex justify-center '>
             {avatar ? (<img
-                className=" w-40 aspect-square object-cover rounded-full "
+                className=" w-40 h-auto aspect-square object-cover rounded-full mb-3"
                 src={avatar}
                 alt="{name}"
               />):( null)
             }
           </div>
           <div className=''>
-              <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
-              <p className="text-light-subtle dark:text-dark-subtle flex  p-1 ">{bio}</p>
+              <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
+              <p className="text-light-subtle dark:text-dark-subtle flex  p-1 mb-3">{bio}</p>
           </div>
+          
         </div>
+        
       </div>
+      
+      {/* <div className='flex-row items-right text-right mr-4 mt-5'>
+              <button onClick={handleOnEditClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
+                type="button">Edit</button>
+        </div> */}
+      
 
+      <UserUpload
+        visible={showEditModal}
+        initialState={selectedUser}
+        onSuccess={handleOnUserUpdate}
+        onClose={hideEditModal}
+      />
+
+        <div className="z-0"><ProfileReviewTabs /></div>
+         
       </Container>
+      
     </div>
+    
     </>
   )
     }

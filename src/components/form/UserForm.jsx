@@ -73,11 +73,11 @@ export default function UserForm({
   const { name, bio } = userInfo;
   return (
     <form
-      className="dark:bg-primary bg-white p-3 w-[auto] h-[100] lg:w-[35rem] rounded"
+      className="dark:bg-primary bg-white p-3 w-[35rem] rounded"
       onSubmit={handleSubmit}
     >
       <div className="flex justify-between items-center mb-3">
-        <h1 className="font-semibold text-xl dark:text-white text-primary">
+        <h1 className="font-semibold text-xl dark:text-white text-primary ">
           {title}
         </h1>
         <button
@@ -88,7 +88,7 @@ export default function UserForm({
         </button>
       </div>
 
-      <div className="flex-col lg:flex space-x-2">
+      <div className="flex space-x-2">
         <PosterSelector
           selectedPoster={selectedAvatarForUI}
           className="w-36 h-36 aspect-square object-cover"
