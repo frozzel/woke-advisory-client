@@ -63,7 +63,7 @@ export default function Profile() {
       
     useEffect(() => {
         if (userId)fetchProfile() && window.scrollTo(0, 0);
-    }, []);
+    }, [userId]);
 
     const { profile } = authInfo;
 

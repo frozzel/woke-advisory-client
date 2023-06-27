@@ -4,12 +4,12 @@ import { BsTrash, BsPencilSquare } from "react-icons/bs";
 import { deleteReview, getReviewByUser } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
-import CustomButtonLink from "../CustomButtonLink";
+
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModal from "../models/EditRatingModal";
-import {Link} from "react-router-dom"
+
 
 
 export default function UserReviews() {
@@ -45,53 +45,41 @@ export default function UserReviews() {
     setProfileOwnersReview(matched);
   };
 
-  const handleOnEditClick = () => {
-    const { id, content, rating} = profileOwnersReview;
+  const handleOnEditClick = (review) => {
     
-    setSelectedReview({
-      id,
-      content,
-      rating,
-    });
+    
+    setSelectedReview(review);
     
     setShowEditModal(true);
   };
-  
+  const displayConfirmModal = (review) => {
+    setSelectedReview(review);
+    setShowConfirmModal(true);
+  };
   const handleDeleteConfirm = async () => {
     setBusy(true);
-    const { error, message } = await deleteReview(profileOwnersReview.id);
+    const { error, message } = await deleteReview(selectedReview.id);
     setBusy(false);
     if (error) return updateNotification("error", error);
 
     updateNotification("success", message);
-
-    const updatedReviews = reviews.filter(
-      (r) => r.id !== profileOwnersReview.id
-    );
-    setReviews([...updatedReviews]);
-    setProfileOwnersReview(null);
     hideConfirmModal();
+    fetchReviews();
   };
 
   const handleOnReviewUpdate = (review) => {
-    const updatedReview = {
-      ...profileOwnersReview,
-      rating: review.rating,
-      content: review.content,
-      // CRT: review.CRT,
-    };
+    const updatedReview = reviews.map((r) => {  
+      if (r.id === review.id) {
+        return review;  
+        }
+        return r;
+        });
+        setReviews([...updatedReview]);
+        fetchReviews();
 
-    setProfileOwnersReview({ ...updatedReview });
-
-    const newReviews = reviews.map((r) => {
-      if (r.id === updatedReview.id) return updatedReview;
-      return r;
-    });
-
-    setReviews([...newReviews]);
   };
 
-  const displayConfirmModal = () => setShowConfirmModal(true);
+  // const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
   const hideEditModal = () => {
     setShowEditModal(false);
@@ -100,7 +88,7 @@ export default function UserReviews() {
 
   useEffect(() => {
     if (userId) fetchReviews();
-  }, [userId]);
+  }, [userId]);;
 
   return (
     <div className="dark:bg-primary bg-white  min-h-screen pb-10">
@@ -123,22 +111,20 @@ export default function UserReviews() {
 
         <NotFoundText text="No Reviews!" visible={!reviews.length} />
 
-        {profileOwnersReview ? (
-          <div>
-            <ReviewCard review={profileOwnersReview} />
-            <div className="flex space-x-3 dark:text-white text-primary text-xl p-3">
-              <button onClick={displayConfirmModal} type="button">
-                <BsTrash />
-              </button>
-              <button onClick={handleOnEditClick} type="button">
-                <BsPencilSquare />
-              </button>
-            </div>
-          </div>
+        {profileId !== userId ? (
+        
+      <div className="space-y-3 mt-3">
+      {reviews.map((review) => (
+        <ReviewCard review={review} key={review.id}/> 
+        
+      ))}
+    </div>
         ) : (
           <div className="space-y-3 mt-3">
             {reviews.map((review) => (
-              <ReviewCard review={review} key={review.id} />
+              <ReviewCard review={review} key={review.id} 
+              onEditClick={() => handleOnEditClick(review)}
+              onDeleteClick={() => displayConfirmModal(review)}/>
             ))}
           </div>
         )}
@@ -163,30 +149,107 @@ export default function UserReviews() {
   );
 }
 
-const ReviewCard = ({ review }) => {
-  if (!review) return null;
+const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
+  const [showOptions, setShowOptions] = useState(false);
+  
+  
+  const handleOnMouseEnter = () => {
+    setShowOptions(true);
+  };
 
+  const handleOnMouseLeave = () => {
+    setShowOptions(false);
+  };
+  if (!review) return null;
   const { content, rating, parentMovie } = review;
-  const { title, backdrop_path, TMDB_Id } = parentMovie;
+  if (!parentMovie) return null;
+  
+  const { title, backdrop_path } = parentMovie;
   return (
-    <Link to={"/movie/" + TMDB_Id}>
-    <div className="flex space-x-3">
-       <div className="w-16 lg:w-24">
-      <img
-                className="w-full aspect-video"
-                src={backdrop_path}
-                alt={title}
-              />
-        {/* {getNameInitial(owner.name)} */}
-      </div>
-      <div>
-        <h1 className="dark:text-white text-secondary font-semibold text-lg">
+    <>
+      {onDeleteClick && onEditClick ? (
+        <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
+            <div
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+            className="flex cursor-pointer relative ">
+        
+
+    <img
+      src={backdrop_path}
+      alt={title}
+      className="w-28 aspect-video object-cover"
+    />
+    <div className="px-2">
+          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {title}
-        </h1>
-        <RatingStar rating={rating} />
-        <p className="text-light-subtle dark:text-dark-subtle mb-2">{content}</p>
-      </div>
+          </h1>
+          <p className="text-primary dark:text-white opacity-70">
+          {content}
+          </p>
     </div>
-    </Link>
+        <div className="flex items-center space-x-2 absolute top-2 right-2 text-2xl lg:text-lg bg-white dark:bg-secondary">
+          <RatingStar rating={rating} />
+        </div>
+
+           <Options
+           onEditClick={onEditClick}
+           onDeleteClick={onDeleteClick}
+           visible={showOptions}
+         />
+               </div>
+               </div>
+          ) : (
+            <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
+            <div
+            className="flex relative ">
+        
+
+    <img
+      src={backdrop_path}
+      alt={title}
+      className="w-28 aspect-video object-cover"
+    />
+    <div className="px-2">
+          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
+          {title}
+          </h1>
+          <p className="text-primary dark:text-white opacity-70">
+          {content}
+          </p>
+    </div>
+        <div className="flex items-center space-x-2 absolute top-2 right-2 text-2xl lg:text-lg bg-white dark:bg-secondary">
+          <RatingStar rating={rating} />
+        </div>
+
+           
+               </div>
+               </div>
+          )}
+
+    
+         </>
+  );
+};
+const Options = ({ visible, onDeleteClick, onEditClick }) => {
+  if (!visible) return null;
+
+  return (
+    <div className="absolute inset-0 bg-primary bg-opacity-25 backdrop-blur-sm flex justify-center items-center space-x-5">
+      <button
+        onClick={onDeleteClick}
+        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        type="button"
+      >
+        <BsTrash />
+      </button>
+      <button
+        onClick={onEditClick}
+        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        type="button"
+      >
+        <BsPencilSquare />
+      </button>
+    </div>
   );
 };
