@@ -48,3 +48,11 @@ export const addReviewTv = async (movieId, reviewData, ) => {
       return catchError(error);
     }
   };
+export const getReviewByUser = async (userId) => {
+  try {
+    const { data } = await client(`/reviewtv/get-reviews-by-user/${userId}`);
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};

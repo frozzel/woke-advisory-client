@@ -10,7 +10,8 @@ import { BiMoviePlay } from "react-icons/bi";
 import {BiCameraMovie} from "react-icons/bi";
 import {IoSchool} from "react-icons/io5";
 import {FaRegAddressCard} from "react-icons/fa";
-import MovieReviews from "./MovieReviews";
+import UserReviews from "./UserReviews";
+import UserReviewsTv from "./UserReviewsTv";
 
 export default function ProfileReviewTabs() {
     const [activeTab, setActiveTab] = React.useState("Movies");
@@ -19,15 +20,13 @@ export default function ProfileReviewTabs() {
             label: "Movies",
             value: "Movies",
             icon: BiCameraMovie,
-            desc: <MovieReviews/>,
+            desc: <UserReviews/>,
           },
         {
           label: "Tv Series",
           value: "Tv Series",
           icon: BiMoviePlay,
-          desc: `It really matters and then like it really doesn't matter.
-          What matters is the people who are sparked by it. And the people
-          who are like offended by it, it doesn't matter.`,
+          desc: <UserReviewsTv/>,
         },
 
         {

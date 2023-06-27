@@ -9,6 +9,7 @@ import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModal from "../models/EditRatingModal";
+import {Link} from "react-router-dom"
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -105,6 +106,7 @@ export default function MovieReviews() {
   }, [movieId]);
 
   return (
+    
     <div className="dark:bg-primary bg-white  min-h-screen pb-10">
       <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
@@ -166,14 +168,24 @@ export default function MovieReviews() {
 }
 
 const ReviewCard = ({ review }) => {
+  console.log(review);
   if (!review) return null;
 
   const { owner, content, rating } = review;
+  const avatar = owner.avatar.url;
+  const userId = owner.id;
   return (
+  <>
+    <Link to={`/profile/${userId}`}>
     <div className="flex space-x-3">
-      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl select-none">
-        {getNameInitial(owner.name)}
-      </div>
+      <div className='mb-4 flex justify-center'>
+            {avatar ? (<img
+                className=" w-16 lg:w-20 aspect-square object-cover rounded-full "
+                src={avatar}
+                alt="{name}"
+              />):( null)
+            }
+          </div>
       <div>
         <h1 className="dark:text-white text-secondary font-semibold text-lg">
           {owner.name}
@@ -182,5 +194,7 @@ const ReviewCard = ({ review }) => {
         <p className="text-light-subtle dark:text-dark-subtle">{content}</p>
       </div>
     </div>
+    </Link>
+    </>
   );
 };
