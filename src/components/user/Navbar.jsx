@@ -21,13 +21,6 @@ export default function Navbar() {
 
   const { profile } = authInfo;
 
-  const dualState = () => {
-    setIsNavOpen(false);
-    
-  };
-
-  
-
   const handleSearchSubmit = (query) => {
     navigate("/movie/search?title=" + query);
   };
@@ -47,7 +40,7 @@ export default function Navbar() {
               </button>
             </li>
             <li>
-              <AppSearchForm placeholder='Search' inputClassName="border-2 border-dark-subtle p-1 rounded bg-transparent text-sm outline-none focus:border-white transition text-white sm:w-auto w-40 sm:text-lg "
+              <AppSearchForm placeholder='Search Movies & TV' inputClassName="border-2 border-dark-subtle p-1 rounded bg-transparent text-sm outline-none focus:border-white transition text-white sm:w-auto w-40 sm:text-lg "
               onSubmit={handleSearchSubmit} />
               {/* <input
                 type="text"

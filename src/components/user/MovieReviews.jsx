@@ -168,11 +168,11 @@ export default function MovieReviews() {
 }
 
 const ReviewCard = ({ review }) => {
-  console.log(review);
+  
   if (!review) return null;
 
   const { owner, content, rating } = review;
-  const avatar = owner.avatar.url;
+  const avatar = owner.avatar?.url;
   const userId = owner.id;
   return (
   <>

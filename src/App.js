@@ -16,6 +16,8 @@ import MovieReviews from "./components/user/MovieReviews";
 import SearchMovies from "./components/user/SearchMovies";
 import MovieReviewsTv from "./components/user/MovieReviewsTv";
 import Profile from "./components/user/Profile";
+import SchoolHome from './components/SchoolHome';
+import SearchSchools from './components/user/SearchSchools';
 
 
 export default function App() {
@@ -41,6 +43,8 @@ export default function App() {
           <Route path="/movie/reviewstv/:movieId" element={<MovieReviewsTv />} />
           <Route path="/movie/search" element={<SearchMovies />} />
           <Route path="/profile/:userId" element={<Profile />} />
+          <Route path='/school/home' element={<SchoolHome />} />
+          <Route path="/school/search" element={<SearchSchools />} />
           <Route path='*' element={<NotFound/>} />
         
       </Routes>
