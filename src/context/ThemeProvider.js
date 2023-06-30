@@ -2,8 +2,8 @@ import React, {createContext, useEffect} from 'react'
 
 export const ThemeContext = createContext()
 
-const defaultTheme = 'light';
-const darkTheme = 'dark';
+const defaultTheme = 'dark';
+const darkTheme = 'light';
 
 
 export default function ThemeProvider({children}) {

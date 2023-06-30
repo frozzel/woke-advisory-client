@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, forwardRef } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
-// import { getLatestUploads } from "../../api/movie";
 import { getNews } from "../../api/news";  
 import { useNotification } from "../../hooks";
 
@@ -124,8 +123,6 @@ export default function HeroSlidShowNews() {
     } else pauseSlideShow();
   }, [slides.length, visible]);
 
-  // const newScr = "https://image.tmdb.org/t/p/original" + clonedSlide.backdrop_path
-  // const newScr1 = "https://image.tmdb.org/t/p/original" + currentSlide.backdrop_path
   return (
     <div className="w-full flex">
       {/* Slide show section */}
@@ -201,6 +198,7 @@ const Slide = forwardRef((props, ref) => {
  
   return (
     <Link
+      target="_blank"
       to={url}
       ref={ref}
       className={"w-full cursor-pointer block " + className}

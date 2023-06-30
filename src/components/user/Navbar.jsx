@@ -33,14 +33,14 @@ export default function Navbar() {
           <h1> <span className="lg:text-2xl md:text-xl sm:text-xs font-semibold dark:text-white text-dark  dark:bg-transparent bg-white font-Anton "> WOKE </span><span className="lg:text-2xl md:text-xl sm:text-xs font-semibold dark:bg-white bg-secondary dark:text-secondary text-white"> ADVISORY </span></h1>
           {/* <img src="./logo.png" alt="" className="h-12" /> */}
           </Link>
-          <ul className="flex items-center sm:space-x-4 space-x-2 lg:text-xl md:text-lg sm:text-xs">
+          <ul className="flex items-center sm:space-x-2 space-x-1 lg:text-xl md:text-lg sm:text-xs">
             <li >
-              <button onClick={toggleTheme} className="dark:bg-white bg-dark-subtle p-1 rounded sm:text-2xl text-lg">
-                <BsFillSunFill className="text-secondary "   />
+              <button onClick={toggleTheme} className=" p-1 rounded text-sm lg:text-lg">
+                <BsFillSunFill className="text-white dark:text-dark-subtle"   />
               </button>
             </li>
             <li>
-              <AppSearchForm placeholder='Search Movies & TV' inputClassName="border-2 border-dark-subtle p-1 rounded bg-transparent text-sm outline-none focus:border-white transition text-white sm:w-auto w-40 sm:text-lg "
+              <AppSearchForm placeholder='Search Movies & TV' inputClassName="border-2 border-dark-subtle pr-1 rounded bg-transparent text-sm outline-none focus:border-white transition text-white sm:w-auto w-40 text-sm lg:text-md  "
               onSubmit={handleSearchSubmit} />
               {/* <input
                 type="text"
