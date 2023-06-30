@@ -18,6 +18,7 @@ import MovieReviewsTv from "./components/user/MovieReviewsTv";
 import Profile from "./components/user/Profile";
 import SchoolHome from './components/SchoolHome';
 import SearchSchools from './components/user/SearchSchools';
+import SingleSchool from './components/user/SingleSchool';
 
 
 export default function App() {
@@ -38,6 +39,8 @@ export default function App() {
           <Route path='/auth/forget-password' element={<ForgetPassword />} />
           <Route path='/auth/reset-password' element={<ConfirmPassword/>} />
           <Route path="/movie/:movieId" element={<SingleMovie />} />
+          <Route path="/school/:schoolId" element={<SingleSchool />} />
+
           <Route path="/tv/:movieId" element={<SingleTv />} />
           <Route path="/movie/reviews/:movieId" element={<MovieReviews />} />
           <Route path="/movie/reviewstv/:movieId" element={<MovieReviewsTv />} />
