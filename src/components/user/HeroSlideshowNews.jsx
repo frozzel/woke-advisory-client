@@ -126,7 +126,7 @@ export default function HeroSlidShowNews() {
   return (
     <div className="w-full flex">
       {/* Slide show section */}
-      <div className="object-cover md:w-4/5 w-full aspect-video relative  overflow-hidden">
+      <div className="md:w-4/5 w-full aspect-video relative  overflow-hidden outline-none">
         {/* current slide */}
         <Slide
           ref={slideRef}
@@ -157,22 +157,25 @@ export default function HeroSlidShowNews() {
         />
       </div>
       {/* Up Next Section */}
-      <div className="w-1/5 md:block hidden space-y-3 px-3">
+      <div className="w-1/5 md:block hidden space-y-3 px-3 outline-none">
         <h1 className="font-semibold text-2xl text-primary dark:text-white">
           Up Next
         </h1>
         {upNext.map(({ urlToImage, _id }) => {
        
           return (
-            
-            <img
+
+              <img
               key={_id}
               src={urlToImage}
               alt=""
-              className="aspect-video object-cover rounded"
+              className="aspect-video object-cover rounded outline-none cursor-pointer"
             />
-          );
-        })}
+
+            )}
+            
+        )}
+          
       </div>
     </div>
   );
@@ -201,22 +204,22 @@ const Slide = forwardRef((props, ref) => {
       target="_blank"
       to={url}
       ref={ref}
-      className={"w-full cursor-pointer block " + className}
+      className={"w-full cursor-pointer block outline-none" + className}
       {...rest}
     >
       {src !== null ? (
-        <img className="object-cover aspect-video" src={src} alt="" />
-      ) : <img className="object-cover aspect-video" src= "https://s.yimg.com/ny/api/res/1.2/jkN.9wNtePdZFz3Qn6oyqw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://media.zenfs.com/en/usa_today_news_641/58a68214d6e140c2161948f98b82d993" alt="" />}
+        <img className="object-cover aspect-video outline-none" src={src} alt="" />
+      ) : <img className="object-cover aspect-video outline-none" src= "https://s.yimg.com/ny/api/res/1.2/jkN.9wNtePdZFz3Qn6oyqw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://media.zenfs.com/en/usa_today_news_641/58a68214d6e140c2161948f98b82d993" alt="" />}
       {title ? (
-        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white via-transparent dark:from-primary dark:via-transparent">
-          <h1 className="font-semibold md:text-4xl text-lg dark:text-highlight-dark text-highlight">
+        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white via-transparent dark:from-primary dark:via-transparent outline-none">
+          <h1 className="font-semibold md:text-4xl text-lg dark:text-highlight-dark text-highlight outline-none">
             {source}
             
           </h1>
-          <h5 className="md:text-xl text-sm dark:text-highlight-dark text-highlight whitespace-nowrap ">
+          <h5 className="md:text-xl text-sm dark:text-highlight-dark text-highlight whitespace-nowrap outline-none">
             {title}
           </h5>
-          <p className="dark:text-dark-subtle text-secondary  md:text-md md:contents hidden">{description}</p>
+          <p className="dark:text-dark-subtle text-secondary  md:text-md md:contents hidden outline-none">{description}</p>
         </div>
         
       ) : null}
