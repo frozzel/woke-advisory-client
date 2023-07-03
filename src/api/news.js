@@ -10,3 +10,13 @@ export const getNews = async () => {
       return catchError(error);
     }
   };
+
+export const getImage = async () => {
+   
+    try {
+      const { data } = await client(`/news/images`);
+      return data;
+    } catch (error) {
+      return catchError(error);
+    }
+  }

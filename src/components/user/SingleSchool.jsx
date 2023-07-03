@@ -13,6 +13,9 @@ import TopRatedTVSeries from "./TopRatedTVSeries";
 import GaugeChart from 'react-gauge-chart';
 import { BsFillCheckSquareFill, BsSquare } from "react-icons/bs";
 import TMDB from "../TMDB";
+import { getImage } from "../../api/news";
+import { Link } from "react-router-dom";
+import CustomButtonLink2 from "../CustomButtonLink2";
 
 
 
@@ -45,6 +48,7 @@ export default function SingleSchool() {
   const [ready, setReady] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
+  const [image, setImage] = useState({});
 
   const { schoolId } = useParams();
   const { updateNotification } = useNotification();
@@ -55,10 +59,17 @@ export default function SingleSchool() {
 
   const fetchMovie = async () => {
     const { error, school } = await getSingleSchool(schoolId);
+    console.log(school)
     if (error) return updateNotification("error", error);
 
     setReady(true);
     setMovie(school);
+  };
+
+  const fetchImages = async () => {
+    const { error, oneImage } = await getImage();
+    if (error) return updateNotification("error", error);
+    setImage(oneImage);
   };
 
   const handleOnRateMovie = () => {
@@ -77,7 +88,11 @@ export default function SingleSchool() {
   };
 
   useEffect(() => {
-    if (schoolId) fetchMovie() && window.scrollTo(0, 0);
+    if (schoolId) fetchMovie() && window.scrollTo(0, 0) && fetchImages();
+  }, [schoolId]);
+
+  useEffect(() => {
+    if (schoolId) fetchImages(schoolId);
   }, [schoolId]);
 
 
@@ -112,10 +127,7 @@ export default function SingleSchool() {
     LowGradeServed,
     HighGradeServed,
     LevelID,
-    Magnet,
-    Charter,
-    Virtual,
-    IsPrivate
+
   } = movie;
 
   let imgCheck = false;
@@ -126,10 +138,10 @@ export default function SingleSchool() {
     <div className="dark:bg-primary bg-white min-h-screen pb-10 pt-3">
       <Container className="xl:px-0 px-2">
         <div className="w-full flex">
-        <div className="md:w-4/5 w-full aspect-video relative overflow-hidden">
-              {/* {newScr ? ( <img className="" src={newScr} alt=""></img>
+        <div className=" w-full  items-center aspect-video relative overflow-hidden">
+              {image.imageUrl ? ( <img className="" src={image.imageUrl} alt=""></img>
               ) : null}
-              {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute top-4 right-4  flex flex-col w-16 md:w-32 lg:w-48" />): null} */}
+              {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute top-4 right-4  flex flex-col w-16 md:w-32 lg:w-48" />): null}
               {SchoolName ? (
               <div className="absolute inset-0 flex flex-col justify-end py-0 md:py-2 lg:py-3 bg-gradient-to-t from-white via-transparent dark:from-primary dark:via-transparent">
                 <h1 className="font-semibold text-lg md:text-2xl lg:text-4xl dark:text-highlight-dark text-highlight"> 
@@ -138,22 +150,7 @@ export default function SingleSchool() {
               </div>
             ) : null}
         </div>
-          <div className="w-1/5 md:block hidden space-y-3 px-3">
-              <h1 className="font-semibold text-2xl text-primary dark:text-white">
-                Trailers
-              </h1>
-              {/* {trailer ? (  
-                  <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer}  playing/>
-              ) : null
-              }{trailer2 ? (
-                <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer2}  playing/>
-              ) : null
-                }{trailer3 ? (
-                  <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer3}  playing/>
-              ) : null
-                } */}
-              
-          </div>
+
         </div>  
 
         <div className="flex justify-between">
@@ -206,43 +203,56 @@ export default function SingleSchool() {
         </div>
         
 
-        <div className="space-y-3">
+        <div className="space-y-1 flex justify-between mt-1">
+        <div className="flex flex-col  ">
+        
           <p className="text-light-subtle dark:text-dark-subtle">{AddressStreet}</p>
-
-
-          <ListWithLabel label="Language:">
-            <CustomButtonLink label={AddressCity} clickable={false} rating={null}/>
+          <p className="text-light-subtle dark:text-dark-subtle">{AddressCity}, {AddressState} <span>{AddressZip} {AddressZip4}</span></p>
+          <ListWithLabel label="Latitude/Longitude">
+          <p className="text-light-subtle dark:text-dark-subtle"> {AddressLatitude}</p>
+          <p className="text-light-subtle dark:text-dark-subtle">   {AddressLongitude}</p>
+          </ListWithLabel>
+          <ListWithLabel label="Phone Number:">
+            <CustomButtonLink label={Phone} clickable={true} rating={null}/>
           </ListWithLabel>
 
-          <ListWithLabel label="Release Date:">
-            <CustomButtonLink
+          <ListWithLabel label="WebSite:">
+            <CustomButtonLink2
               rating={null}
             //   label={convertDate(release_date)}
-              clickable={false}
+              clickable={true}
+              url={SchoolURL}
+              label={SchoolName}
             />
           </ListWithLabel>
+          </div>
+          <div className="flex-col sm:block hidden text-right">
+          <p className="text-light-subtle dark:text-dark-subtle">District: {DistrictName}</p>
+          
+          <p className="text-light-subtle dark:text-dark-subtle">County: {CountyName}</p>
+          <p className="text-light-subtle dark:text-dark-subtle">Lowest Grade: {LowGradeServed}</p>
+          <p className="text-light-subtle dark:text-dark-subtle">Highest Grade: {HighGradeServed}</p>
+          <p className="text-light-subtle dark:text-dark-subtle">Level: {LevelID} School</p>
+
+          <ListWithLabel label="District Website:">
+            <CustomButtonLink2
+              rating={null}
+            //   label={convertDate(release_date)}
+              clickable={true}
+              url={DistrictURL}
+              label={DistrictName}
+            />
+          </ListWithLabel>
+
+
+          </div>
 
           {/* <ListWithLabel label="Genres:">
             {genres.map((g) => (
               <CustomButtonLink label={g} key={g} clickable={false} rating={null}/>
             ))}
           </ListWithLabel> */}
-              <div className="lg:hidden md:hidden  space-y-3 px-3">
-              <h1 className="font-semibold text-2xl text-primary dark:text-white">
-                Trailers
-              </h1>
-              {/* {trailer ? (  
-                  <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer}  playing/>
-              ) : null
-              }{trailer2 ? (
-                <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer2}  playing/>
-              ) : null
-                }{trailer3 ? (
-                  <ReactPlayer height="" width="" className='aspect-video object-cover rounded' controls={true} light={true} url={trailer3}  playing/>
-              ) : null
-                } */}
-              
-          </div>
+
           {/* <RelatedMovies movieId={movieId} />
           <TopRatedTVSeries movieId={movieId} /> */}
         </div>
@@ -264,7 +274,9 @@ export default function SingleSchool() {
         onSuccess={handleOnRatingSuccess}
       /> */}
       {/* <MovieReviews movieId={movieId} /> */}
-      <TMDB />
+      <div className=" dark:text-highlight-dark text-highlight text-[9px] md:text-sm lg:text-base xl:text-lg text-center mx-auto mt-6" >
+          <Link target="_blank"
+      to={image.profileUrl}><h1>Photo from Unsplash By {image.author} </h1></Link></div>
     </div>
   );
 }
