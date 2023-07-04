@@ -14,8 +14,8 @@ export default function CustomButtonLink2({ label, url, rating, clickable = true
         className= "text-good  hover:underline"
     } 
   return (
-    <Link target="_blank" to={url} className={className} type="button">
-    <button onClick={onClick} className={className} type="button">
+    <Link target="_blank" to={url} className={"truncate "+className} type="button">
+    <button onClick={onClick} className={"truncate "+className} type="button">
       {label}
     </button>
     </Link>

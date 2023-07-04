@@ -26,9 +26,9 @@ export default function Navbar() {
   };
   
   return (
-    <div className="bg-secondary shadow-sm shadow-gray-500">
-      <Container className="p-1">
-        <div className="flex justify-between items-center">
+    <div className="bg-secondary shadow-sm shadow-gray-500 sticky top-0 z-50">
+      <Container className="p-1 ">
+        <div className="flex justify-between items-center ">
           <Link to="/">
           <h1> <span className="lg:text-2xl md:text-xl sm:text-xs font-semibold dark:text-white text-dark  dark:bg-transparent bg-white font-Anton "> WOKE </span><span className="lg:text-2xl md:text-xl sm:text-xs font-semibold dark:bg-white bg-secondary dark:text-secondary text-white"> ADVISORY </span></h1>
           {/* <img src="./logo.png" alt="" className="h-12" /> */}
