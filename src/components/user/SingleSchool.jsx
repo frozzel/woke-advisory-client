@@ -16,6 +16,7 @@ import TMDB from "../TMDB";
 import { getImage } from "../../api/news";
 import { Link } from "react-router-dom";
 import CustomButtonLink2 from "../CustomButtonLink2";
+import ProfileReviewTabs from './ProfileReviewTabs';
 
 
 
@@ -59,7 +60,6 @@ export default function SingleSchool() {
 
   const fetchMovie = async () => {
     const { error, school } = await getSingleSchool(schoolId);
-    console.log(school)
     if (error) return updateNotification("error", error);
 
     setReady(true);
@@ -144,7 +144,7 @@ export default function SingleSchool() {
               {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute top-4 right-4  flex flex-col w-16 md:w-32 lg:w-48" />): null}
               {SchoolName ? (
               <div className="absolute inset-0 flex flex-col justify-end py-0 md:py-2 lg:py-3 bg-gradient-to-t from-white via-transparent dark:from-primary dark:via-transparent">
-                <h1 className="font-semibold text-lg md:text-2xl lg:text-4xl dark:text-highlight-dark text-highlight"> 
+                <h1 className="font-semibold text-md truncate md:text-2xl lg:text-4xl dark:text-highlight-dark text-highlight"> 
                   {SchoolName}
                 </h1>
               </div>
@@ -203,11 +203,11 @@ export default function SingleSchool() {
         </div>
         
 
-        <div className="space-y-1 flex justify-between mt-1">
+        <div className="mt-2  justify-between grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
         <div className="flex flex-col  ">
         
-          <p className="text-light-subtle dark:text-dark-subtle">{AddressStreet}</p>
-          <p className="text-light-subtle dark:text-dark-subtle">{AddressCity}, {AddressState} <span>{AddressZip} {AddressZip4}</span></p>
+          <p className="text-light-subtle dark:text-dark-subtle font-bold">{AddressStreet}</p>
+          <p className="text-light-subtle dark:text-dark-subtle font-bold">{AddressCity}, {AddressState} <span>{AddressZip} {AddressZip4}</span></p>
           <ListWithLabel label="Latitude/Longitude">
           <p className="text-light-subtle dark:text-dark-subtle"> {AddressLatitude}</p>
           <p className="text-light-subtle dark:text-dark-subtle">   {AddressLongitude}</p>
@@ -226,23 +226,16 @@ export default function SingleSchool() {
             />
           </ListWithLabel>
           </div>
-          <div className="flex-col sm:block hidden text-right">
-          <p className="text-light-subtle dark:text-dark-subtle">District: {DistrictName}</p>
-          
-          <p className="text-light-subtle dark:text-dark-subtle">County: {CountyName}</p>
-          <p className="text-light-subtle dark:text-dark-subtle">Lowest Grade: {LowGradeServed}</p>
-          <p className="text-light-subtle dark:text-dark-subtle">Highest Grade: {HighGradeServed}</p>
-          <p className="text-light-subtle dark:text-dark-subtle">Level: {LevelID} School</p>
+          <div className="flex-col  text-left md:text-right">
+          <Link target="_blank" to={DistrictURL} className=" " type="button">
+          <p className="text-light-subtle dark:text-dark-subtle font-bold">District: <span className="font-normal hover:underline truncate">{DistrictName}</span></p></Link>
+          <p className="text-light-subtle dark:text-dark-subtle font-bold">County: <span className="font-normal">{CountyName}</span></p>
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Lowest Grade: {LowGradeServed}</p>
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Highest Grade: {HighGradeServed}</p>
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Level: {LevelID} School</p>
+         
 
-          <ListWithLabel label="District Website:">
-            <CustomButtonLink2
-              rating={null}
-            //   label={convertDate(release_date)}
-              clickable={true}
-              url={DistrictURL}
-              label={DistrictName}
-            />
-          </ListWithLabel>
+
 
 
           </div>
@@ -256,6 +249,7 @@ export default function SingleSchool() {
           {/* <RelatedMovies movieId={movieId} />
           <TopRatedTVSeries movieId={movieId} /> */}
         </div>
+        <ProfileReviewTabs />
       </Container>
 
       {/* <AddRatingModal
@@ -274,7 +268,8 @@ export default function SingleSchool() {
         onSuccess={handleOnRatingSuccess}
       /> */}
       {/* <MovieReviews movieId={movieId} /> */}
-      <div className=" dark:text-highlight-dark text-highlight text-[9px] md:text-sm lg:text-base xl:text-lg text-center mx-auto mt-6" >
+ 
+      <div className=" dark:text-highlight-dark text-highlight text-[9px] md:text-sm lg:text-base xl:text-lg text-center mx-auto mt-6 hover:underline" >
           <Link target="_blank"
       to={image.profileUrl}><h1>Photo from Unsplash By {image.author} </h1></Link></div>
     </div>
