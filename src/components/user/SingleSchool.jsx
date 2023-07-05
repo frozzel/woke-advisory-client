@@ -4,15 +4,11 @@ import { getSingleSchool } from "../../api/school";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
-import AddRatingModal from "../models/AddRatingModal";
+import AddRatingModalSchool from "../models/AddRatingModalSchool";
 import RatingStar from "../RatingStar";
-import RelatedMovies from "../RelatedMovies";
-import MovieReviews from "./MovieReviews";
-import ReactPlayer from 'react-player'
-import TopRatedTVSeries from "./TopRatedTVSeries";
+import MovieReviewsSchool from "./MovieReviewsSchool";
 import GaugeChart from 'react-gauge-chart';
 import { BsFillCheckSquareFill, BsSquare } from "react-icons/bs";
-import TMDB from "../TMDB";
 import { getImage } from "../../api/news";
 import { Link } from "react-router-dom";
 import CustomButtonLink2 from "../CustomButtonLink2";
@@ -27,9 +23,6 @@ const convertReviewCount = (count = 0) => {
   return parseFloat(count / 1000).toFixed(2) + "k";
 };
 
-const convertDate = (date = "") => {
-  return date.split("T")[0];
-};
 let chartStyle = {};
 const w = window.innerWidth;
 if (w < 768) {
@@ -84,7 +77,7 @@ export default function SingleSchool() {
 
 
   const handleOnRatingSuccess = (reviews) => {
-    setMovie({ ...movie, reviews: { ...reviews } });
+    setMovie({ ...movie, SchoolReviews: { ...reviews } });
   };
 
   useEffect(() => {
@@ -108,9 +101,9 @@ export default function SingleSchool() {
 
   const {
     id,
-    SchoolReviews = [],
-    SchoolAlerts = [],
-    Teachers = [],
+    SchoolReviews = {},
+    SchoolAlerts = {},
+    Teachers = {},
     SchoolName,
     AddressStreet,
     AddressCity,
@@ -165,13 +158,13 @@ export default function SingleSchool() {
         </div>
         <div className=" flex-col sm:block hidden mt-2">
         <ListWithLabel2 label="CRT Related Material" children={SchoolReviews.CRT}></ListWithLabel2>
-        <ListWithLabel2 label="LGBTQ Content" children={SchoolReviews.LGBTQ_content}></ListWithLabel2>
-        <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_content}></ListWithLabel2>
+        <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_grooming}></ListWithLabel2>
+        <ListWithLabel2 label="Require Trans Pronouns" children={SchoolReviews.trans_pronouns}></ListWithLabel2>
         </div>
         <div className=" flex-col sm:block hidden mt-2">
-        <ListWithLabel2 label="Anti Religious Sentiment" children={SchoolReviews.anti_religion}></ListWithLabel2>
-        <ListWithLabel2 label="Climate Change Activism" children={SchoolReviews.globalWarming}></ListWithLabel2>
-        <ListWithLabel2 label="Left Wing Propaganda" children={SchoolReviews.leftWing}></ListWithLabel2>
+        <ListWithLabel2 label="Trans Bathrooms Policy" children={SchoolReviews.trans_bathroom}></ListWithLabel2>
+        <ListWithLabel2 label="Climate Change Hysteria" children={SchoolReviews.globalWarming}></ListWithLabel2>
+        <ListWithLabel2 label="Anti Parental Rights" children={SchoolReviews.anti_parents_rights}></ListWithLabel2>
         </div>
           <div className="flex flex-col items-end mt-2">
 
@@ -193,13 +186,13 @@ export default function SingleSchool() {
         </div>
         <div className=" flex-col sm:flex  lg:hidden md:hidden ">
         <ListWithLabel2 label="CRT Related Material" children={SchoolReviews.CRT}></ListWithLabel2>
-        <ListWithLabel2 label="LGBTQ Content" children={SchoolReviews.LGBTQ_content}></ListWithLabel2>
-        <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_content}></ListWithLabel2>
+        <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_grooming}></ListWithLabel2>
+        <ListWithLabel2 label="Require Trans Pronouns" children={SchoolReviews.trans_pronouns}></ListWithLabel2>
         </div>
         <div className="  flex-col sm:flex  lg:hidden md:hidden pb-3">
-        <ListWithLabel2 label="Anti Religious Sentiment" children={SchoolReviews.anti_religion}></ListWithLabel2>
-        <ListWithLabel2 label="Climate Change Activism" children={SchoolReviews.globalWarming}></ListWithLabel2>
-        <ListWithLabel2 label="Left Wing Propaganda" children={SchoolReviews.leftWing}></ListWithLabel2>
+        <ListWithLabel2 label="Trans Bathrooms Policy" children={SchoolReviews.trans_bathroom}></ListWithLabel2>
+        <ListWithLabel2 label="Climate Change Hysteria" children={SchoolReviews.globalWarming}></ListWithLabel2>
+        <ListWithLabel2 label="Anti Parental Rights" children={SchoolReviews.anti_parents_rights}></ListWithLabel2>
         </div>
         
 
@@ -233,41 +226,29 @@ export default function SingleSchool() {
           <p className="text-light-subtle dark:text-dark-subtle font-semibold">Lowest Grade: {LowGradeServed}</p>
           <p className="text-light-subtle dark:text-dark-subtle font-semibold">Highest Grade: {HighGradeServed}</p>
           <p className="text-light-subtle dark:text-dark-subtle font-semibold">Level: {LevelID} School</p>
-         
-
-
-
 
           </div>
 
-          {/* <ListWithLabel label="Genres:">
-            {genres.map((g) => (
-              <CustomButtonLink label={g} key={g} clickable={false} rating={null}/>
-            ))}
-          </ListWithLabel> */}
-
-          {/* <RelatedMovies movieId={movieId} />
-          <TopRatedTVSeries movieId={movieId} /> */}
         </div>
         <ProfileReviewTabs />
       </Container>
 
-      {/* <AddRatingModal
-        title={title}
-        IMDB={IMDB}
-        overview={overview}
-        release_date={release_date}
-        genres={genres}
-        backdrop_path={backdrop_path}
-        trailer={trailer}
-        trailer2={trailer2}
-        trailer3={trailer3}
-        original_language={original_language}
+      <AddRatingModalSchool
+        // title={title}
+        // IMDB={IMDB}
+        // overview={overview}
+        // release_date={release_date}
+        // genres={genres}
+        // backdrop_path={backdrop_path}
+        // trailer={trailer}
+        // trailer2={trailer2}
+        // trailer3={trailer3}
+        // original_language={original_language}
         visible={showRatingModal}
         onClose={hideRatingModal}
         onSuccess={handleOnRatingSuccess}
-      /> */}
-      {/* <MovieReviews movieId={movieId} /> */}
+      />
+      <MovieReviewsSchool movieId={schoolId} />
  
       <div className=" dark:text-highlight-dark text-highlight text-[9px] md:text-sm lg:text-base xl:text-lg text-center mx-auto mt-6 hover:underline" >
           <Link target="_blank"
