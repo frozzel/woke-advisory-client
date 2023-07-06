@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
-import { deleteReview, getReviewByUser } from "../../api/review";
+import { deleteReview, getReviewByUser } from "../../api/reviewschool";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
-
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModal from "../models/EditRatingModal";
+import {IoSchool} from "react-icons/io5";
 
 
 
@@ -30,11 +30,10 @@ export default function UserReviews() {
   const fetchReviews = async () => {
     const { movie, error } = await getReviewByUser(userId);
     if (error) return console.log("Reviews Error:", error);
-
+    
     setReviews([...movie.reviews]);
-    setMovieTitle(movie.title);
+    setMovieTitle(movie.reviews.title);
   };
-  
   const findProfileOwnersReview = () => {
     if (profileOwnersReview) return setProfileOwnersReview(null);
 
@@ -96,7 +95,7 @@ export default function UserReviews() {
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
-              Movie Reviews: 
+              School Reviews: 
             </span>{" "}
             {movieTitle}
           </h1>
@@ -161,10 +160,14 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
     setShowOptions(false);
   };
   if (!review) return null;
-  const { content, rating, parentMovie } = review;
-  if (!parentMovie) return null;
+  const { content, rating, parentSchool } = review;
+  if (!parentSchool) return null;
   
-  const { title, backdrop_path } = parentMovie;
+  const { SchoolName, AddressStreet,
+    AddressCity,
+    AddressState,
+    AddressZip,
+    AddressZip4, backdrop_path } = parentSchool;
   return (
     <>
       {onDeleteClick && onEditClick ? (
@@ -173,16 +176,16 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
             className="flex cursor-pointer relative ">
-        
 
-    <img
+        <IoSchool className="text-2xl m-1 md:text-4xl md:m-2"/>
+    {/* <img
       src={backdrop_path}
-      alt={title}
+      alt={SchoolName}
       className="w-28 aspect-video object-cover"
-    />
+    /> */}
     <div className="px-2">
-          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
-          {title}
+         <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
+          {SchoolName}
           </h1>
           <p className="text-primary dark:text-white opacity-70">
           {content}
@@ -207,12 +210,12 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
 
     <img
       src={backdrop_path}
-      alt={title}
+      alt={SchoolName}
       className="w-28 aspect-video object-cover"
     />
     <div className="px-2">
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
-          {title}
+          {SchoolName}
           </h1>
           <p className="text-primary dark:text-white opacity-70">
           {content}

@@ -11,9 +11,9 @@ import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
 import { getReviewByMovieSchool, deleteReview } from "../../api/reviewschool";
 
-const getNameInitial = (name = "") => {
-  return name[0].toUpperCase();
-};
+// const getNameInitial = (name = "") => {
+//   return name[0].toUpperCase();
+// };
 
 export default function MovieReviewsSchool() {
   const [reviews, setReviews] = useState([]);

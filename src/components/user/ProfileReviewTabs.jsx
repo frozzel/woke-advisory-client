@@ -12,6 +12,7 @@ import {IoSchool} from "react-icons/io5";
 import {FaRegAddressCard} from "react-icons/fa";
 import UserReviews from "./UserReviews";
 import UserReviewsTv from "./UserReviewsTv";
+import UserReviewsSchool from "./UserReviewsSchool";
 
 export default function ProfileReviewTabs() {
     const [activeTab, setActiveTab] = React.useState("Movies");
@@ -33,9 +34,7 @@ export default function ProfileReviewTabs() {
           label: "School",
           value: "School",
           icon: IoSchool,
-          desc: `We're not always in the position that we want to be at.
-          We're constantly growing. We're constantly making mistakes. We're
-          constantly trying to express ourselves and actualize our dreams.`,
+          desc: <UserReviewsSchool/>,
         },
         {
             label: "Teacher",
