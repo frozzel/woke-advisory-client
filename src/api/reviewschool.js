@@ -22,7 +22,7 @@ export const addReviewSchool = async (schoolId, reviewData, ) => {
       return catchError(error);
     }
   };
-  export const deleteReviewTv = async (reviewId) => {
+  export const deleteReview = async (reviewId) => {
     const token = getToken();
     try {
       const { data } = await client.delete(`/reviewschool/${reviewId}`, {

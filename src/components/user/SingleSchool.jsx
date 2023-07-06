@@ -6,13 +6,12 @@ import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import AddRatingModalSchool from "../models/AddRatingModalSchool";
 import RatingStar from "../RatingStar";
-import MovieReviewsSchool from "./MovieReviewsSchool";
 import GaugeChart from 'react-gauge-chart';
 import { BsFillCheckSquareFill, BsSquare } from "react-icons/bs";
 import { getImage } from "../../api/news";
 import { Link } from "react-router-dom";
 import CustomButtonLink2 from "../CustomButtonLink2";
-import ProfileReviewTabs from './ProfileReviewTabs';
+import SchoolReviewTabs from './SchoolReviewTabs';
 
 
 
@@ -100,7 +99,7 @@ export default function SingleSchool() {
     );
 
   const {
-    id,
+    _id,
     SchoolReviews = {},
     SchoolAlerts = {},
     Teachers = {},
@@ -122,6 +121,7 @@ export default function SingleSchool() {
     LevelID,
 
   } = movie;
+
 
   let imgCheck = false;
 //   const newScr = "https://image.tmdb.org/t/p/original" + backdrop_path
@@ -172,7 +172,7 @@ export default function SingleSchool() {
             <CustomButtonLink
               rating={SchoolReviews.ratingAvg}
               label={convertReviewCount(SchoolReviews.reviewCount) + " Reviews"}
-              onClick={() => navigate("/movie/reviews/" + id)}
+              onClick={() => navigate("/school/reviews/" + _id)}
             />
             <CustomButtonLink
               rating={SchoolReviews.ratingAvg}
@@ -230,7 +230,7 @@ export default function SingleSchool() {
           </div>
 
         </div>
-        <ProfileReviewTabs />
+        <SchoolReviewTabs />
       </Container>
 
       <AddRatingModalSchool
@@ -248,7 +248,7 @@ export default function SingleSchool() {
         onClose={hideRatingModal}
         onSuccess={handleOnRatingSuccess}
       />
-      <MovieReviewsSchool movieId={schoolId} />
+      
  
       <div className=" dark:text-highlight-dark text-highlight text-[9px] md:text-sm lg:text-base xl:text-lg text-center mx-auto mt-6 hover:underline" >
           <Link target="_blank"

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
-import { deleteReview, getReviewByMovie } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
-import EditRatingModal from "../models/EditRatingModal";
+import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
-import { getReviewByMovieSchool } from "../../api/reviewschool";
+import { getReviewByMovieSchool, deleteReview } from "../../api/reviewschool";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -33,6 +32,7 @@ export default function MovieReviewsSchool() {
 
   const fetchReviews = async () => {
     const { movie, error } = await getReviewByMovieSchool(schoolId);
+    console.log(movie)
     if (error) return console.log("Reviews Error:", error);
 
     setReviews([...movie.reviews]);
@@ -108,12 +108,12 @@ export default function MovieReviewsSchool() {
 
   return (
     
-    <div className="dark:bg-primary bg-white  min-h-screen pb-10">
+    <div className="dark:bg-primary bg-white  pb-10">
       <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
-              Reviews for: 
+              Reviews: 
             </span>{" "}
             {movieTitle}
           </h1>
@@ -158,7 +158,7 @@ export default function MovieReviewsSchool() {
         subtitle="This action will remove this review permanently."
       />
 
-      <EditRatingModal
+      <EditRatingModalSchool
         visible={showEditModal}
         initialState={selectedReview}
         onSuccess={handleOnReviewUpdate}
