@@ -77,7 +77,6 @@ export default function RatingFormSchool({ busy, initialState, onSubmit, }) {
   };
   
   useEffect(() => {
-    console.log(initialState);
   if (initialState) {
     setContent(initialState.content);
     setSelectedRatings(createArray(initialState.rating));

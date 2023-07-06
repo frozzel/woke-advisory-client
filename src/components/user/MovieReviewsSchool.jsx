@@ -32,7 +32,7 @@ export default function MovieReviewsSchool() {
 
   const fetchReviews = async () => {
     const { movie, error } = await getReviewByMovieSchool(schoolId);
-    console.log(movie)
+    
     if (error) return console.log("Reviews Error:", error);
 
     setReviews([...movie.reviews]);
