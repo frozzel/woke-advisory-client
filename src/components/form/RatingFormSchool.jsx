@@ -8,7 +8,7 @@ const createArray = (count) => {
 
 const ratings = createArray(10);
 
-export default function RatingForm({ busy, initialState, onSubmit, }) {
+export default function RatingFormSchool({ busy, initialState, onSubmit, }) {
   const [selectedRatings, setSelectedRatings] = useState([]);
   const [content, setContent] = useState("");
   const [CRT, setCRT] = useState(false);
@@ -77,15 +77,17 @@ export default function RatingForm({ busy, initialState, onSubmit, }) {
   };
   
   useEffect(() => {
+    console.log(initialState);
   if (initialState) {
     setContent(initialState.content);
     setSelectedRatings(createArray(initialState.rating));
     setCRT(initialState.CRT);
     setTrans_grooming(initialState.trans_grooming);
-    trans_bathroom(initialState.trans_bathroom);
+    setTrans_pronouns(initialState.trans_pronouns)
+    setTrans_bathroom(initialState.trans_bathroom);
     setGlobalWarming(initialState.globalWarming);
     setAnti_parents_rights(initialState.anti_parents_rights);
-    setTrans_pronouns(initialState.trans_pronouns)
+    
 
   }
 }, [initialState]);
