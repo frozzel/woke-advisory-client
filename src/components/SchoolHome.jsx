@@ -23,7 +23,7 @@ export default function SchoolHome() {
 
     const searchSchool = async (query) => {
       const { error, results } = await searchPublicSchools(query);
-     
+    
       if (error) return updateNotification("error", error);
       if (!results.length) {
         setResultNotFound(true);

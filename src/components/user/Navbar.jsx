@@ -26,7 +26,7 @@ export default function Navbar() {
   };
   
   return (
-    <div className="bg-secondary shadow-sm shadow-gray-500 sticky top-0 z-50">
+    <div className="bg-secondary shadow-sm shadow-gray-500 sticky top-0 z-30">
       <Container className="p-1 ">
         <div className="flex justify-between items-center ">
           <Link to="/">

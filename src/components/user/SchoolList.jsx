@@ -30,7 +30,7 @@ export default function SchoolList({ title, schools = [] }) {
 
 const ListItem = ({ school }) => {
   const { id, backdrop_path, reviews , SchoolName, name, title, AddressStreet, AddressCity, AddressState, AddressZip, AddressZip4} = school;
-
+  
   if (backdrop_path===null || backdrop_path===undefined){
     const  newScr = '/placeholder.png'
     return (
