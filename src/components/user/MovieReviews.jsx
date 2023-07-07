@@ -177,13 +177,15 @@ const ReviewCard = ({ review }) => {
   return (
   <>
     <Link to={`/profile/${userId}`}>
-    <div className="flex space-x-3">
-      <div className='mb-4 flex justify-center'>
+    <div className="flex flex-col md:flex-row space-x-3 mb-5">
+      <div className='flex md:justify-center mb-2'>
             {avatar ? (<img
-                className=" w-16 lg:w-20 aspect-square object-cover rounded-full "
+                className=" w-16 h-16 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full"
                 src={avatar}
                 alt="{name}"
-              />):( null)
+              />):( <div className="flex items-center justify-center w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+              {getNameInitial(owner.name)}
+            </div>)
             }
           </div>
       <div>

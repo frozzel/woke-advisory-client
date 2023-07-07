@@ -15,7 +15,7 @@ import EditRatingModal from "../models/EditRatingModal";
 export default function UserReviews() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
-  const [profileOwnersReview, setProfileOwnersReview] = useState(null);
+  // const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
@@ -35,15 +35,15 @@ export default function UserReviews() {
     setMovieTitle(movie.title);
   };
   
-  const findProfileOwnersReview = () => {
-    if (profileOwnersReview) return setProfileOwnersReview(null);
+  // const findProfileOwnersReview = () => {
+  //   if (profileOwnersReview) return setProfileOwnersReview(null);
 
-    const matched = reviews.find((review) => review.owner === profileId);
-    if (!matched)
-      return updateNotification("error", "You don't have any review!");
+  //   const matched = reviews.find((review) => review.owner === profileId);
+  //   if (!matched)
+  //     return updateNotification("error", "You don't have any review!");
     
-    setProfileOwnersReview(matched);
-  };
+  //   setProfileOwnersReview(matched);
+  // };
 
   const handleOnEditClick = (review) => {
     
@@ -184,7 +184,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {title}
           </h1>
-          <p className="text-primary dark:text-white opacity-70">
+          <p className="text-primary dark:text-white opacity-70 whitespace-nowrap">
           {content}
           </p>
     </div>
@@ -214,7 +214,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {title}
           </h1>
-          <p className="text-primary dark:text-white opacity-70">
+          <p className="text-primary dark:text-white opacity-70 whitespace-nowrap">
           {content}
           </p>
     </div>

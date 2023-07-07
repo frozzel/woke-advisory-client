@@ -6,11 +6,8 @@ import {
     Tab,
     TabPanel,
   } from "@material-tailwind/react";
-import { BiMoviePlay } from "react-icons/bi";
-import {BiCameraMovie} from "react-icons/bi";
-import {IoSchool} from "react-icons/io5";
+
 import {FaRegAddressCard} from "react-icons/fa";
-import UserReviews from "./UserReviews";
 import UserReviewsTv from "./UserReviewsTv";
 import MovieReviewsSchool from './MovieReviewsSchool';
 import { FaRadiation } from "react-icons/fa";

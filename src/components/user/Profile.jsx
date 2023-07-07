@@ -9,7 +9,9 @@ import UserUpload from '../models/UserUpload';
 import ProfileReviewTabs from './ProfileReviewTabs';
 
 
-
+const getNameInitial = (name = "") => {
+  return name[0].toUpperCase();
+};
 
 
 
@@ -87,10 +89,12 @@ export default function Profile() {
         <div className="flex-row lg:flex  space-x-4">
           <div className='mb-4 flex justify-center '>
             {avatar ? (<img
-                className=" w-40 h-auto aspect-square object-cover rounded-full mb-3"
+                className=" w-24 h-24 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
                 src={avatar}
                 alt="{name}"
-              />):( null)
+              />):( <div className="flex items-center justify-center w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+              {getNameInitial(name? name : profile.name)}
+            </div>)
             }
           </div>
           <div className=''>
@@ -135,10 +139,12 @@ export default function Profile() {
         <div className="flex-row lg:flex  space-x-4">
           <div className='mb-4 flex justify-center '>
             {avatar ? (<img
-                className=" w-40 h-auto aspect-square object-cover rounded-full mb-3"
+                className="w-24 h-24 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full"
                 src={avatar}
                 alt="{name}"
-              />):( null)
+              />):( <div className="flex items-center justify-center w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+              {getNameInitial(name? name : profile.name)}
+            </div>)
             }
           </div>
           <div className=''>
