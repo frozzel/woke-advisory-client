@@ -7,7 +7,7 @@ import Container from "../Container";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
-import EditRatingModal from "../models/EditRatingModal";
+import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {IoSchool} from "react-icons/io5";
 
 
@@ -15,7 +15,7 @@ import {IoSchool} from "react-icons/io5";
 export default function UserReviews() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
-  const [profileOwnersReview, setProfileOwnersReview] = useState(null);
+  // const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
@@ -34,15 +34,15 @@ export default function UserReviews() {
     setReviews([...movie.reviews]);
     setMovieTitle(movie.reviews.title);
   };
-  const findProfileOwnersReview = () => {
-    if (profileOwnersReview) return setProfileOwnersReview(null);
+  // const findProfileOwnersReview = () => {
+  //   if (profileOwnersReview) return setProfileOwnersReview(null);
 
-    const matched = reviews.find((review) => review.owner === profileId);
-    if (!matched)
-      return updateNotification("error", "You don't have any review!");
+  //   const matched = reviews.find((review) => review.owner === profileId);
+  //   if (!matched)
+  //     return updateNotification("error", "You don't have any review!");
     
-    setProfileOwnersReview(matched);
-  };
+  //   setProfileOwnersReview(matched);
+  // };
 
   const handleOnEditClick = (review) => {
     
@@ -138,7 +138,7 @@ export default function UserReviews() {
         subtitle="This action will remove this review permanently."
       />
 
-      <EditRatingModal
+      <EditRatingModalSchool
         visible={showEditModal}
         initialState={selectedReview}
         onSuccess={handleOnReviewUpdate}
@@ -167,7 +167,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
     AddressCity,
     AddressState,
     AddressZip,
-    AddressZip4, backdrop_path } = parentSchool;
+    AddressZip4,  } = parentSchool;
   return (
     <>
       {onDeleteClick && onEditClick ? (
@@ -177,18 +177,17 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
             onMouseLeave={handleOnMouseLeave}
             className="flex cursor-pointer relative ">
 
-        <IoSchool className="text-2xl m-1 md:text-4xl md:m-2"/>
-    {/* <img
-      src={backdrop_path}
-      alt={SchoolName}
-      className="w-28 aspect-video object-cover"
-    /> */}
+        <IoSchool className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/>
+ 
     <div className="px-2">
          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {SchoolName}
           </h1>
-          <p className="text-primary dark:text-white opacity-70">
-          {content}
+          <p className="text-primary dark:text-white opacity-70 whitespace-wrap">
+          {AddressStreet}
+          </p>
+          <p className="text-primary dark:text-white opacity-70 whitespace-wrap">
+          {AddressCity}, {AddressState} {AddressZip}-{AddressZip4}
           </p>
     </div>
         <div className="flex items-center space-x-2 absolute top-2 right-2 text-2xl lg:text-lg bg-white dark:bg-secondary">
@@ -206,19 +205,18 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
             <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
             <div
             className="flex relative ">
-        
+        <IoSchool className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/>
 
-    <img
-      src={backdrop_path}
-      alt={SchoolName}
-      className="w-28 aspect-video object-cover"
-    />
+  
     <div className="px-2">
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {SchoolName}
           </h1>
-          <p className="text-primary dark:text-white opacity-70">
-          {content}
+          <p className="text-primary dark:text-white opacity-70 whitespace-wrap">
+          {AddressStreet}
+          </p>
+          <p className="text-primary dark:text-white opacity-70 whitespace-wrap">
+          {AddressCity}, {AddressState} {AddressZip}-{AddressZip4}
           </p>
     </div>
         <div className="flex items-center space-x-2 absolute top-2 right-2 text-2xl lg:text-lg bg-white dark:bg-secondary">
