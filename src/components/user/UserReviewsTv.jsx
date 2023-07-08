@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link  } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
 import { deleteReviewTv, getReviewByUser } from "../../api/reviewtv";
 import { useAuth, useNotification } from "../../hooks";
@@ -8,6 +8,7 @@ import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModal from "../models/EditRatingModalTv";
+import {FiExternalLink} from "react-icons/fi";
 
 
 
@@ -25,6 +26,7 @@ export default function UserReviewsTv() {
   const profileId = authInfo.profile?.id;
   
   const { updateNotification } = useNotification();
+  const navigate = useNavigate();
 
   const fetchReviews = async () => {
     const { movie, error } = await getReviewByUser(userId);
@@ -44,7 +46,9 @@ export default function UserReviewsTv() {
     
   //   setProfileOwnersReview(matched);
   // };
-
+  const handleOnLinkClick = (review) => {
+    navigate("/tv/" + review.parentTv.TMDB_Id);
+  };
   const handleOnEditClick = (review) => {
     
     
@@ -124,7 +128,8 @@ export default function UserReviewsTv() {
             {reviews.map((review) => (
               <ReviewCard review={review} key={review.id} 
               onEditClick={() => handleOnEditClick(review)}
-              onDeleteClick={() => displayConfirmModal(review)}/>
+              onDeleteClick={() => displayConfirmModal(review)}
+              onLinkClick={() => handleOnLinkClick(review)}/>
             ))}
           </div>
         )}
@@ -149,7 +154,7 @@ export default function UserReviewsTv() {
   );
 }
 
-const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
+const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
   const [showOptions, setShowOptions] = useState(false);
   
  
@@ -167,7 +172,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
   const { title, backdrop_path } = parentTv;
   return (
     <>
-      {onDeleteClick && onEditClick ? (
+      {onDeleteClick && onEditClick && onLinkClick ? (
         <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
             <div
             onMouseEnter={handleOnMouseEnter}
@@ -195,6 +200,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
            <Options
            onEditClick={onEditClick}
            onDeleteClick={onDeleteClick}
+           onLinkClick={onLinkClick}
            visible={showOptions}
          />
                </div>
@@ -211,9 +217,12 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
       className="w-28 aspect-video object-cover"
     />
     <div className="px-2">
+    <Link to={"/tv/" + parentTv.TMDB_Id} className="  hover:underline">
+
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {title}
           </h1>
+          </Link>
           <p className="text-primary dark:text-white opacity-70 whitespace-nowrap">
           {content}
           </p>
@@ -231,7 +240,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
          </>
   );
 };
-const Options = ({ visible, onDeleteClick, onEditClick }) => {
+const Options = ({ visible, onDeleteClick, onEditClick, onLinkClick }) => {
   if (!visible) return null;
 
   return (
@@ -249,6 +258,13 @@ const Options = ({ visible, onDeleteClick, onEditClick }) => {
         type="button"
       >
         <BsPencilSquare />
+      </button>
+      <button
+        onClick={onLinkClick}
+        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        type="button"
+      >
+        <FiExternalLink />
       </button>
     </div>
   );

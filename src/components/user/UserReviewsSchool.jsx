@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
 import { deleteReview, getReviewByUser } from "../../api/reviewschool";
 import { useAuth, useNotification } from "../../hooks";
@@ -9,6 +9,7 @@ import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {IoSchool} from "react-icons/io5";
+import {FiExternalLink} from "react-icons/fi";
 
 
 
@@ -26,6 +27,7 @@ export default function UserReviews() {
   const profileId = authInfo.profile?.id;
   
   const { updateNotification } = useNotification();
+   const navigate = useNavigate();
 
   const fetchReviews = async () => {
     const { movie, error } = await getReviewByUser(userId);
@@ -43,7 +45,9 @@ export default function UserReviews() {
     
   //   setProfileOwnersReview(matched);
   // };
-
+  const handleOnLinkClick = (review) => {
+    navigate("/school/" + review.parentSchool.id);
+  };
   const handleOnEditClick = (review) => {
     
     
@@ -123,7 +127,8 @@ export default function UserReviews() {
             {reviews.map((review) => (
               <ReviewCard review={review} key={review.id} 
               onEditClick={() => handleOnEditClick(review)}
-              onDeleteClick={() => displayConfirmModal(review)}/>
+              onDeleteClick={() => displayConfirmModal(review)}
+              onLinkClick={() => handleOnLinkClick(review)}/>
             ))}
           </div>
         )}
@@ -148,7 +153,7 @@ export default function UserReviews() {
   );
 }
 
-const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
+const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
   const [showOptions, setShowOptions] = useState(false);
   
   
@@ -170,7 +175,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
     AddressZip4,  } = parentSchool;
   return (
     <>
-      {onDeleteClick && onEditClick ? (
+      {onDeleteClick && onEditClick && onLinkClick ? (
         <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
             <div
             onMouseEnter={handleOnMouseEnter}
@@ -197,6 +202,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
            <Options
            onEditClick={onEditClick}
            onDeleteClick={onDeleteClick}
+           onLinkClick={onLinkClick}
            visible={showOptions}
          />
                </div>
@@ -209,9 +215,11 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
 
   
     <div className="px-2">
+          <Link to={"/school/" + parentSchool.id} className="  hover:underline">  
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {SchoolName}
           </h1>
+          </Link>
           <p className="text-primary dark:text-white opacity-70 whitespace-wrap">
           {AddressStreet}
           </p>
@@ -232,7 +240,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick }) => {
          </>
   );
 };
-const Options = ({ visible, onDeleteClick, onEditClick }) => {
+const Options = ({ visible, onDeleteClick, onEditClick, onLinkClick }) => {
   if (!visible) return null;
 
   return (
@@ -250,6 +258,13 @@ const Options = ({ visible, onDeleteClick, onEditClick }) => {
         type="button"
       >
         <BsPencilSquare />
+      </button>
+            <button
+        onClick={onLinkClick}
+        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        type="button"
+      >
+        <FiExternalLink />
       </button>
     </div>
   );
