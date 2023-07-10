@@ -5,37 +5,65 @@ import { commonInputClasses } from "../../utils/theme";
 import PosterSelector from "../PosterSelector";
 import Selector from "../Selector";
 
-const defaultActorInfo = {
+const defaultTeacherInfo = {
   name: "",
   about: "",
   avatar: null,
-  gender: "",
+  grade: "",
+  classType: "",
 };
 
-const genderOptions = [
-  { title: "Male", value: "male" },
-  { title: "Female", value: "female" },
-  { title: "Other", value: "other" },
+const gradeOptions = [
+  { title: "Pre K", value: "pre-k" },
+  { title: "Kindergarten", value: "kindergarten" },
+  { title: "1st", value: "1st" },
+    { title: "2nd", value: "2nd" },
+    { title: "3rd", value: "3rd" },
+    { title: "4th", value: "4th" },
+    { title: "5th", value: "5th" },
+    { title: "6th", value: "6th" },
+    { title: "7th", value: "7th" },
+    { title: "8th", value: "8th" },
+    { title: "9th", value: "9th" },
+    { title: "10th", value: "10th" },
+    { title: "11th", value: "11th" },
+    { title: "12th", value: "12th" },
+    { title: "Other", value: "other" },
 ];
+const classTypeOptions = [
+    { title: "Math", value: "Math" },
+    { title: "English", value: "English" },
+    { title: "Social Studies", value: "Social Studies" },
+      { title: "Science", value: "Science" },
+      { title: "Coach", value: "Coach" },
+      { title: "Admin", value: "Admin" },
+      { title: "Vocational", value: "Vocational" },
+      { title: "Board Member", value: "Board Member" },
+      { title: "Counselor", value: "Counselor" },
+      { title: "Other", value: "Other" },
+      { title: "Multiple", value: "Multiple" },
+     
+  ];
 
-const validateActor = ({ avatar, name, about, gender }) => {
-  if (!name.trim()) return { error: "Actor name is missing!" };
+const validateActor = ({ avatar, name, about, grade, classType }) => {
+  if (!name.trim()) return { error: "Teachers name is missing!" };
   if (!about.trim()) return { error: "About section is empty!" };
-  if (!gender.trim()) return { error: "Actor gender is missing!" };
+  if (!grade.trim()) return { error: "Teachers Grade is missing!" };
+  if (!classType.trim()) return { error: "Teachers Class Type is missing!" };
   if (avatar && !avatar.type?.startsWith("image"))
     return { error: "Invalid image / avatar file!" };
 
   return { error: null };
 };
 
-export default function ActorForm({
+export default function TeacherForm({
   title,
   initialState,
   btnTitle,
   busy,
   onSubmit,
 }) {
-  const [actorInfo, setActorInfo] = useState({ ...defaultActorInfo });
+  const [actorInfo, setActorInfo] = useState({ ...defaultTeacherInfo });
   const [selectedAvatarForUI, setSelectedAvatarForUI] = useState("");
   const { updateNotification } = useNotification();
 
@@ -52,7 +80,7 @@ export default function ActorForm({
       return setActorInfo({ ...actorInfo, avatar: file });
     }
 
-    setActorInfo({ ...actorInfo, [name]: value,   });
+    setActorInfo({ ...actorInfo, [name]: value,});
   };
 
   const handleSubmit = (e) => {
@@ -65,6 +93,7 @@ export default function ActorForm({
     for (let key in actorInfo) {
       if (key) formData.append(key, actorInfo[key]);
     }
+    
     onSubmit(formData);
   };
 
@@ -75,7 +104,8 @@ export default function ActorForm({
     }
   }, [initialState]);
 
-  const { name, about, gender } = actorInfo;
+  const { name, about, grade, classType } = actorInfo;
+ 
   return (
     <form
       className="dark:bg-primary bg-white p-3 w-[35rem] rounded"
@@ -121,15 +151,26 @@ export default function ActorForm({
         </div>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 flex justify-evenly ">
         <Selector
-          options={genderOptions}
-          label="Gender"
-          value={gender}
+          options={gradeOptions}
+          label="Grade"
+          value={grade}
           onChange={handleChange}
-          name="gender"
+          name="grade"
+          
         />
+        <Selector
+          options={classTypeOptions}
+          label="Class Type"
+          value={classType}
+          onChange={handleChange}
+          name="classType"
+          
+        />
+        
       </div>
+      
     </form>
   );
 }

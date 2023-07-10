@@ -10,9 +10,11 @@ import {
 import {FaRegAddressCard} from "react-icons/fa";
 import UserReviewsTv from "./UserReviewsTv";
 import MovieReviewsSchool from './MovieReviewsSchool';
+import TeacherCreate from './TeacherCreate';
 import { FaRadiation } from "react-icons/fa";
 import { TbAlertTriangleFilled } from "react-icons/tb";
 import { MdHowToVote } from "react-icons/md";
+
 
 export default function SchoolReviewTabs() {
     const [activeTab, setActiveTab] = React.useState("Reviews");
@@ -33,9 +35,7 @@ export default function SchoolReviewTabs() {
             label: "Teacher",
             value: "Teacher",
             icon: FaRegAddressCard,
-            desc: `We're not always in the position that we want to be at.
-            We're constantly growing. We're constantly making mistakes. We're
-            constantly trying to express ourselves and actualize our dreams.`,
+            desc: <TeacherCreate/>,
           },
 
         {
