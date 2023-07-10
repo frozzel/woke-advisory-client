@@ -18,3 +18,12 @@ export const searchPublicSchools = async (val) => {
       return catchError(error);
     }
   };
+
+export const getTeacherBySchool = async (schoolId) => {
+    try {
+      const { data } = await client("/school/teachers/" + schoolId);
+      return data;
+    } catch (error) {
+      return catchError(error);
+    }
+  }
