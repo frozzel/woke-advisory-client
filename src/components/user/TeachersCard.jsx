@@ -10,6 +10,7 @@ import NotFoundText from "../NotFoundText";
 import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
 import { getTeacherBySchool,  } from "../../api/school";
+import GridContainer from "../GridContainer";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -33,7 +34,7 @@ export default function TeachersCard() {
     const { teachers, error } = await getTeacherBySchool(schoolId);
     
     if (error) return console.log("Reviews Error:", error);
-    
+    // console.log("teachers:", teachers);
     setReviews([...teachers]);
     
   };
@@ -141,9 +142,14 @@ export default function TeachersCard() {
           </div>
         ) : (
           <div className="space-y-3 mt-3">
+            <GridContainer>
+
+
+            
             {reviews.map((review) => (
               <ReviewCard review={review} key={review.id} />
             ))}
+            </GridContainer>
           </div>
         )}
       </Container>
@@ -170,21 +176,22 @@ export default function TeachersCard() {
 const ReviewCard = ({ review }) => {
   
   if (!review) return null;
-  const {name, avatar, about, grade, classType} = review
+  const {name, avatar, about, grade, classType, id} = review
   
 //   const { owner, content, rating } = review;
 //   const avatar = avatar.url;
 //   const userId = owner.id;
   return (
   <>
-    {/* <Link to={`/profile/${userId}`}> */}
-    <div className="flex flex-col md:flex-row space-x-3 mb-5">
+    <Link to={`/teacher/${id}`}>
+    
+    <div className="flex flex-row space-x-3 mb-5">
       <div className='  flex md:justify-center mb-2'>
             {avatar.url ? (<img
-                className="w-16 h-16 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
+                className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
                 src={avatar.url}
                 alt="{name}"
-              />):( <div className="flex items-center justify-center w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+              />):( <div className="flex items-center justify-center w-20 h-20 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
         {getNameInitial(name)}
       </div>)
             }
@@ -194,11 +201,12 @@ const ReviewCard = ({ review }) => {
           {name}
         </h1>
         <p className="text-light-subtle dark:text-dark-subtle">Grade: {grade} </p>
-        <p className="text-light-subtle dark:text-dark-subtle">Class Type: {classType}</p>
+        <p className="text-light-subtle dark:text-dark-subtle text-xs">Class Type: {classType}</p>
        <RatingStar rating={review.rating} />
       </div>
     </div>
-    {/* </Link> */}
+   
+    </Link>
     </>
   );
 };

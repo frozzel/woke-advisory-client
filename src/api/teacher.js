@@ -56,3 +56,11 @@ export const getReviewByUser = async (userId) => {
     return catchError(error);
   }
 };
+export const getSingleTeacher = async (teacherId) => {
+  try {
+    const { data } = await client("/teacher/single/" + teacherId);
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
