@@ -20,6 +20,7 @@ import SchoolHome from './components/SchoolHome';
 import SearchSchools from './components/user/SearchSchools';
 import SingleSchool from './components/user/SingleSchool';
 import MovieReviewsSchool from './components/user/MovieReviewsSchool';
+import SingleTeacher from './components/user/SingleTeacher';
 
 
 export default function App() {
@@ -41,6 +42,7 @@ export default function App() {
           <Route path='/auth/reset-password' element={<ConfirmPassword/>} />
           <Route path="/movie/:movieId" element={<SingleMovie />} />
           <Route path="/school/:schoolId" element={<SingleSchool />} />
+          <Route path="/teacher/:teacherId" element={<SingleTeacher />} />
 
           <Route path="/tv/:movieId" element={<SingleTv />} />
           <Route path="/movie/reviews/:movieId" element={<MovieReviews />} />
