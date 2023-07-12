@@ -63,7 +63,7 @@ export default function TeacherCreate() {
 
       }, [query]);
   return (
-    <div className="dark:bg-primary bg-white min-h-screen pb-10 pt-3">
+    <div className="dark:bg-primary bg-white  pb-10 pt-3">
       <Container className="xl:px-0 px-2">
         <div className="flex justify-around ">
             <div className=" flex-col-1/2  items-center justify-center	">

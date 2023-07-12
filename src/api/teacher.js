@@ -75,4 +75,16 @@ export const searchTeacher = async (val, schoolId) => {
   }
 };
 
-
+export const updateTeacher = async (teacherId, userData) => {
+  const token = getToken();
+  try {
+    const { data } = await client.post(`/teacher/update/${teacherId}`, userData, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};

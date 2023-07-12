@@ -8,12 +8,10 @@ import AddRatingModalSchool from "../models/AddRatingModalSchool";
 import RatingStar from "../RatingStar";
 import GaugeChart from 'react-gauge-chart';
 import { BsFillCheckSquareFill, BsSquare } from "react-icons/bs";
-import { getImage } from "../../api/news";
 import { Link } from "react-router-dom";
 import CustomButtonLink2 from "../CustomButtonLink2";
 import SchoolReviewTabs from './SchoolReviewTabs';
-
-
+import TeacherUpload from "../models/TeacherUpload";
 
 
 
@@ -37,12 +35,17 @@ if (w < 768) {
   };
 let theme = localStorage.getItem('theme');
 
+const getNameInitial = (name = "") => {
+    return name[0].toUpperCase();
+  };
+
 
 export default function SingleTeacher() {
   const [ready, setReady] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
-  const [image, setImage] = useState({});
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const { teacherId } = useParams();
   const { updateNotification } = useNotification();
@@ -58,13 +61,15 @@ export default function SingleTeacher() {
     setReady(true);
     setMovie(Teacher);
   };
- console.log(movie)
+//  console.log(movie)
  
-  const fetchImages = async () => {
-    const { error, oneImage } = await getImage();
-    if (error) return updateNotification("error", error);
-    setImage(oneImage);
-  };
+ 
+ 
+//   const fetchImages = async () => {
+//     const { error, oneImage } = await getImage();
+//     if (error) return updateNotification("error", error);
+//     setImage(oneImage);
+//   };
 
   const handleOnRateMovie = () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
@@ -75,6 +80,36 @@ export default function SingleTeacher() {
     setShowRatingModal(false);
   };
 
+  const handleOnEditClick = () => {
+    const { _id, name, about, avatar, grade, classType } = movie;
+    console.log(movie)
+    
+    setSelectedUser({
+      _id,
+      name,
+      about,
+      avatar: avatar.url,
+      grade,
+      classType
+    });
+    setShowEditModal(true);
+   }
+   const hideEditModal = () => {
+    setShowEditModal(false);
+    setSelectedUser(null);
+  };
+  const handleOnTeacherUpdate = (movie) => {
+
+    const updatedTeacher = {
+      ...movie,
+   
+      
+    };
+    console.log("update with", updatedTeacher)
+    
+    setMovie({ ...updatedTeacher });
+;
+  };
 
 
   const handleOnRatingSuccess = (reviews) => {
@@ -82,12 +117,9 @@ export default function SingleTeacher() {
   };
 
   useEffect(() => {
-    if (teacherId) fetchMovie() && window.scrollTo(0, 0) && fetchImages();
+    if (teacherId)fetchMovie() && window.scrollTo(0, 0);
   }, [teacherId]);
 
-  useEffect(() => {
-    if (teacherId) fetchImages(teacherId);
-  }, [teacherId]);
 
 
 
@@ -103,54 +135,56 @@ export default function SingleTeacher() {
   const {
     _id,
     SchoolReviews = {},
-    SchoolAlerts = {},
-    Teachers = {},
-    SchoolName,
-    AddressStreet,
-    AddressCity,
-    AddressState,
-    AddressZip,
-    AddressZip4,
-    SchoolURL,
-    AddressLatitude,
-    AddressLongitude,
-    DistrictName,
-    DistrictURL,
-    CountyName,
-    Phone,
-    LowGradeServed,
-    HighGradeServed,
-    LevelID,
     name,
     about,
     grade,
     classType,
+    avatar,
+    parentSchool,
 
   } = movie;
 
+  let imgCheck = true;
 
-  let imgCheck = false;
-//   const newScr = "https://image.tmdb.org/t/p/original" + backdrop_path
   if (SchoolReviews.ratingAvg > 1) imgCheck = true;
   
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10 pt-3">
       <Container className="xl:px-0 px-2">
-        <div className="w-full flex">
-        <div className=" w-full  items-center aspect-video relative overflow-hidden">
-              {image.imageUrl ? ( <img className="" src={image.imageUrl} alt=""></img>
-              ) : null}
-              {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute top-4 right-4  flex flex-col w-16 md:w-32 lg:w-48" />): null}
-              {SchoolName ? (
-              <div className="absolute inset-0 flex flex-col justify-end py-0 md:py-2 lg:py-3 bg-gradient-to-t from-white via-transparent dark:from-primary dark:via-transparent">
-                <h1 className="font-semibold text-md truncate md:text-2xl lg:text-4xl dark:text-highlight-dark text-highlight"> 
-                  {SchoolName}
-                </h1>
-              </div>
-            ) : null}
-        </div>
 
-        </div>  
+      <div className=" pt-4 flex ">
+        <div className="flex-row lg:flex  space-x-4">
+          <div className='mb-4 flex justify-center '>
+            {avatar.url ? (<img
+                className=" w-32 h-32 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
+                src={avatar.url}
+                alt="{name}"
+              />):( <div className="flex items-center justify-center w-32 h-32 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-6xl md:text-8xl select-none">
+              {getNameInitial(name ? name : "L")}
+            </div>)
+            }
+          </div>
+          <div className=''>
+              <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
+              <p className="text-light-subtle dark:text-dark-subtle font-bold">Grade: {grade}</p>
+          <p className="text-light-subtle dark:text-dark-subtle font-bold">Subject: {classType}</p>
+          <Link to={`/school/${parentSchool._id}`} className=" " type="button">
+          <p className="text-light-subtle dark:text-dark-subtle font-bold">School: <span className="dark:text-highlight-dark text-highlight hover:underline">{parentSchool.SchoolName}</span></p>
+          </Link>
+              
+          
+
+          </div>
+
+        </div>
+        {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute right-4 md:right-24 xl:right-80 w-16 md:w-32 lg:w-48" />): null}
+      </div>
+      <p className="text-light-subtle dark:text-dark-subtle flex font-bold  mt-4 ml-4">About:</p>
+      <p className="text-light-subtle dark:text-dark-subtle flex  mb-3  ml-4">{about}</p>
+      <button onClick={handleOnEditClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
+                type="button">Edit</button>
+
 
         <div className="flex justify-between">
         <div className="flex flex-col ">
@@ -202,41 +236,15 @@ export default function SingleTeacher() {
         </div>
         
 
-        <div className="mt-2  justify-between grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-        <div className="flex flex-col  ">
-        
-          <p className="text-light-subtle dark:text-dark-subtle font-bold">{name}</p>
-          <p className="text-light-subtle dark:text-dark-subtle font-bold">{about}, {AddressState} <span>{AddressZip} {AddressZip4}</span></p>
-          <ListWithLabel label="Latitude/Longitude">
-          <p className="text-light-subtle dark:text-dark-subtle"> {grade}</p>
-          <p className="text-light-subtle dark:text-dark-subtle">   {classType}</p>
-          </ListWithLabel>
-          <ListWithLabel label="Phone Number:">
-            <CustomButtonLink label={Phone} clickable={true} rating={null}/>
-          </ListWithLabel>
 
-          <ListWithLabel label="WebSite:">
-            <CustomButtonLink2
-              rating={null}
-            //   label={convertDate(release_date)}
-              clickable={true}
-              url={SchoolURL}
-              label={SchoolName}
-            />
-          </ListWithLabel>
-          </div>
-          <div className="flex-col  text-left md:text-right">
-          <Link target="_blank" to={DistrictURL} className=" " type="button">
-          <p className="text-light-subtle dark:text-dark-subtle font-bold">District: <span className="font-normal hover:underline truncate">{DistrictName}</span></p></Link>
-          <p className="text-light-subtle dark:text-dark-subtle font-bold">County: <span className="font-normal">{CountyName}</span></p>
-          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Lowest Grade: {LowGradeServed}</p>
-          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Highest Grade: {HighGradeServed}</p>
-          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Level: {LevelID} School</p>
-
-          </div>
-
-        </div>
         <SchoolReviewTabs />
+
+        <TeacherUpload
+        visible={showEditModal}
+        initialState={selectedUser}
+        onSuccess={handleOnTeacherUpdate}
+        onClose={hideEditModal}
+      />
       </Container>
 
       <AddRatingModalSchool
@@ -255,10 +263,6 @@ export default function SingleTeacher() {
         onSuccess={handleOnRatingSuccess}
       />
       
- 
-      <div className=" dark:text-highlight-dark text-highlight text-[9px] md:text-sm lg:text-base xl:text-lg text-center mx-auto mt-6 hover:underline" >
-          <Link target="_blank"
-      to={image.profileUrl}><h1>Photo from Unsplash By {image.author} </h1></Link></div>
     </div>
   );
 }
