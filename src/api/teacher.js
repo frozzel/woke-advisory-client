@@ -64,3 +64,15 @@ export const getSingleTeacher = async (teacherId) => {
     return catchError(error);
   }
 };
+export const searchTeacher = async (val, schoolId) => {
+
+  try {
+    const { data } = await client(`/teacher/search/`+schoolId+`/?name=` + val);
+    
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
+
+
