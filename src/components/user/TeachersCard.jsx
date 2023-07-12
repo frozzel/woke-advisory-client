@@ -5,12 +5,11 @@ import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
-import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
-import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
 import { getTeacherBySchool,  } from "../../api/school";
 import GridContainer from "../GridContainer";
+
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -23,6 +22,8 @@ export default function TeachersCard() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
+ 
+
 
   const { schoolId } = useParams();
   const { authInfo } = useAuth();
@@ -34,7 +35,7 @@ export default function TeachersCard() {
     const { teachers, error } = await getTeacherBySchool(schoolId);
     
     if (error) return console.log("Reviews Error:", error);
-    // console.log("teachers:", teachers);
+    console.log("teachers:", teachers);
     setReviews([...teachers]);
     
   };
@@ -61,21 +62,7 @@ export default function TeachersCard() {
     setShowEditModal(true);
   };
   
-//   const handleDeleteConfirm = async () => {
-//     setBusy(true);
-//     const { error, message } = await deleteReview(profileOwnersReview.id);
-//     setBusy(false);
-//     if (error) return updateNotification("error", error);
 
-//     updateNotification("success", message);
-
-//     const updatedReviews = reviews.filter(
-//       (r) => r.id !== profileOwnersReview.id
-//     );
-//     setReviews([...updatedReviews]);
-//     setProfileOwnersReview(null);
-//     hideConfirmModal();
-//   };
 
   const handleOnReviewUpdate = (review) => {
     const updatedReview = {
@@ -102,6 +89,7 @@ export default function TeachersCard() {
     setSelectedReview(null);
   };
 
+
   useEffect(() => {
     if (schoolId) fetchReviews();
   }, [schoolId]);
@@ -119,14 +107,11 @@ export default function TeachersCard() {
           </h1>
 
           {profileId ? (
-            <CustomButtonLink
-              label={profileOwnersReview ? "View All" : "Find My Review"}
-              onClick={findProfileOwnersReview}
-            />
+            null
           ) : null}
         </div>
 
-        <NotFoundText text="No Reviews!" visible={!reviews.length} />
+        <NotFoundText text="No Teachers!" visible={!reviews.length} />
 
         {profileOwnersReview ? (
           <div>
@@ -153,22 +138,7 @@ export default function TeachersCard() {
           </div>
         )}
       </Container>
-{/* 
-      <ConfirmModal
-        visible={showConfirmModal}
-        onCancel={hideConfirmModal}
-        onConfirm={handleDeleteConfirm}
-        busy={busy}
-        title="Are you sure?"
-        subtitle="This action will remove this review permanently."
-      /> */}
 
-      <EditRatingModalSchool
-        visible={showEditModal}
-        initialState={selectedReview}
-        onSuccess={handleOnReviewUpdate}
-        onClose={hideEditModal}
-      />
     </div>
   );
 }
@@ -176,11 +146,8 @@ export default function TeachersCard() {
 const ReviewCard = ({ review }) => {
   
   if (!review) return null;
-  const {name, avatar, about, grade, classType, id} = review
+  const {name, avatar, grade, classType, id} = review
   
-//   const { owner, content, rating } = review;
-//   const avatar = avatar.url;
-//   const userId = owner.id;
   return (
   <>
     <Link to={`/teacher/${id}`}>
