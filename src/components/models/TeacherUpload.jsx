@@ -3,6 +3,7 @@ import { updateTeacher } from "../../api/teacher";
 import { useNotification } from "../../hooks";
 import TeacherForm from "../form/TeacherForm";
 import ModalContainer from "./ModalContainer";
+import { act } from "react-dom/test-utils";
 
 export default function UpdateTeacher({
   visible,
@@ -15,11 +16,13 @@ export default function UpdateTeacher({
   const { updateNotification } = useNotification();
 
   const handleSubmit = async (data) => {
+    
     setBusy(true);
-    const { error, actor } = await updateTeacher(initialState._id, data);
+    const { error, teacher } = await updateTeacher(initialState._id, data);
     setBusy(false);
     if (error) return updateNotification("error", error);
-    onSuccess(actor);
+    
+    onSuccess(teacher);
     updateNotification("success", "Teacher updated successfully.");
     onClose();
   };

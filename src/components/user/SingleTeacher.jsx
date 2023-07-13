@@ -51,6 +51,7 @@ export default function SingleTeacher() {
   const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
+  const isVerified = authInfo.profile?.isVerified;
 
   const navigate = useNavigate();
 
@@ -61,7 +62,7 @@ export default function SingleTeacher() {
     setReady(true);
     setMovie(Teacher);
   };
-//  console.log(movie)
+ 
  
  
  
@@ -88,7 +89,7 @@ export default function SingleTeacher() {
       _id,
       name,
       about,
-      avatar: avatar.url,
+      avatar: avatar?.url,
       grade,
       classType
     });
@@ -102,12 +103,16 @@ export default function SingleTeacher() {
 
     const updatedTeacher = {
       ...movie,
-   
-      
+      name,
+        about: movie.about,
+        avatar: movie.avatar.url,
+        grade: movie.grade,
+        classType: movie.classType,
+
     };
-    console.log("update with", updatedTeacher)
-    
+
     setMovie({ ...updatedTeacher });
+    fetchMovie()
 ;
   };
 
@@ -155,7 +160,7 @@ export default function SingleTeacher() {
       <div className=" pt-4 flex ">
         <div className="flex-row lg:flex  space-x-4">
           <div className='mb-4 flex justify-center '>
-            {avatar.url ? (<img
+            {avatar ? (<img
                 className=" w-32 h-32 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
                 src={avatar.url}
                 alt="{name}"
@@ -177,15 +182,21 @@ export default function SingleTeacher() {
           </div>
 
         </div>
-        {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute right-4 md:right-24 xl:right-80 w-16 md:w-32 lg:w-48" />): null}
+        {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute right-4 md:right-2 xl:right-80 w-16 md:w-32 lg:w-48" />): null}
       </div>
-      <p className="text-light-subtle dark:text-dark-subtle flex font-bold  mt-4 ml-4">About:</p>
-      <p className="text-light-subtle dark:text-dark-subtle flex  mb-3  ml-4">{about}</p>
+      <div className="grid justify-items-stretch mt-2">
+      {isLoggedIn  && isVerified ? (
+      
       <button onClick={handleOnEditClick}
-                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full justify-self-center md:justify-self-end  "
                 type="button">Edit</button>
 
-
+        ) : null}
+        </div>
+      <div className="grid justify-items-stretch">
+      <p className="text-light-subtle dark:text-dark-subtle flex font-bold  mt-4 ml-4">About:</p>
+      <p className="text-light-subtle dark:text-dark-subtle flex  mb-3  ml-4">{about}      </p>
+        </div>
         <div className="flex justify-between">
         <div className="flex flex-col ">
         <GaugeChart id="gauge-chart2" style={chartStyle} textColor={theme === 'dark' ? 'white' : '#000'}  needleColor={theme === 'dark' ? '#adadad' : '#DC143C'} needleBaseColor={theme === 'dark' ? '#adadad' : '#DC143C'}

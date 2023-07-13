@@ -35,7 +35,7 @@ export default function TeachersCard() {
     const { teachers, error } = await getTeacherBySchool(schoolId);
     
     if (error) return console.log("Reviews Error:", error);
-    console.log("teachers:", teachers);
+   
     setReviews([...teachers]);
     
   };
@@ -154,7 +154,7 @@ const ReviewCard = ({ review }) => {
     
     <div className="flex flex-row space-x-3 mb-5">
       <div className='  flex md:justify-center mb-2'>
-            {avatar.url ? (<img
+            {avatar ? (<img
                 className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
                 src={avatar.url}
                 alt="{name}"

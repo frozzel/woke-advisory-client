@@ -73,21 +73,21 @@ export default function TeacherForm({
   };
 
   const handleChange = ({ target }) => {
-    const { value, files, name } = target;
+    const { value, files, name, about, grade, classType } = target;
     if (name === "avatar") {
       const file = files[0];
       updatePosterForUI(file);
       return setActorInfo({ ...actorInfo, avatar: file });
     }
 
-    setActorInfo({ ...actorInfo, [name]: value,});
+    setActorInfo({ ...actorInfo, [name]: value, [about]: value, [grade]: value, [classType]: value});
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { error } = validateActor(actorInfo);
     if (error) return updateNotification("error", error);
-
+    
     // submit form
     const formData = new FormData();
     for (let key in actorInfo) {

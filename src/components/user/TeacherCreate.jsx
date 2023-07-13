@@ -35,9 +35,9 @@ export default function TeacherCreate() {
     setShowAddModal(false);
     };
 
-    // const handleOnRatingSuccess = (reviews) => {
-    //     setTeacher({ ...movie, SchoolReviews: { ...reviews } });
-    //   };
+    const handleOnRatingSuccess = (teachers) => {
+        setTeachers({ ...teachers });
+      };
 
     const test = () => {
         console.log("test")
@@ -87,10 +87,10 @@ export default function TeacherCreate() {
           query={query}
           resultNotFound={resultNotFound}
           schools={teachers}/>
-        <TeachersCard />
+        <TeachersCard schoolId={schoolId}/>
       </Container>
 
-      <AddTeacherModal visible={showAddModal} onClose={hideRatingModal} onSuccess={test} />
+      <AddTeacherModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
     </div>
   )
 }
