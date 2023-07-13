@@ -64,14 +64,6 @@ export default function SingleTeacher() {
   };
  
  
- 
- 
-//   const fetchImages = async () => {
-//     const { error, oneImage } = await getImage();
-//     if (error) return updateNotification("error", error);
-//     setImage(oneImage);
-//   };
-
   const handleOnRateMovie = () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     setShowRatingModal(true);
@@ -139,7 +131,7 @@ export default function SingleTeacher() {
 
   const {
     _id,
-    SchoolReviews = {},
+    reviewsTeacher = {},
     name,
     about,
     grade,
@@ -149,9 +141,9 @@ export default function SingleTeacher() {
 
   } = movie;
 
-  let imgCheck = true;
+  let imgCheck = false;
 
-  if (SchoolReviews.ratingAvg > 1) imgCheck = true;
+  if (reviewsTeacher.ratingAvg > 1) imgCheck = true;
   
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10 pt-3">
@@ -203,30 +195,30 @@ export default function SingleTeacher() {
               nrOfLevels={20}
               arcsLength={[0.1, 0.6, 0.3]}
               colors={['#5BE12C', '#F5CD19', '#DC143C']}
-              percent={SchoolReviews.ratingAvg/10? SchoolReviews.ratingAvg/10 : 0.01}
+              percent={reviewsTeacher.ratingAvg/10? reviewsTeacher.ratingAvg/10 : 0.01}
               arcPadding={0.02}
             />
         </div>
         <div className=" flex-col sm:block hidden mt-2">
-        <ListWithLabel2 label="CRT Related Material" children={SchoolReviews.CRT}></ListWithLabel2>
-        <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_grooming}></ListWithLabel2>
-        <ListWithLabel2 label="Require Trans Pronouns" children={SchoolReviews.trans_pronouns}></ListWithLabel2>
+        <ListWithLabel2 label="CRT Related Material" children={reviewsTeacher.CRT}></ListWithLabel2>
+        <ListWithLabel2 label="Trans/Queer Theory" children={reviewsTeacher.trans_grooming}></ListWithLabel2>
+        <ListWithLabel2 label="Require Trans Pronouns" children={reviewsTeacher.trans_pronouns}></ListWithLabel2>
         </div>
         <div className=" flex-col sm:block hidden mt-2">
-        <ListWithLabel2 label="Trans Bathrooms Policy" children={SchoolReviews.trans_bathroom}></ListWithLabel2>
-        <ListWithLabel2 label="Climate Change Hysteria" children={SchoolReviews.globalWarming}></ListWithLabel2>
-        <ListWithLabel2 label="Anti Parental Rights" children={SchoolReviews.anti_parents_rights}></ListWithLabel2>
+        <ListWithLabel2 label="Trans Bathrooms Policy" children={reviewsTeacher.trans_sports}></ListWithLabel2>
+        <ListWithLabel2 label="Climate Change Hysteria" children={reviewsTeacher.globalWarming}></ListWithLabel2>
+        <ListWithLabel2 label="Anti Parental Rights" children={reviewsTeacher.anti_parents_rights}></ListWithLabel2>
         </div>
           <div className="flex flex-col items-end mt-2">
 
-            <RatingStar rating={SchoolReviews.ratingAvg} />
+            <RatingStar rating={reviewsTeacher.ratingAvg} />
             <CustomButtonLink
-              rating={SchoolReviews.ratingAvg}
-              label={convertReviewCount(SchoolReviews.reviewCount) + " Reviews"}
-              onClick={() => navigate("/school/reviews/" + _id)}
+              rating={reviewsTeacher.ratingAvg}
+              label={convertReviewCount(reviewsTeacher.reviewCount) + " Reviews"}
+              onClick={() => navigate("/teacher/reviews/" + _id)}
             />
             <CustomButtonLink
-              rating={SchoolReviews.ratingAvg}
+              rating={reviewsTeacher.ratingAvg}
               label="Rate the movie"
               onClick={handleOnRateMovie}
             />
@@ -236,14 +228,14 @@ export default function SingleTeacher() {
 
         </div>
         <div className=" flex-col sm:flex  lg:hidden md:hidden ">
-        <ListWithLabel2 label="CRT Related Material" children={SchoolReviews.CRT}></ListWithLabel2>
-        <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_grooming}></ListWithLabel2>
-        <ListWithLabel2 label="Require Trans Pronouns" children={SchoolReviews.trans_pronouns}></ListWithLabel2>
+        <ListWithLabel2 label="CRT Related Material" children={reviewsTeacher.CRT}></ListWithLabel2>
+        <ListWithLabel2 label="Trans/Queer Theory" children={reviewsTeacher.trans_grooming}></ListWithLabel2>
+        <ListWithLabel2 label="Require Trans Pronouns" children={reviewsTeacher.trans_pronouns}></ListWithLabel2>
         </div>
         <div className="  flex-col sm:flex  lg:hidden md:hidden pb-3">
-        <ListWithLabel2 label="Trans Bathrooms Policy" children={SchoolReviews.trans_bathroom}></ListWithLabel2>
-        <ListWithLabel2 label="Climate Change Hysteria" children={SchoolReviews.globalWarming}></ListWithLabel2>
-        <ListWithLabel2 label="Anti Parental Rights" children={SchoolReviews.anti_parents_rights}></ListWithLabel2>
+        <ListWithLabel2 label="Trans Bathrooms Policy" children={reviewsTeacher.trans_sports}></ListWithLabel2>
+        <ListWithLabel2 label="Climate Change Hysteria" children={reviewsTeacher.globalWarming}></ListWithLabel2>
+        <ListWithLabel2 label="Anti Parental Rights" children={reviewsTeacher.anti_parents_rights}></ListWithLabel2>
         </div>
         
 

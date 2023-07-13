@@ -57,6 +57,7 @@ export default function SingleSchool() {
     setReady(true);
     setMovie(school);
   };
+ 
 
   const fetchImages = async () => {
     const { error, oneImage } = await getImage();
