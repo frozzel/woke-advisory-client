@@ -37,11 +37,10 @@ export default function TeacherCreate() {
 
     const handleOnRatingSuccess = (teachers) => {
         setTeachers({ ...teachers });
+        
       };
 
-    const test = () => {
-        console.log("test")
-    }
+    
     const handleSearchSubmit = (query) => {
       setQuery(query);
     };
@@ -61,7 +60,11 @@ export default function TeacherCreate() {
     useEffect(() => {
       if (query.trim()) searchTeachers(query, schoolId);
 
-      }, [query]);
+      }, [query, schoolId]);
+
+    
+
+
   return (
     <div className="dark:bg-primary bg-white  pb-10 pt-3">
       <Container className="xl:px-0 px-2">

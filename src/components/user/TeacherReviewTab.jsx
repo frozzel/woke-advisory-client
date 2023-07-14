@@ -6,43 +6,32 @@ import {
     Tab,
     TabPanel,
   } from "@material-tailwind/react";
-import { BiMoviePlay } from "react-icons/bi";
-import {BiCameraMovie} from "react-icons/bi";
-import {IoSchool} from "react-icons/io5";
-import {FaRegAddressCard} from "react-icons/fa";
-import UserReviews from "./UserReviews";
-import UserReviewsTv from "./UserReviewsTv";
-import UserReviewsSchool from "./UserReviewsSchool";
-import UserReviewsTeacher from "./UserReviewsTeacher";
 
-export default function ProfileReviewTabs() {
-    const [activeTab, setActiveTab] = React.useState("Movies");
+
+import UserReviewsTv from "./UserReviewsTv";
+import MovieReviewsTeacher from './MovieReviewsTeacher';
+import { FaRadiation } from "react-icons/fa";
+import { TbAlertTriangleFilled } from "react-icons/tb";
+
+
+
+export default function TeacherReviewTabs() {
+    const [activeTab, setActiveTab] = React.useState("Reviews");
     const data = [
         {
-            label: "Movies",
-            value: "Movies",
-            icon: BiCameraMovie,
-            desc: <UserReviews/>,
+            label: "Reviews",
+            value: "Reviews",
+            icon: FaRadiation,
+            desc: <MovieReviewsTeacher/>,
           },
         {
-          label: "Tv Series",
-          value: "Tv Series",
-          icon: BiMoviePlay,
+          label: "Alerts",
+          value: "Alerts",
+          icon: TbAlertTriangleFilled,
           desc: <UserReviewsTv/>,
         },
 
-        {
-          label: "Schools",
-          value: "Schools",
-          icon: IoSchool,
-          desc: <UserReviewsSchool/>,
-        },
-        {
-            label: "Teachers",
-            value: "Teachers",
-            icon: FaRegAddressCard,
-            desc: <UserReviewsTeacher/>,
-          },
+
       ];
   return (<>
     <Tabs value={activeTab}>

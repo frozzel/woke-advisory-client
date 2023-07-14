@@ -34,7 +34,7 @@ export default function TeacherList({ title, schools = [] }) {
 const ListItem = ({ school }) => {
   
     if (!school) return null;
-    const {name, avatar, about, grade, classType, id} = school
+    const {name, avatar, about, grade, classType, id, reviewsTeacher} = school
     
     return (
     <>
@@ -44,7 +44,7 @@ const ListItem = ({ school }) => {
         <div className='  flex md:justify-center mb-2'>
               {avatar ? (<img
                   className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
-                  src={avatar}
+                  src={avatar.url}
                   alt="{name}"
                 />):( <div className="flex items-center justify-center w-20 h-20 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
           {getNameInitial(name)}
@@ -57,7 +57,7 @@ const ListItem = ({ school }) => {
           </h1>
           <p className="text-light-subtle dark:text-dark-subtle">Grade: {grade} </p>
           <p className="text-light-subtle dark:text-dark-subtle text-xs">Class Type: {classType}</p>
-         <RatingStar rating={school.rating} />
+         <RatingStar rating={reviewsTeacher.ratingAvg} />
         </div>
       </div>
      

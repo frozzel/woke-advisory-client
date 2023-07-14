@@ -4,13 +4,12 @@ import { getSingleTeacher } from "../../api/teacher";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
-import AddRatingModalSchool from "../models/AddRatingModalSchool";
+import AddRatingModalTeacher from "../models/AddRatingModalTeacher";
 import RatingStar from "../RatingStar";
 import GaugeChart from 'react-gauge-chart';
 import { BsFillCheckSquareFill, BsSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import CustomButtonLink2 from "../CustomButtonLink2";
-import SchoolReviewTabs from './SchoolReviewTabs';
+import TeacherReviewTab from './TeacherReviewTab';
 import TeacherUpload from "../models/TeacherUpload";
 
 
@@ -110,7 +109,7 @@ export default function SingleTeacher() {
 
 
   const handleOnRatingSuccess = (reviews) => {
-    setMovie({ ...movie, SchoolReviews: { ...reviews } });
+    setMovie({ ...movie, reviewsTeacher: { ...reviews } });
   };
 
   useEffect(() => {
@@ -205,7 +204,7 @@ export default function SingleTeacher() {
         <ListWithLabel2 label="Require Trans Pronouns" children={reviewsTeacher.trans_pronouns}></ListWithLabel2>
         </div>
         <div className=" flex-col sm:block hidden mt-2">
-        <ListWithLabel2 label="Trans Bathrooms Policy" children={reviewsTeacher.trans_sports}></ListWithLabel2>
+        <ListWithLabel2 label="Trans Sports Policy" children={reviewsTeacher.trans_sports}></ListWithLabel2>
         <ListWithLabel2 label="Climate Change Hysteria" children={reviewsTeacher.globalWarming}></ListWithLabel2>
         <ListWithLabel2 label="Anti Parental Rights" children={reviewsTeacher.anti_parents_rights}></ListWithLabel2>
         </div>
@@ -219,7 +218,7 @@ export default function SingleTeacher() {
             />
             <CustomButtonLink
               rating={reviewsTeacher.ratingAvg}
-              label="Rate the movie"
+              label="Rate the Teacher"
               onClick={handleOnRateMovie}
             />
           </div>
@@ -233,14 +232,14 @@ export default function SingleTeacher() {
         <ListWithLabel2 label="Require Trans Pronouns" children={reviewsTeacher.trans_pronouns}></ListWithLabel2>
         </div>
         <div className="  flex-col sm:flex  lg:hidden md:hidden pb-3">
-        <ListWithLabel2 label="Trans Bathrooms Policy" children={reviewsTeacher.trans_sports}></ListWithLabel2>
+        <ListWithLabel2 label="Trans Sports Policy" children={reviewsTeacher.trans_sports}></ListWithLabel2>
         <ListWithLabel2 label="Climate Change Hysteria" children={reviewsTeacher.globalWarming}></ListWithLabel2>
         <ListWithLabel2 label="Anti Parental Rights" children={reviewsTeacher.anti_parents_rights}></ListWithLabel2>
         </div>
         
 
 
-        <SchoolReviewTabs />
+        <TeacherReviewTab />
 
         <TeacherUpload
         visible={showEditModal}
@@ -250,17 +249,7 @@ export default function SingleTeacher() {
       />
       </Container>
 
-      <AddRatingModalSchool
-        // title={title}
-        // IMDB={IMDB}
-        // overview={overview}
-        // release_date={release_date}
-        // genres={genres}
-        // backdrop_path={backdrop_path}
-        // trailer={trailer}
-        // trailer2={trailer2}
-        // trailer3={trailer3}
-        // original_language={original_language}
+      <AddRatingModalTeacher
         visible={showRatingModal}
         onClose={hideRatingModal}
         onSuccess={handleOnRatingSuccess}

@@ -81,7 +81,7 @@ export default function SingleSchool() {
   };
 
   useEffect(() => {
-    if (schoolId) fetchMovie() && window.scrollTo(0, 0) && fetchImages();
+    if (schoolId) fetchMovie() && window.scrollTo(0, 0);
   }, [schoolId]);
 
   useEffect(() => {
@@ -177,7 +177,7 @@ export default function SingleSchool() {
             />
             <CustomButtonLink
               rating={SchoolReviews.ratingAvg}
-              label="Rate the movie"
+              label="Rate this School"
               onClick={handleOnRateMovie}
             />
           </div>
