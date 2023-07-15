@@ -40,7 +40,8 @@ export default function SingleTv() {
   const [ready, setReady] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
- 
+  const [refresh, setRefresh] = useState(false);
+
 
   const { movieId } = useParams();
   const { updateNotification } = useNotification();
@@ -69,6 +70,7 @@ export default function SingleTv() {
 
   const handleOnRatingSuccess = (reviews) => {
     setMovie({ ...movie, reviews: { ...reviews } });
+    setRefresh(true);
   };
 
   useEffect(() => {
@@ -244,7 +246,7 @@ export default function SingleTv() {
         onClose={hideRatingModal}
         onSuccess={handleOnRatingSuccess}
       />
-     <MovieReviewsTv movieId={movieId} />
+     <MovieReviewsTv movieId={movieId} refresh={refresh}/>
     <div className="flex justify-center pt-5">
       <TMDB />
      </div>

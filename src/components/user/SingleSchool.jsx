@@ -42,6 +42,7 @@ export default function SingleSchool() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
   const [image, setImage] = useState({});
+  const [refresh, setRefresh] = useState(false);
 
   const { schoolId } = useParams();
   const { updateNotification } = useNotification();
@@ -78,6 +79,7 @@ export default function SingleSchool() {
 
   const handleOnRatingSuccess = (reviews) => {
     setMovie({ ...movie, SchoolReviews: { ...reviews } });
+    setRefresh(true);
   };
 
   useEffect(() => {
@@ -231,20 +233,10 @@ export default function SingleSchool() {
           </div>
 
         </div>
-        <SchoolReviewTabs />
+        <SchoolReviewTabs refresh={refresh}/>
       </Container>
 
       <AddRatingModalSchool
-        // title={title}
-        // IMDB={IMDB}
-        // overview={overview}
-        // release_date={release_date}
-        // genres={genres}
-        // backdrop_path={backdrop_path}
-        // trailer={trailer}
-        // trailer2={trailer2}
-        // trailer3={trailer3}
-        // original_language={original_language}
         visible={showRatingModal}
         onClose={hideRatingModal}
         onSuccess={handleOnRatingSuccess}

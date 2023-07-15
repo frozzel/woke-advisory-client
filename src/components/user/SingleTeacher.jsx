@@ -45,6 +45,7 @@ export default function SingleTeacher() {
   const [movie, setMovie] = useState({});
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const { teacherId } = useParams();
   const { updateNotification } = useNotification();
@@ -74,7 +75,7 @@ export default function SingleTeacher() {
 
   const handleOnEditClick = () => {
     const { _id, name, about, avatar, grade, classType } = movie;
-    console.log(movie)
+    
     
     setSelectedUser({
       _id,
@@ -103,18 +104,22 @@ export default function SingleTeacher() {
     };
 
     setMovie({ ...updatedTeacher });
-    fetchMovie()
+    
 ;
   };
 
 
   const handleOnRatingSuccess = (reviews) => {
     setMovie({ ...movie, reviewsTeacher: { ...reviews } });
+    fetchMovie();
+    setRefresh(true);
   };
 
   useEffect(() => {
     if (teacherId)fetchMovie() && window.scrollTo(0, 0);
   }, [teacherId]);
+
+
 
 
 
@@ -239,7 +244,7 @@ export default function SingleTeacher() {
         
 
 
-        <TeacherReviewTab />
+        <TeacherReviewTab refresh={refresh}/>
 
         <TeacherUpload
         visible={showEditModal}

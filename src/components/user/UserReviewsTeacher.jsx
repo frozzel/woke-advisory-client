@@ -7,12 +7,14 @@ import Container from "../Container";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
-import EditRatingModalSchool from "../models/EditRatingModalSchool";
+import EditRatingModalTeacher from "../models/EditRatingModalTeacher";
 import {IoSchool} from "react-icons/io5";
 import {FiExternalLink} from "react-icons/fi";
 import {FaUserGraduate} from "react-icons/fa";
 
-
+const getNameInitial = (name = "") => {
+  return name[0].toUpperCase();
+};
 
 export default function UserReviews() {
   const [reviews, setReviews] = useState([]);
@@ -136,7 +138,7 @@ export default function UserReviews() {
         subtitle="This action will remove this review permanently."
       />
 
-      <EditRatingModalSchool
+      <EditRatingModalTeacher
         visible={showEditModal}
         initialState={selectedReview}
         onSuccess={handleOnReviewUpdate}
@@ -161,7 +163,8 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
   const { content, rating, parentTeacher } = review;
   if (!parentTeacher) return null;
   
-  const {name, grade, classType } = parentTeacher;
+  const {name, grade, classType, avatar } = parentTeacher;
+  
   return (
     <>
       {onDeleteClick && onEditClick && onLinkClick ? (
@@ -171,8 +174,15 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
             onMouseLeave={handleOnMouseLeave}
             className="flex cursor-pointer relative ">
 
-        <FaUserGraduate className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/>
- 
+        {/* <FaUserGraduate className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/> */}
+        {avatar ? (<img
+                className="w-20 h-120 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover "
+                src={avatar.url}
+                alt="{name}"
+              />):( <div className="flex items-center justify-center w-20 h-20 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px]  bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+        {getNameInitial(name)}
+      </div>)
+            }
     <div className="px-2">
          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
           {name}
@@ -200,8 +210,15 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
             <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
             <div
             className="flex relative ">
-        <FaUserGraduate className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/>
-
+        {/* <FaUserGraduate className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/> */}
+        {avatar ? (<img
+                className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover  "
+                src={avatar.url}
+                alt="{name}"
+              />):( <div className="flex items-center justify-center w-20 h-20 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px]  bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+        {getNameInitial(name)}
+      </div>)
+            }
   
     <div className="px-2">
           <Link to={"/teacher/" + parentTeacher.id} className="  hover:underline">  

@@ -121,7 +121,7 @@ export default function RatingFormSchool({ busy, initialState, onSubmit, }) {
           className="w-full h-24 border-2 p-2 dark:text-white text-primary rounded outline-none bg-transparent resize-none"
         ></textarea>
 
-        <Submit busy={busy} onClick={handleSubmit} value="Rate This Movie" />
+        <Submit busy={busy} onClick={handleSubmit} value="Rate This School" />
       </div>
     </div>
   );

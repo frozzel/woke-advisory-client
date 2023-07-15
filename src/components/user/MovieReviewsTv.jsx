@@ -15,7 +15,7 @@ const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
 
-export default function MovieReviewsTv() {
+export default function MovieReviewsTv({ refresh}) {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
@@ -23,6 +23,7 @@ export default function MovieReviewsTv() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
+  
 
   const { movieId } = useParams();
   const { authInfo } = useAuth();
@@ -102,6 +103,11 @@ export default function MovieReviewsTv() {
   useEffect(() => {
     if (movieId) fetchReviews();
   }, [movieId]);
+
+  useEffect(() => {
+    if (refresh) fetchReviews();
+  }, [refresh]);
+
 
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">

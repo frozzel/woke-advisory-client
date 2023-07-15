@@ -16,26 +16,26 @@ import { TbAlertTriangleFilled } from "react-icons/tb";
 import { MdHowToVote } from "react-icons/md";
 
 
-export default function SchoolReviewTabs() {
+export default function SchoolReviewTabs({refresh}) {
     const [activeTab, setActiveTab] = React.useState("Reviews");
     const data = [
         {
             label: "Reviews",
             value: "Reviews",
             icon: FaRadiation,
-            desc: <MovieReviewsSchool/>,
+            desc: <MovieReviewsSchool refresh={refresh}/>,
           },
         {
           label: "Alerts",
           value: "Alerts",
           icon: TbAlertTriangleFilled,
-          desc: <UserReviewsTv/>,
+          desc: <UserReviewsTv />,
         },
         {
             label: "Teacher",
             value: "Teacher",
             icon: FaRegAddressCard,
-            desc: <TeacherCreate/>,
+            desc: <TeacherCreate />,
           },
 
         {
