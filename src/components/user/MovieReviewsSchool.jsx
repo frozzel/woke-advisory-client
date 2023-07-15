@@ -15,7 +15,7 @@ const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
 
-export default function MovieReviewsSchool() {
+export default function MovieReviewsSchool({ refresh}) {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
@@ -105,6 +105,10 @@ export default function MovieReviewsSchool() {
   useEffect(() => {
     if (schoolId) fetchReviews();
   }, [schoolId]);
+
+  useEffect(() => {
+    if (refresh) fetchReviews();
+  }, [refresh]);
 
   return (
     

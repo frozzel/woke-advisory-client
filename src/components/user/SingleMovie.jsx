@@ -45,6 +45,7 @@ export default function SingleMovie() {
   const [ready, setReady] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
+  const [refresh, setRefresh] = useState(false);
 
   const { movieId } = useParams();
   const { updateNotification } = useNotification();
@@ -74,6 +75,7 @@ export default function SingleMovie() {
 
   const handleOnRatingSuccess = (reviews) => {
     setMovie({ ...movie, reviews: { ...reviews } });
+    setRefresh(true);
   };
 
   useEffect(() => {
@@ -251,7 +253,7 @@ export default function SingleMovie() {
         onClose={hideRatingModal}
         onSuccess={handleOnRatingSuccess}
       />
-      <MovieReviews movieId={movieId} />
+      <MovieReviews movieId={movieId} refresh={refresh}/>
       <TMDB />
     </div>
   );

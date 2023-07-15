@@ -16,6 +16,7 @@ export default function TeacherCreate() {
     const [resultNotFound, setResultNotFound] = useState(false);
     const [teachers, setTeachers] = useState([]);
     const [query, setQuery] = useState("");
+    const [refresh, setRefresh] = useState(false);
 
     const { authInfo } = useAuth();
     const navigate = useNavigate();
@@ -37,6 +38,7 @@ export default function TeacherCreate() {
 
     const handleOnRatingSuccess = (teachers) => {
         setTeachers({ ...teachers });
+        setRefresh(true);
         
       };
 
@@ -90,7 +92,7 @@ export default function TeacherCreate() {
           query={query}
           resultNotFound={resultNotFound}
           schools={teachers}/>
-        <TeachersCard schoolId={schoolId}/>
+        <TeachersCard schoolId={schoolId} refresh={refresh}/>
       </Container>
 
       <AddTeacherModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />

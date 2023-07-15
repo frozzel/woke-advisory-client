@@ -15,20 +15,20 @@ import { TbAlertTriangleFilled } from "react-icons/tb";
 
 
 
-export default function TeacherReviewTabs() {
+export default function TeacherReviewTabs({refresh}) {
     const [activeTab, setActiveTab] = React.useState("Reviews");
     const data = [
         {
             label: "Reviews",
             value: "Reviews",
             icon: FaRadiation,
-            desc: <MovieReviewsTeacher/>,
+            desc: <MovieReviewsTeacher refresh={refresh}/>,
           },
         {
           label: "Alerts",
           value: "Alerts",
           icon: TbAlertTriangleFilled,
-          desc: <UserReviewsTv/>,
+          desc: <UserReviewsTv />,
         },
 
 

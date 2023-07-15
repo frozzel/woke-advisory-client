@@ -15,7 +15,7 @@ const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
 
-export default function TeachersCard() {
+export default function TeachersCard({ refresh}) {
   const [reviews, setReviews] = useState([]);
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -93,6 +93,10 @@ export default function TeachersCard() {
   useEffect(() => {
     if (schoolId) fetchReviews();
   }, [schoolId]);
+
+  useEffect(() => {
+    if (refresh) fetchReviews();
+  }, [refresh]);
 
   return (
     
