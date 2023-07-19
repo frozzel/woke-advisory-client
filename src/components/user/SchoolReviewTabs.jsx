@@ -14,6 +14,7 @@ import TeacherCreate from './TeacherCreate';
 import { FaRadiation } from "react-icons/fa";
 import { TbAlertTriangleFilled } from "react-icons/tb";
 import { MdHowToVote } from "react-icons/md";
+import AlertsSchool from './AlertsSchool';
 
 
 export default function SchoolReviewTabs({refresh}) {
@@ -29,7 +30,7 @@ export default function SchoolReviewTabs({refresh}) {
           label: "Alerts",
           value: "Alerts",
           icon: TbAlertTriangleFilled,
-          desc: <UserReviewsTv />,
+          desc: <AlertsSchool refresh={refresh}/>,
         },
         {
             label: "Teacher",
