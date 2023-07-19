@@ -104,8 +104,6 @@ export default function SingleSchool() {
   const {
     _id,
     SchoolReviews = {},
-    SchoolAlerts = {},
-    Teachers = {},
     SchoolName,
     AddressStreet,
     AddressCity,
