@@ -13,10 +13,13 @@ import { getAlertsSchool, deleteReview } from "../../api/alertsschool";
 import AddAlertSchoolModal from "../models/AddAlertSchoolModal";
 import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
+import {BiDotsHorizontalRounded} from "react-icons/bi"
+import {RiDeleteBackLine} from "react-icons/ri"
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
+let refreshs = false;
 
 export default function AlertsSchool({ }) {
   const [reviews, setReviews] = useState([]);
@@ -30,7 +33,7 @@ export default function AlertsSchool({ }) {
   const [refresh, setRefresh] = useState(false);
   const [teachers, setTeachers] = useState([]);
 
-  console.log("matched", profileOwnersReview)
+  
 
   const { schoolId } = useParams();
   const { authInfo } = useAuth();
@@ -40,6 +43,8 @@ export default function AlertsSchool({ }) {
   
   const { updateNotification } = useNotification();
 
+
+
   const fetchReviews = async () => {
     const { alerts, error } = await getAlertsSchool(schoolId);
     console.log(alerts)
@@ -48,6 +53,10 @@ export default function AlertsSchool({ }) {
     setReviews([...alerts]);
     setMovieTitle(title?.SchoolName);
   };
+  if(refreshs){
+    fetchReviews();
+    refreshs = false;
+  }
 
   const findProfileOwnersReview = () => {
     if (profileOwnersReview) return setProfileOwnersReview(null);
@@ -156,12 +165,12 @@ export default function AlertsSchool({ }) {
         <div className=" text-right"> */}
           
 
-          {profileId ? (
+          {/* {profileId ? (
             <CustomButtonLink
               label={profileOwnersReview ? "View All" : "Find My Alert"}
               onClick={findProfileOwnersReview}
             />
-          ) : null}
+          ) : null} */}
           
             
         </div>
@@ -212,14 +221,45 @@ export default function AlertsSchool({ }) {
   );
 }
 
-const ReviewCard = ({ review }) => {
+const ReviewCard = ({ review, }) => {
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [profileOwnersReview, setProfileOwnersReview] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const { authInfo } = useAuth();
+  const profileId = authInfo.profile?.id;
+  const { isLoggedIn } = authInfo;
+  const navigate = useNavigate();
+  const { updateNotification } = useNotification();
+
+  const handleDeleteConfirm = async () => {
+    setBusy(true);
+    const { error, message } = await deleteReview(review._id);
+    setBusy(false);
+    if (error) return updateNotification("error", error);
+
+    updateNotification("success", message);
+
+    // const updatedReviews = reviews.filter(
+    //   (r) => r.id !== profileOwnersReview.id
+    // );
+    // setReviews([...updatedReviews]);
+    // setProfileOwnersReview(null);
+    refreshs = true;
+    hideConfirmModal();
+  };
+
+  const displayConfirmModal = () => setShowConfirmModal(true);
+  const hideConfirmModal = () => setShowConfirmModal(false);
+
+
   console.log("review", review)
   if (!review) return null;
 
-  const { owner, content, comments, image, likes } = review;
+  const { owner, content, comments, image, likes, school } = review;
+  console.log("owner", owner)
   const count = likes.length;
   const avatar = owner.avatar?.url;
-  const userId = owner.id;
+ 
   return (
   <>
     {/* <Link to={`/profile/${userId}`}>
@@ -253,7 +293,10 @@ const ReviewCard = ({ review }) => {
 
     <div className=" ">
   <div className="bg-transparent border rounded-sm max-w-md">
-    <div class="flex items-center px-4 py-3">
+    <div class="flex items-center  px-4 py-3 ">
+    
+      
+      
     {avatar ? (<img
                 className="w-16 h-16  rounded-full "
                 src={avatar}
@@ -263,15 +306,33 @@ const ReviewCard = ({ review }) => {
         </div>)
             }
       
-      <div className="ml-3 ">
+      <div className="ml-3 w-full">
+      <Link to={`/profile/${owner._id}`}>
         <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
-        <span className="text-gray-600 text-xs block">{content}</span>
+        <span className="text-gray-600 text-xs block">{school.SchoolName}</span>
+        </Link>
+      </div>
+     
+      
+      <div className="flex w-full  object-right-top justify-end text-xl font-semibold antialiased  dark:text-white text-secondary   ">
+        
+        <button onClick={displayConfirmModal} type="button">
+                  <RiDeleteBackLine />
+                </button>
+                {/* <button onClick={handleOnEditClick} type="button">
+                  <BsPencilSquare />
+                </button> */}
       </div>
     </div>
+    <div className="ml-3 ">
+        <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{content}</span>
+        
+      </div>
     
-    {image ? ( <img className="" src={image.url} alt=""></img>
+    <div className="w-full    object-fill ">
+    {image ? ( <img  src={image.url} alt="" className="w-full object-fill" />
               ) : null}
-    
+    </div>
     <div className="flex items-center justify-between mx-4 mt-3 mb-2">
       <div class="flex gap-5  dark:text-white text-secondary">
         <FaRegHeart/>
@@ -285,7 +346,14 @@ const ReviewCard = ({ review }) => {
   </div>
 </div>
 
-
+      <ConfirmModal
+        visible={showConfirmModal}
+        onCancel={hideConfirmModal}
+        onConfirm={handleDeleteConfirm}
+        busy={busy}
+        title="Are you sure?"
+        subtitle="This action will remove this review permanently."
+      />
 
     </>
   );
