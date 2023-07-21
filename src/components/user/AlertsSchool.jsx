@@ -9,19 +9,20 @@ import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
-import { getAlertsSchool, deleteReview } from "../../api/alertsschool";
+import { getAlertsSchool, deleteReview, addComment } from "../../api/alertsschool";
 import AddAlertSchoolModal from "../models/AddAlertSchoolModal";
 import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
 import {BiDotsHorizontalRounded} from "react-icons/bi"
 import {RiDeleteBackLine} from "react-icons/ri"
+import PostCommentForm from "../form/PostCommentForm";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
 let refreshs = false;
 
-export default function AlertsSchool({ }) {
+export default function AlertsSchool() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
@@ -148,11 +149,15 @@ export default function AlertsSchool({ }) {
     <AddAlertSchoolModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
 
     <div className="dark:bg-primary bg-white  pb-10">
-      <Container className="xl:px-0 px-2 py-8">
+      <Container className="xl:px-0  py-1">
         <div className="mb-3 md:text-left text-center ">
-      <button onClick={handleAddTeacher}
+          { isLoggedIn ? (  <button onClick={handleAddTeacher}
                 className="border-2 border-light-subtle dark:border-dark-subtle  p-1 rounded bg-transparent text-sm outline-none hover:border-secondary hover:dark:border-white transition text-light-subtle dark:text-dark-subtle w-40 md:w-40 sm:w-auto  sm:text-sm whitespace-nowrap"
                 type="button">Add Alert</button>
+          ) : null
+
+          }
+    
         </div>
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px] whitespace-nowrap">
@@ -194,8 +199,8 @@ export default function AlertsSchool({ }) {
 
           </div>
         ) : (
-          <div className="space-y-3 mt-3">
-            {reviews.map((review) => (
+          <div className=" space-y-3  mt-3">
+            {reviews.slice(0).reverse().map((review) => (
               <ReviewCard review={review} key={review._id} />
             ))}
           </div>
@@ -222,14 +227,16 @@ export default function AlertsSchool({ }) {
 }
 
 const ReviewCard = ({ review, }) => {
+  const { owner, content, image, createdAt, likes,  school } = review;
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [busy, setBusy] = useState(false);
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
   const { isLoggedIn } = authInfo;
   const navigate = useNavigate();
   const { updateNotification } = useNotification();
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState(review.comments);
 
   const handleDeleteConfirm = async () => {
     setBusy(true);
@@ -238,62 +245,48 @@ const ReviewCard = ({ review, }) => {
     if (error) return updateNotification("error", error);
 
     updateNotification("success", message);
-
-    // const updatedReviews = reviews.filter(
-    //   (r) => r.id !== profileOwnersReview.id
-    // );
-    // setReviews([...updatedReviews]);
-    // setProfileOwnersReview(null);
     refreshs = true;
     hideConfirmModal();
+  };
+
+  const handleSearchSubmit = async (query) => {
+    if (!isLoggedIn) return navigate("/auth/signIn");
+    const content = {
+      content: query
+    }
+    const alertId = review._id;
+    const { error, alert } = await addComment(alertId, content);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "Comment added successfully!");
+    setComments([...comments, alert.comments[alert.comments.length - 1]]);
+    setShowComments(true);
+    
   };
 
   const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
 
+  const displayComments = () => { 
+    if(showComments) setShowComments(false)
+    else setShowComments(true) };
 
-  console.log("review", review)
+
+  // console.log("review", review)
   if (!review) return null;
 
-  const { owner, content, comments, image, likes, school } = review;
-  console.log("owner", owner)
+  
+  
+  console.log("comments", likes)
   const count = likes.length;
   const avatar = owner.avatar?.url;
  
   return (
   <>
-    {/* <Link to={`/profile/${userId}`}>
-    <div className="flex flex-col md:flex-row space-x-3 mb-5">
-      <div className='  flex md:justify-center mb-2'>
-            {avatar ? (<img
-                className="w-16 h-16 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
-                src={avatar}
-                alt="{name}"
-              />):( <div className="flex items-center justify-center w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
-        {getNameInitial(owner.name)}
-      </div>)
-            }
-          </div>
-      <div className=" ">
-        <h1 className="dark:text-white text-secondary font-semibold text-lg">
-          {owner.name}
-        </h1>
-        <p className="text-light-subtle dark:text-dark-subtle">{content}</p>
-        <div className="  w-full aspect-auto ">
-              {image.url ? ( <img className="" src={image.url} alt=""></img>
-              ) : null}
-            </div>
 
-
-        
-        <p className="text-light-subtle dark:text-dark-subtle">{comments[0]?.content}</p>
-      </div>
-    </div>
-    </Link> */}
 
     <div className=" ">
-  <div className="bg-transparent border rounded-sm max-w-md">
-    <div class="flex items-center  px-4 py-3 ">
+  <div className="bg-transparent border  max-w-lg border-light-subtle dark:border-dark-subtle">
+    <div className="flex items-center  px-4 py-3 ">
     
       
       
@@ -309,24 +302,28 @@ const ReviewCard = ({ review, }) => {
       <div className="ml-3 w-full">
       <Link to={`/profile/${owner._id}`}>
         <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
-        <span className="text-gray-600 text-xs block">{school.SchoolName}</span>
+        <span className="text-light-subtle dark:text-dark-subtle text-xs block">{school.SchoolName}</span>
+        
         </Link>
       </div>
      
       
       <div className="flex w-full  object-right-top justify-end text-xl font-semibold antialiased  dark:text-white text-secondary   ">
+        { owner._id === profileId ? (<>
+          <button onClick={displayConfirmModal} type="button">
+          <RiDeleteBackLine />
+        </button>
+        {/* <button onClick={handleOnEditClick} type="button">
+          <BsPencilSquare />
+        </button> */}
+          </>):(null)
+          }
         
-        <button onClick={displayConfirmModal} type="button">
-                  <RiDeleteBackLine />
-                </button>
-                {/* <button onClick={handleOnEditClick} type="button">
-                  <BsPencilSquare />
-                </button> */}
       </div>
     </div>
     <div className="ml-3 ">
         <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{content}</span>
-        
+        <span className="text-light-subtle dark:text-dark-subtle text-xs block text-right mr-1">Posted@{createdAt.toString().split("T")[0]}</span>
       </div>
     
     <div className="w-full    object-fill ">
@@ -334,17 +331,40 @@ const ReviewCard = ({ review, }) => {
               ) : null}
     </div>
     <div className="flex items-center justify-between mx-4 mt-3 mb-2">
-      <div class="flex gap-5  dark:text-white text-secondary">
-        <FaRegHeart/>
+      <div className="flex gap-5  dark:text-white text-secondary">
+        { profileId === owner._id ? (<FaHeart className="text-red-600"/>
+        ):(<FaRegHeart />)
+        }
+        
+        
+        <button onClick={displayComments} type="button">
         <FaRegComment/>
+        </button>
+        
       </div>
-      <div class="flex">
-        <svg fill="#262626" height="24" viewBox="0 0 48 48" width="24"><path d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 29 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1zM24 26c.8 0 1.6.3 2.2.9l15.8 16V3H6v39.9l15.8-16c.6-.6 1.4-.9 2.2-.9z"></path></svg>
+      <div className="flex">
+      <div className="font-semibold text-sm mx-4 mt-2 mb-4">{count} likes</div>
       </div>
     </div>
-    <div class="font-semibold text-sm mx-4 mt-2 mb-4">{count} likes</div>
+    {showComments ? (<>
+      <div className="p-2">
+
+<PostCommentForm placeholder='Comment on Alert' inputClassName="border-1 dark:border-dark-subtle border-light-subtle  bg-transparent text-sm outline-none dark:focus:border-white focus:border-primary transition text-light-subtle dark:text-dark-subtle w-full  text-sm lg:text-md  "
+        onSubmit={handleSearchSubmit} /> 
   </div>
-</div>
+    
+      <div className="font-semibold text-sm mx-4 mt-2 mb-4 dark:text-white text-secondary " >Comments:</div>
+            {comments.slice(0).reverse().map((comment) => ( 
+              <CommentCard comment={comment} key={comment._id} />
+              
+              ))}
+              
+    
+    </>
+      ) : null  }
+ 
+      </div>
+    </div>
 
       <ConfirmModal
         visible={showConfirmModal}
@@ -358,3 +378,10 @@ const ReviewCard = ({ review, }) => {
     </>
   );
 };
+const CommentCard = ({ comment }) => {
+
+  return (<div className="font-semibold text-sm mx-4 mt-2 mb-4 dark:text-white text-secondary"><Link to={`/profile/${comment.user._id}`} >{comment.user.name} </Link>: <span className="text-light-subtle dark:text-dark-subtle">{comment.content}</span> </div>
+
+  );
+
+}

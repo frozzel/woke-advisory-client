@@ -56,3 +56,17 @@ export const getReviewByUser = async (userId) => {
     return catchError(error);
   }
 };
+export const addComment = async (alertId, query) => {
+
+  const token = getToken();
+  try {
+    const { data } = await client.post(`/alertsschool/addcomment/${alertId}`, query, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+}
