@@ -70,3 +70,18 @@ export const addComment = async (alertId, query) => {
     return catchError(error);
   }
 }
+
+export const likeAlert = async (alertId) => {
+  
+    const token = getToken();
+    try {
+      const { data } = await client.post(`/alertsschool/addlike/${alertId}`, {}, {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      });
+      return data;
+    } catch (error) {
+      return catchError(error);
+    }
+}

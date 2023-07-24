@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
-import CustomButtonLink from "../CustomButtonLink";
-import RatingStar from "../RatingStar";
 import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModalSchool from "../models/EditRatingModalSchool";
@@ -13,9 +11,9 @@ import { getAlertsSchool, deleteReview, addComment } from "../../api/alertsschoo
 import AddAlertSchoolModal from "../models/AddAlertSchoolModal";
 import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
-import {BiDotsHorizontalRounded} from "react-icons/bi"
 import {RiDeleteBackLine} from "react-icons/ri"
 import PostCommentForm from "../form/PostCommentForm";
+import { likeAlert } from "../../api/alertsschool";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -33,6 +31,7 @@ export default function AlertsSchool() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [teachers, setTeachers] = useState([]);
+  
 
   
 
@@ -48,7 +47,7 @@ export default function AlertsSchool() {
 
   const fetchReviews = async () => {
     const { alerts, error } = await getAlertsSchool(schoolId);
-    console.log(alerts)
+    // console.log(alerts)
     if (error) return console.log("Reviews Error:", error);
     const title = alerts[0]?.school
     setReviews([...alerts]);
@@ -227,7 +226,7 @@ export default function AlertsSchool() {
 }
 
 const ReviewCard = ({ review, }) => {
-  const { owner, content, image, createdAt, likes,  school } = review;
+  const { owner, content, image, createdAt, school } = review;
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [busy, setBusy] = useState(false);
   const { authInfo } = useAuth();
@@ -237,6 +236,12 @@ const ReviewCard = ({ review, }) => {
   const { updateNotification } = useNotification();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(review.comments);
+  const [likes, setLikes] = useState(review.likes);
+  const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
+
+  // const test = review.likes.filter((like) => like.user._id === profileId);
+  // if (test.length > 0 && liked === false) setLiked(true);
+  // else if (test.length === 0 && liked === true) setLiked(false);
 
   const handleDeleteConfirm = async () => {
     setBusy(true);
@@ -274,9 +279,21 @@ const ReviewCard = ({ review, }) => {
   // console.log("review", review)
   if (!review) return null;
 
-  
-  
-  console.log("comments", likes)
+  const addLike = async () => {
+    if (!isLoggedIn) return navigate("/auth/signIn");
+    const alertId = review._id;
+    const { error, alert } = await likeAlert(alertId);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "Like added successfully!"); 
+    if (alert.likes.length === 0) setLikes([]);
+    else setLikes([...alert.likes]);
+    const test =  alert.likes.filter((like) => like.user._id === profileId);
+      
+    if (test.length === 1 ) setLiked(true);
+    else setLiked(false);
+    
+  };
+
   const count = likes.length;
   const avatar = owner.avatar?.url;
  
@@ -332,9 +349,12 @@ const ReviewCard = ({ review, }) => {
     </div>
     <div className="flex items-center justify-between mx-4 mt-3 mb-2">
       <div className="flex gap-5  dark:text-white text-secondary">
-        { profileId === owner._id ? (<FaHeart className="text-red-600"/>
-        ):(<FaRegHeart />)
+        { liked ?  (<button onClick={addLike} type="button"><FaHeart className="text-red-600"/></button>
+        ):(        <button onClick={addLike} type="button">
+        <FaRegHeart/>
+      </button>)
         }
+ 
         
         
         <button onClick={displayComments} type="button">
