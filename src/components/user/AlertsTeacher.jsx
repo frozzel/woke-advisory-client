@@ -7,13 +7,13 @@ import ConfirmModal from "../models/ConfirmModal";
 import NotFoundText from "../NotFoundText";
 import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
-import { getAlertsSchool, deleteReview, addComment } from "../../api/alertsschool";
-import AddAlertSchoolModal from "../models/AddAlertSchoolModal";
+import { getAlertsTeacher, deleteReview, addComment } from "../../api/alertsteacher";
+import AddAlertTeacherModal from "../models/AddAlertTeacherModal";
 import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
 import {RiDeleteBack2Line} from "react-icons/ri"
 import PostCommentForm from "../form/PostCommentForm";
-import { likeAlert } from "../../api/alertsschool";
+import { likeAlert } from "../../api/alertsteacher";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -35,7 +35,7 @@ export default function AlertsSchool() {
 
   
 
-  const { schoolId } = useParams();
+  const { teacherId } = useParams();
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
   const { isLoggedIn } = authInfo;
@@ -46,12 +46,12 @@ export default function AlertsSchool() {
 
 
   const fetchReviews = async () => {
-    const { alerts, error } = await getAlertsSchool(schoolId);
-    // console.log(alerts)
+    const { alerts, error } = await getAlertsTeacher(teacherId);
+   
     if (error) return console.log("Reviews Error:", error);
-    const title = alerts[0]?.school
+    const title = alerts[0]?.teacher
     setReviews([...alerts]);
-    setMovieTitle(title?.SchoolName);
+    setMovieTitle(title?.name);
   };
   if(refreshs){
     fetchReviews();
@@ -137,15 +137,15 @@ export default function AlertsSchool() {
     };
 
   useEffect(() => {
-    if (schoolId) fetchReviews();
-  }, [schoolId]);
+    if (teacherId) fetchReviews();
+  }, [teacherId]);
 
   useEffect(() => {
     if (refresh) fetchReviews();
   }, [refresh]);
 
   return (<>
-    <AddAlertSchoolModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
+    <AddAlertTeacherModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
 
     <div className="dark:bg-primary bg-white  pb-10">
       <Container className="xl:px-0  py-1">
@@ -226,7 +226,7 @@ export default function AlertsSchool() {
 }
 
 const ReviewCard = ({ review, }) => {
-  const { owner, content, image, createdAt, school } = review;
+  const { owner, content, image, createdAt, teacher } = review;
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [busy, setBusy] = useState(false);
   const { authInfo } = useAuth();
@@ -316,13 +316,13 @@ const ReviewCard = ({ review, }) => {
       <div className="ml-3 w-full">
       <Link to={`/profile/${owner._id}`}>
         <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
-        <span className="dark:text-highlight-dark text-highlight text-xs block">@{school.SchoolName}</span>
+        <span className="dark:text-highlight-dark text-highlight text-xs block">@{teacher.name}</span>
         
         </Link>
       </div>
      
       
-      <div className="flex w-full  object-right-top justify-end text-xl font-semibold antialiased dark:text-highlight-dark text-highlight  ">
+      <div className="flex w-full  object-right-top justify-end text-xl font-semibold antialiased  dark:text-highlight-dark text-highlight  ">
         { owner._id === profileId ? (<>
           <button onClick={displayConfirmModal} type="button">
           <RiDeleteBack2Line />
