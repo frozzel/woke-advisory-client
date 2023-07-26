@@ -7,16 +7,15 @@ import {
     TabPanel,
   } from "@material-tailwind/react";
 
-
-import UserReviewsTv from "./UserReviewsTv";
 import MovieReviewsTeacher from './MovieReviewsTeacher';
 import { FaRadiation } from "react-icons/fa";
 import { TbAlertTriangleFilled } from "react-icons/tb";
+import AlertsTeacher from './AlertsTeacher';
 
 
 
 export default function TeacherReviewTabs({refresh}) {
-    const [activeTab, setActiveTab] = React.useState("Reviews");
+    const [activeTab, setActiveTab] = React.useState("Alerts");
     const data = [
         {
             label: "Reviews",
@@ -28,7 +27,7 @@ export default function TeacherReviewTabs({refresh}) {
           label: "Alerts",
           value: "Alerts",
           icon: TbAlertTriangleFilled,
-          desc: <UserReviewsTv />,
+          desc: <AlertsTeacher refresh={refresh}/>,
         },
 
 
