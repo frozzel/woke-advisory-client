@@ -12,6 +12,7 @@ import { getImage } from "../../api/news";
 import { Link } from "react-router-dom";
 import CustomButtonLink2 from "../CustomButtonLink2";
 import SchoolReviewTabs from './SchoolReviewTabs';
+import { followSchool } from "../../api/follow";
 
 
 
@@ -43,13 +44,19 @@ export default function SingleSchool() {
   const [movie, setMovie] = useState({});
   const [image, setImage] = useState({});
   const [refresh, setRefresh] = useState(false);
+  
 
   const { schoolId } = useParams();
   const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
+  const isVerified = authInfo.profile?.isVerified;
 
   const navigate = useNavigate();
+
+  const test = authInfo.profile?.schoolsFollowing?.includes(schoolId);
+  
+  const [following, setFollowing] = useState(test);
 
   const fetchMovie = async () => {
     const { error, school } = await getSingleSchool(schoolId);
@@ -75,6 +82,19 @@ export default function SingleSchool() {
     setShowRatingModal(false);
   };
 
+     const fetchFollowSchool = async (schoolId) => {
+    const { error, user } = await followSchool(schoolId);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "You are now following this teacher");
+    if (following) setFollowing(false);
+    else setFollowing(true);
+  };
+
+    const handleFollowClick = () => {
+      if (!isLoggedIn) return navigate("/auth/signIn");
+      fetchFollowSchool(schoolId);
+    };
+
 
 
   const handleOnRatingSuccess = (reviews) => {
@@ -88,7 +108,13 @@ export default function SingleSchool() {
 
   useEffect(() => {
     if (schoolId) fetchImages(schoolId);
+
   }, [schoolId]);
+
+  useEffect(() => {
+    if (test) setFollowing(true);
+    else setFollowing(false);
+  }, [test]);
 
 
 
@@ -141,8 +167,10 @@ export default function SingleSchool() {
                 <h1 className="font-semibold text-md truncate md:text-2xl lg:text-4xl dark:text-highlight-dark text-highlight"> 
                   {SchoolName}
                 </h1>
+                
               </div>
             ) : null}
+            
         </div>
 
         </div>  
@@ -182,10 +210,12 @@ export default function SingleSchool() {
             />
           </div>
         </div>
+        
         <div className="flex justify-between">
 
         </div>
         <div className=" flex-col sm:flex  lg:hidden md:hidden ">
+
         <ListWithLabel2 label="CRT Related Material" children={SchoolReviews.CRT}></ListWithLabel2>
         <ListWithLabel2 label="Trans/Queer Theory" children={SchoolReviews.trans_grooming}></ListWithLabel2>
         <ListWithLabel2 label="Require Trans Pronouns" children={SchoolReviews.trans_pronouns}></ListWithLabel2>
@@ -230,6 +260,18 @@ export default function SingleSchool() {
 
           </div>
 
+        </div>
+        <div className="grid grid-cols-2  mt-2">
+      {isLoggedIn  && isVerified ? (<>
+      {following ? (<button onClick={handleFollowClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full   "
+                type="button">Unfollow</button>) :
+                (<button onClick={handleFollowClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full   "
+                type="button">Follow</button>)}
+
+      </>
+        ) : null}
         </div>
         <SchoolReviewTabs refresh={refresh}/>
       </Container>

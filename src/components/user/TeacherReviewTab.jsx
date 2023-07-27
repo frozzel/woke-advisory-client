@@ -15,7 +15,7 @@ import AlertsTeacher from './AlertsTeacher';
 
 
 export default function TeacherReviewTabs({refresh}) {
-    const [activeTab, setActiveTab] = React.useState("Alerts");
+    const [activeTab, setActiveTab] = React.useState("Reviews");
     const data = [
         {
             label: "Reviews",

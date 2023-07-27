@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import Container from '../Container';
 import UserUpload from '../models/UserUpload';
 import ProfileReviewTabs from './ProfileReviewTabs';
+import { followUser } from '../../api/follow';
+import { useNavigate } from 'react-router-dom';
 
 
 const getNameInitial = (name = "") => {
@@ -24,6 +26,23 @@ export default function Profile() {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
+    const navigate = useNavigate();
+
+    const test = authInfo.profile?.following?.includes(userId);
+    const [following, setFollowing] = useState(test);
+
+    const fetchFollowUser = async (userId) => {
+      const { error, user } = await followUser(userId);
+      if (error) return updateNotification("error", error);
+      updateNotification("success", "You are now following this user");
+      if (following) setFollowing(false);
+      else setFollowing(true);
+    };
+  
+      const handleFollowClick = () => {
+        if (!isLoggedIn) return navigate("/auth/signIn");
+        fetchFollowUser(userId);
+      };
   
 
     const fetchProfile = async () => {
@@ -66,6 +85,11 @@ export default function Profile() {
     useEffect(() => {
         if (userId)fetchProfile() && window.scrollTo(0, 0);
     }, [userId]);
+
+    useEffect(() => {
+      if (test) setFollowing(true);
+      else setFollowing(false);
+    }, [test]);
 
     const { profile } = authInfo;
 
@@ -150,6 +174,18 @@ export default function Profile() {
           <div className=''>
               <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
               <p className="text-light-subtle dark:text-dark-subtle flex  p-1 mb-3">{bio}</p>
+              <div className="grid grid-cols-2  mt-2">
+      {isLoggedIn  ? (<>
+      {following ? (<button onClick={handleFollowClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full   "
+                type="button">Unfollow</button>) :
+                (<button onClick={handleFollowClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full   "
+                type="button">Follow</button>)}
+
+      </>
+        ) : null}
+        </div>
           </div>
           
         </div>
