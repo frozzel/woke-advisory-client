@@ -11,6 +11,7 @@ import { BsFillCheckSquareFill, BsSquare } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import TeacherReviewTab from './TeacherReviewTab';
 import TeacherUpload from "../models/TeacherUpload";
+import { followTeacher } from "../../api/follow";
 
 
 
@@ -46,12 +47,16 @@ export default function SingleTeacher() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  
 
   const { teacherId } = useParams();
   const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
   const isVerified = authInfo.profile?.isVerified;
+
+  const test = authInfo.profile?.teachersFollowing?.includes(teacherId);
+  const [following, setFollowing] = useState(test);
 
   const navigate = useNavigate();
 
@@ -87,6 +92,19 @@ export default function SingleTeacher() {
     });
     setShowEditModal(true);
    }
+  
+   const fetchFollowTeacher = async (teacherId) => {
+    const { error, user } = await followTeacher(teacherId);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "You are now following this teacher");
+    if (following) setFollowing(false);
+    else setFollowing(true);
+  };
+
+    const handleFollowClick = () => {
+      if (!isLoggedIn) return navigate("/auth/signIn");
+      fetchFollowTeacher(teacherId);
+    };
    const hideEditModal = () => {
     setShowEditModal(false);
     setSelectedUser(null);
@@ -97,7 +115,7 @@ export default function SingleTeacher() {
       ...movie,
       name,
         about: movie.about,
-        avatar: movie.avatar.url,
+        avatar: movie.avatar?.url,
         grade: movie.grade,
         classType: movie.classType,
 
@@ -119,7 +137,10 @@ export default function SingleTeacher() {
     if (teacherId)fetchMovie() && window.scrollTo(0, 0);
   }, [teacherId]);
 
-
+  useEffect(() => {
+    if (test) setFollowing(true);
+    else setFollowing(false);
+  }, [test]);
 
 
 
@@ -180,13 +201,20 @@ export default function SingleTeacher() {
         </div>
         {imgCheck ?  (<img src="./logo.png" alt="logo" className="absolute right-4 md:right-2 xl:right-80 w-16 md:w-32 lg:w-48" />): null}
       </div>
-      <div className="grid justify-items-stretch mt-2">
-      {isLoggedIn  && isVerified ? (
+      <div className="grid grid-cols-2  mt-2">
+      {isLoggedIn  && isVerified ? (<>
+      {following ? (<button onClick={handleFollowClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full   "
+                type="button">Unfollow</button>) :
+                (<button onClick={handleFollowClick}
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full   "
+                type="button">Follow</button>)}
+
       
       <button onClick={handleOnEditClick}
-                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full justify-self-center md:justify-self-end  "
+                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full justify-self-end  "
                 type="button">Edit</button>
-
+      </>
         ) : null}
         </div>
       <div className="grid justify-items-stretch">

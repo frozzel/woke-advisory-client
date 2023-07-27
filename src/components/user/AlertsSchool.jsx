@@ -337,7 +337,7 @@ const ReviewCard = ({ review, }) => {
     </div>
     <div className="ml-3 ">
         <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{content}</span>
-        <span className="text-light-subtle dark:text-dark-subtle text-xs block text-right mr-1">Posted@{createdAt.toString().split("T")[0]}</span>
+        <span className="text-light-subtle dark:text-dark-subtle text-xs block text-right mr-1 mt-1">Posted@{createdAt.toString().split("T")[0]}</span>
       </div>
     
     <div className="w-full    object-fill ">
@@ -360,7 +360,10 @@ const ReviewCard = ({ review, }) => {
         
       </div>
       <div className="flex">
-      <div className="font-semibold text-sm mx-4 mt-2 mb-4">{count} likes</div>
+        {likes.length === 1 ? (
+          <div className="font-semibold text-sm mx-4 mt-2 mb-4">{count} like</div>
+        ) : (<div className="font-semibold text-sm mx-4 mt-2 mb-4">{count} likes</div>)}
+     
       </div>
     </div>
     {showComments ? (<>
