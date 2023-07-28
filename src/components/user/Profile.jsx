@@ -9,6 +9,7 @@ import UserUpload from '../models/UserUpload';
 import ProfileReviewTabs from './ProfileReviewTabs';
 import { followUser } from '../../api/follow';
 import { useNavigate } from 'react-router-dom';
+import ProfileFollowTabs from './ProfileFollowTabs';
 
 
 const getNameInitial = (name = "") => {
@@ -25,7 +26,7 @@ export default function Profile() {
     const { updateNotification } = useNotification();
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
-
+    
     const navigate = useNavigate();
 
     const test = authInfo.profile?.following?.includes(userId);
@@ -47,6 +48,7 @@ export default function Profile() {
 
     const fetchProfile = async () => {
       const { error, user } = await getProfile(userId);
+      
         if (error) return updateNotification("error", error);
 
         setUser(user);
@@ -103,7 +105,9 @@ export default function Profile() {
         </>
         )
     }
-    const { name, avatar, bio } = user;
+    const { name, avatar, bio, schoolsFollowing, teachersFollowing, followers  } = user;
+    const userFollowing = user.following;
+    
 
     if (userId === profile.id) {
     return (<>
@@ -148,6 +152,7 @@ export default function Profile() {
       />
 
         <div className="z-0"><ProfileReviewTabs /></div>
+        <div className="z-0"><ProfileFollowTabs  user={user}/></div>
          
       </Container>
       
@@ -192,12 +197,6 @@ export default function Profile() {
         
       </div>
       
-      {/* <div className='flex-row items-right text-right mr-4 mt-5'>
-              <button onClick={handleOnEditClick}
-                className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
-                type="button">Edit</button>
-        </div> */}
-      
 
       <UserUpload
         visible={showEditModal}
@@ -207,6 +206,7 @@ export default function Profile() {
       />
 
         <div className="z-0"><ProfileReviewTabs /></div>
+        
          
       </Container>
       

@@ -89,7 +89,7 @@ export default function UserReviews() {
   }, [userId]);;
 
   return (
-    <div className="dark:bg-primary bg-white  min-h-screen pb-10">
+    <div className="dark:bg-primary bg-white  pb-10">
       <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">

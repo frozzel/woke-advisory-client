@@ -94,7 +94,7 @@ export default function UserReviews() {
   }, [userId]);;
 
   return (
-    <div className="dark:bg-primary bg-white  min-h-screen pb-10">
+    <div className="dark:bg-primary bg-white  pb-10">
       <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
@@ -155,6 +155,11 @@ export default function UserReviews() {
 
 const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
   const [showOptions, setShowOptions] = useState(false);
+
+  const trimTitle = (text = "") => {
+    if (text.length <= 30) return text;
+    return text.substring(0, 25) + "...";
+  };
   
   
   const handleOnMouseEnter = () => {
@@ -176,17 +181,17 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
   return (
     <>
       {onDeleteClick && onEditClick && onLinkClick ? (
-        <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
+        <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden ">
             <div
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
             className="flex cursor-pointer relative ">
 
-        <IoSchool className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2"/>
+        <IoSchool className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2 self-center"/>
  
     <div className="px-2">
          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
-          {SchoolName}
+          {trimTitle(SchoolName)}
           </h1>
           <p className="text-primary dark:text-white opacity-70 whitespace-wrap">
           {AddressStreet}
@@ -195,7 +200,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
           {AddressCity}, {AddressState} {AddressZip}-{AddressZip4}
           </p>
     </div>
-        <div className="flex items-center space-x-2 absolute top-2 right-2 text-2xl lg:text-lg bg-white dark:bg-secondary">
+        <div className="flex items-center space-x-2 absolute top-3 right-2 text-2xl lg:text-lg bg-white dark:bg-secondary self-center">
           <RatingStar rating={rating} />
         </div>
 
@@ -217,7 +222,7 @@ const ReviewCard = ({ review, onEditClick, onDeleteClick, onLinkClick }) => {
     <div className="px-2">
           <Link to={"/school/" + parentSchool.id} className="  hover:underline">  
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
-          {SchoolName}
+          {trimTitle(SchoolName)}
           </h1>
           </Link>
           <p className="text-primary dark:text-white opacity-70 whitespace-wrap">

@@ -15,7 +15,6 @@ import {FiExternalLink} from "react-icons/fi";
 export default function UserReviews() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
-  // const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
@@ -36,15 +35,6 @@ export default function UserReviews() {
     setMovieTitle(movie.title);
   };
   
-  // const findProfileOwnersReview = () => {
-  //   if (profileOwnersReview) return setProfileOwnersReview(null);
-
-  //   const matched = reviews.find((review) => review.owner === profileId);
-  //   if (!matched)
-  //     return updateNotification("error", "You don't have any review!");
-    
-  //   setProfileOwnersReview(matched);
-  // };
   const handleOnLinkClick = (review) => {
     navigate("/movie/" + review.parentMovie.TMDB_Id);
   };
@@ -82,7 +72,6 @@ export default function UserReviews() {
 
   };
 
-  // const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
   const hideEditModal = () => {
     setShowEditModal(false);
@@ -94,7 +83,7 @@ export default function UserReviews() {
   }, [userId]);;
 
   return (
-    <div className="dark:bg-primary bg-white  min-h-screen pb-10">
+    <div className="dark:bg-primary bg-white   pb-10">
       <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
@@ -103,13 +92,7 @@ export default function UserReviews() {
             </span>{" "}
             {movieTitle}
           </h1>
-{/* 
-          {profileId ? (
-            <CustomButtonLink
-              label={profileOwnersReview ? "View All" : "Find My Review"}
-              onClick={findProfileOwnersReview}
-            />
-          ) : null} */}
+
         </div>
 
         <NotFoundText text="No Reviews!" visible={!reviews.length} />
