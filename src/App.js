@@ -22,6 +22,7 @@ import SingleSchool from './components/user/SingleSchool';
 import MovieReviewsSchool from './components/user/MovieReviewsSchool';
 import SingleTeacher from './components/user/SingleTeacher';
 import MovieReviewsTeacher from './components/user/MovieReviewsTeacher';
+import HomeTest from './components/HomeTest';
 
 
 export default function App() {
@@ -55,6 +56,7 @@ export default function App() {
           <Route path='/school/home' element={<SchoolHome />} />
           <Route path="/school/search" element={<SearchSchools />} />
           <Route path='*' element={<NotFound/>} />
+          <Route path='/hometest' element={<HomeTest/>} />
         
       </Routes>
      
