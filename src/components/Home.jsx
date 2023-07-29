@@ -7,6 +7,7 @@ import TopRatedTVSeries from "./user/TopRatedTVSeries";
 import TopRatedWebSeries from "./user/TopRatedWebSeries";
 import TMDB from "./TMDB";
 
+
 export default function Home() {
   return (
     <div className="dark:bg-primary bg-white min-h-screen">
