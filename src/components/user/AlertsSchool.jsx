@@ -14,6 +14,9 @@ import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
 import {RiDeleteBack2Line} from "react-icons/ri"
 import PostCommentForm from "../form/PostCommentForm";
 import { likeAlert } from "../../api/alertsschool";
+import io from 'socket.io-client';
+
+const socket = io(process.env.REACT_APP_API3);
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -33,8 +36,6 @@ export default function AlertsSchool() {
   const [teachers, setTeachers] = useState([]);
   
 
-  
-
   const { schoolId } = useParams();
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
@@ -49,6 +50,7 @@ export default function AlertsSchool() {
     const { alerts, error } = await getAlertsSchool(schoolId);
     // console.log(alerts)
     if (error) return console.log("Reviews Error:", error);
+    
     const title = alerts[0]?.school
     setReviews([...alerts]);
     setMovieTitle(title?.SchoolName);
@@ -68,7 +70,7 @@ export default function AlertsSchool() {
     
     setProfileOwnersReview(matched);
   };
-
+  console.log("reviews", reviews)
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
     
@@ -130,8 +132,9 @@ export default function AlertsSchool() {
     setShowAddModal(false);
     };
 
-  const handleOnRatingSuccess = (teachers) => {
-        setTeachers({ ...teachers });
+const handleOnRatingSuccess = (pass) => {
+        socket.emit("sendSchool", pass  )
+        setReviews(() => [...reviews, pass]);
         setRefresh(true);
         
     };
@@ -140,9 +143,23 @@ export default function AlertsSchool() {
     if (schoolId) fetchReviews();
   }, [schoolId]);
 
+  // useEffect(() => {
+  //   // if (refresh) 
+  //   // console.log("refresh", refresh)
+  //   socket.on('sendTeacher', (pass) => {
+  //     console.log("teachers", pass)
+  //     setReviews(() => [...reviews, pass]);
+  //   });
+  //   // fetchReviews();
+  // }, [refresh]);
+
   useEffect(() => {
-    if (refresh) fetchReviews();
-  }, [refresh]);
+    socket.on('school', (pass) => {
+      setReviews(() => [...reviews, pass]);
+    });
+
+  }, [reviews]);
+
 
   return (<>
     <AddAlertSchoolModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />

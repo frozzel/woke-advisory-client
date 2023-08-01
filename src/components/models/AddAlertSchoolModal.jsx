@@ -14,7 +14,6 @@ export default function AddAlertSchoolModal({ visible, onSuccess, onClose}) {
     setBusy(true);
     const { error, message, alert } = await addAlertsSchool(schoolId, data);
     if (error) return updateNotification("error", error);
-    
     updateNotification("success", message);
     onSuccess(alert);
     onClose();

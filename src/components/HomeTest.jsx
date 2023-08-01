@@ -10,6 +10,7 @@ function HomeTest() {
 
   useEffect(() => {
     socket.on('message', (message) => {
+      console.log("test",message);
       setMessages((messages) => [...messages, message]);
     });
   }, []);
