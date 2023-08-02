@@ -32,8 +32,9 @@ export default function AlertsSchool() {
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  // const [refresh, setRefresh] = useState(false);
   const [teachers, setTeachers] = useState([]);
+  console.log("teachers", reviews)
   
 
   const { schoolId } = useParams();
@@ -55,10 +56,10 @@ export default function AlertsSchool() {
     setReviews([...alerts]);
     setMovieTitle(title?.SchoolName);
   };
-  if(refreshs){
-    fetchReviews();
-    refreshs = false;
-  }
+  // if(refreshs){
+  //   fetchReviews();
+  //   refreshs = false;
+  // }
 
   const findProfileOwnersReview = () => {
     if (profileOwnersReview) return setProfileOwnersReview(null);
@@ -70,7 +71,7 @@ export default function AlertsSchool() {
     
     setProfileOwnersReview(matched);
   };
-  console.log("reviews", reviews)
+ 
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
     
@@ -135,7 +136,7 @@ export default function AlertsSchool() {
 const handleOnRatingSuccess = (pass) => {
         socket.emit("sendSchool", pass  )
         setReviews(() => [...reviews, pass]);
-        setRefresh(true);
+        // setRefresh(true);
         
     };
 
@@ -143,21 +144,22 @@ const handleOnRatingSuccess = (pass) => {
     if (schoolId) fetchReviews();
   }, [schoolId]);
 
-  // useEffect(() => {
-  //   // if (refresh) 
-  //   // console.log("refresh", refresh)
-  //   socket.on('sendTeacher', (pass) => {
-  //     console.log("teachers", pass)
-  //     setReviews(() => [...reviews, pass]);
-  //   });
-  //   // fetchReviews();
-  // }, [refresh]);
+
 
   useEffect(() => {
     socket.on('school', (pass) => {
       setReviews(() => [...reviews, pass]);
     });
 
+  }, [reviews]);
+
+  useEffect(() => {
+
+    socket.on('delete', (pass) => {
+      
+      setReviews([...pass]);
+      
+    });
   }, [reviews]);
 
 
@@ -182,16 +184,7 @@ const handleOnRatingSuccess = (pass) => {
             </span>{"    "}{" "}
             {/* {movieTitle} */}
           </h1>
-        {/* </div>
-        <div className=" text-right"> */}
-          
 
-          {/* {profileId ? (
-            <CustomButtonLink
-              label={profileOwnersReview ? "View All" : "Find My Alert"}
-              onClick={findProfileOwnersReview}
-            />
-          ) : null} */}
           
             
         </div>
@@ -259,11 +252,13 @@ const ReviewCard = ({ review, }) => {
 
   const handleDeleteConfirm = async () => {
     setBusy(true);
-    const { error, message } = await deleteReview(review._id);
+    const { error, alerts, message } = await deleteReview(review._id);
     setBusy(false);
     if (error) return updateNotification("error", error);
-
+    socket.emit("sendDelete", alerts  )
     updateNotification("success", message);
+    
+    console.log("updatedReviews", alerts)
     refreshs = true;
     hideConfirmModal();
   };
