@@ -135,7 +135,7 @@ export default function AlertsSchool() {
 
 const handleOnRatingSuccess = (pass) => {
         socket.emit("sendSchool", pass  )
-        setReviews(() => [...reviews, pass]);
+        // setReviews(() => [...reviews, pass]);
         // setRefresh(true);
         
     };
@@ -257,8 +257,6 @@ const ReviewCard = ({ review, }) => {
     if (error) return updateNotification("error", error);
     socket.emit("sendDelete", alerts  )
     updateNotification("success", message);
-    
-    console.log("updatedReviews", alerts)
     refreshs = true;
     hideConfirmModal();
   };
