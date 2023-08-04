@@ -33,7 +33,6 @@ export default function AlertsSchool() {
   
   const { schoolId } = useParams();
   const { authInfo } = useAuth();
-  // const profileId = authInfo.profile?.id;
   const { isLoggedIn } = authInfo;
   const navigate = useNavigate();
   
@@ -223,7 +222,7 @@ const ReviewCard = ({ review, }) => {
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
   const alertId = review._id;
-
+  
   const handleDeleteConfirm = async () => {
     setBusy(true);
     const { error, alerts, message } = await deleteReview(review._id);
@@ -276,7 +275,7 @@ const ReviewCard = ({ review, }) => {
 
   useEffect(() => {
     socket.emit('roomComment', alertId);
-    socket.on('add', (alert) => {
+    socket.on(`add${alertId}`, (alert) => {
       if(!alert) return;
       setComments([...comments, alert.comments[alert.comments.length - 1]]);
     });
@@ -284,7 +283,7 @@ const ReviewCard = ({ review, }) => {
 
   useEffect(() => {
     socket.emit('roomLike', alertId);
-    socket.on('like', (alert) => {
+    socket.on(`like${alertId}`, (alert) => {
       if(!alert) return;
       if (alert.likes.length === 0) setLikes([]);
       else setLikes([...alert.likes]);
