@@ -134,6 +134,7 @@ const handleOnRatingSuccess = (pass) => {
   useEffect(() => {
     socket.emit('room', schoolId);
     socket.on('msg', (pass) => {
+      console.log("msg",pass);
       if(!pass) return;
       setReviews(() => [...reviews, pass]);
     });
@@ -142,6 +143,7 @@ const handleOnRatingSuccess = (pass) => {
   useEffect(() => {
     socket.emit('roomDelete', schoolId);
     socket.on('delete', (pass) => {
+      console.log("delete",pass);
       if(!pass) return;
       setReviews([...pass]);
     });
