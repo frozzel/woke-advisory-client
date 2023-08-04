@@ -21,22 +21,16 @@ const socket = io(process.env.REACT_APP_API3);
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
-let refreshs = false;
 
 export default function AlertsSchool() {
   const [reviews, setReviews] = useState([]);
-  const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  // const [refresh, setRefresh] = useState(false);
-  const [teachers, setTeachers] = useState([]);
-  console.log("teachers", reviews)
   
-
   const { schoolId } = useParams();
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
@@ -49,17 +43,11 @@ export default function AlertsSchool() {
 
   const fetchReviews = async () => {
     const { alerts, error } = await getAlertsSchool(schoolId);
-    // console.log(alerts)
     if (error) return console.log("Reviews Error:", error);
-    
-    const title = alerts[0]?.school
     setReviews([...alerts]);
-    setMovieTitle(title?.SchoolName);
+    
   };
-  // if(refreshs){
-  //   fetchReviews();
-  //   refreshs = false;
-  // }
+
 
   const findProfileOwnersReview = () => {
     if (profileOwnersReview) return setProfileOwnersReview(null);
@@ -134,9 +122,7 @@ export default function AlertsSchool() {
     };
 
 const handleOnRatingSuccess = (pass) => {
-        socket.emit("sendSchool", pass  )
-        // setReviews(() => [...reviews, pass]);
-        // setRefresh(true);
+        socket.emit('room', schoolId, pass);
         
     };
 
@@ -145,22 +131,22 @@ const handleOnRatingSuccess = (pass) => {
   }, [schoolId]);
 
 
-
   useEffect(() => {
-    socket.on('school', (pass) => {
+    socket.emit('room', schoolId);
+    socket.on('msg', (pass) => {
+      if(!pass) return;
       setReviews(() => [...reviews, pass]);
     });
-
   }, [reviews]);
 
   useEffect(() => {
-
+    socket.emit('roomDelete', schoolId);
     socket.on('delete', (pass) => {
-      
+      if(!pass) return;
       setReviews([...pass]);
-      
     });
   }, [reviews]);
+
 
 
   return (<>
@@ -182,7 +168,7 @@ const handleOnRatingSuccess = (pass) => {
             <span className="text-light-subtle dark:text-dark-subtle font-normal" >
               Alerts:    
             </span>{"    "}{" "}
-            {/* {movieTitle} */}
+        
           </h1>
 
           
@@ -249,15 +235,13 @@ const ReviewCard = ({ review, }) => {
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
 
-
   const handleDeleteConfirm = async () => {
     setBusy(true);
     const { error, alerts, message } = await deleteReview(review._id);
     setBusy(false);
     if (error) return updateNotification("error", error);
-    socket.emit("sendDelete", alerts  )
+    socket.emit('roomDelete', school._id, alerts);
     updateNotification("success", message);
-    refreshs = true;
     hideConfirmModal();
   };
 
@@ -282,8 +266,6 @@ const ReviewCard = ({ review, }) => {
     if(showComments) setShowComments(false)
     else setShowComments(true) };
 
-
-  // console.log("review", review)
   if (!review) return null;
 
   const addLike = async () => {

@@ -16,6 +16,7 @@ export default function AddAlertSchoolModal({ visible, onSuccess, onClose}) {
     if (error) return updateNotification("error", error);
     updateNotification("success", message);
     onSuccess(alert);
+    setBusy(false);
     onClose();
   };
   return (
