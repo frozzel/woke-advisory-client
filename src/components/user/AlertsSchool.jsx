@@ -33,7 +33,7 @@ export default function AlertsSchool() {
   
   const { schoolId } = useParams();
   const { authInfo } = useAuth();
-  const profileId = authInfo.profile?.id;
+  // const profileId = authInfo.profile?.id;
   const { isLoggedIn } = authInfo;
   const navigate = useNavigate();
   
@@ -46,18 +46,6 @@ export default function AlertsSchool() {
     if (error) return console.log("Reviews Error:", error);
     setReviews([...alerts]);
     
-  };
-
-
-  const findProfileOwnersReview = () => {
-    if (profileOwnersReview) return setProfileOwnersReview(null);
-
-    const matched = reviews.filter((review) => review.owner._id === profileId);
-    
-    if (!matched)
-      return updateNotification("error", "You don't have any review!");
-    
-    setProfileOwnersReview(matched);
   };
  
   const handleOnEditClick = () => {
@@ -250,15 +238,12 @@ const ReviewCard = ({ review, }) => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const content = {
       content: query
-    }
-    // const alertId = review._id;
-    // console.log(alertId);
+    };
     
     const { error, alert } = await addComment(alertId, content);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Comment added successfully!");
     socket.emit('roomComment', alertId, alert);
-    // setComments([...comments, alert.comments[alert.comments.length - 1]]);
     setShowComments(true);
     
   };
@@ -274,12 +259,11 @@ const ReviewCard = ({ review, }) => {
 
   const addLike = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
-    const alertId = review._id;
     const { error, alert } = await likeAlert(alertId);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Like added successfully!"); 
-    if (alert.likes.length === 0) setLikes([]);
-    else setLikes([...alert.likes]);
+    socket.emit('roomLike', alertId, alert);
+
     const test =  alert.likes.filter((like) => like.user._id === profileId);
       
     if (test.length === 1 ) setLiked(true);
@@ -297,6 +281,15 @@ const ReviewCard = ({ review, }) => {
       setComments([...comments, alert.comments[alert.comments.length - 1]]);
     });
   }, [comments]);
+
+  useEffect(() => {
+    socket.emit('roomLike', alertId);
+    socket.on('like', (alert) => {
+      if(!alert) return;
+      if (alert.likes.length === 0) setLikes([]);
+      else setLikes([...alert.likes]);
+    });
+  }, [likes]);
 
   if (!review) return null;
   return (
