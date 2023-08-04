@@ -15,29 +15,31 @@ import {RiDeleteBack2Line} from "react-icons/ri"
 import PostCommentForm from "../form/PostCommentForm";
 import { likeAlert } from "../../api/alertsteacher";
 
+import io from 'socket.io-client';
+
+const socket = io(process.env.REACT_APP_API3);
+
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
-let refreshs = false;
+// let refreshs = false;
 
 export default function AlertsSchool() {
   const [reviews, setReviews] = useState([]);
-  const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [teachers, setTeachers] = useState([]);
+  // const [refresh, setRefresh] = useState(false);
   
 
   
 
   const { teacherId } = useParams();
   const { authInfo } = useAuth();
-  const profileId = authInfo.profile?.id;
+  // const profileId = authInfo.profile?.id;
   const { isLoggedIn } = authInfo;
   const navigate = useNavigate();
   
@@ -49,25 +51,24 @@ export default function AlertsSchool() {
     const { alerts, error } = await getAlertsTeacher(teacherId);
    
     if (error) return console.log("Reviews Error:", error);
-    const title = alerts[0]?.teacher
     setReviews([...alerts]);
-    setMovieTitle(title?.name);
+   
   };
-  if(refreshs){
-    fetchReviews();
-    refreshs = false;
-  }
+  // if(refreshs){
+  //   fetchReviews();
+  //   refreshs = false;
+  // }
 
-  const findProfileOwnersReview = () => {
-    if (profileOwnersReview) return setProfileOwnersReview(null);
+  // const findProfileOwnersReview = () => {
+  //   if (profileOwnersReview) return setProfileOwnersReview(null);
 
-    const matched = reviews.filter((review) => review.owner._id === profileId);
+  //   const matched = reviews.filter((review) => review.owner._id === profileId);
     
-    if (!matched)
-      return updateNotification("error", "You don't have any review!");
+  //   if (!matched)
+  //     return updateNotification("error", "You don't have any review!");
     
-    setProfileOwnersReview(matched);
-  };
+  //   setProfileOwnersReview(matched);
+  // };
 
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
@@ -130,9 +131,9 @@ export default function AlertsSchool() {
     setShowAddModal(false);
     };
 
-  const handleOnRatingSuccess = (teachers) => {
-        setTeachers({ ...teachers });
-        setRefresh(true);
+  const handleOnRatingSuccess = (pass) => {
+        socket.emit('room', teacherId, pass);
+        // setRefresh(true);
         
     };
 
@@ -140,9 +141,25 @@ export default function AlertsSchool() {
     if (teacherId) fetchReviews();
   }, [teacherId]);
 
+  // useEffect(() => {
+  //   if (refresh) fetchReviews();
+  // }, [refresh]);
+
   useEffect(() => {
-    if (refresh) fetchReviews();
-  }, [refresh]);
+    socket.emit('room', teacherId);
+    socket.on('msg', (pass) => {
+      if(!pass) return;
+      setReviews(() => [...reviews, pass]);
+    });
+  }, [reviews]);
+
+  useEffect(() => {
+    socket.emit('roomDelete', teacherId);
+    socket.on('delete', (pass) => {
+      if(!pass) return;
+      setReviews([...pass]);
+    });
+  }, [reviews]);
 
   return (<>
     <AddAlertTeacherModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
@@ -163,18 +180,8 @@ export default function AlertsSchool() {
             <span className="text-light-subtle dark:text-dark-subtle font-normal" >
               Alerts:    
             </span>{"    "}{" "}
-            {/* {movieTitle} */}
+           
           </h1>
-        {/* </div>
-        <div className=" text-right"> */}
-          
-
-          {/* {profileId ? (
-            <CustomButtonLink
-              label={profileOwnersReview ? "View All" : "Find My Alert"}
-              onClick={findProfileOwnersReview}
-            />
-          ) : null} */}
           
             
         </div>
@@ -238,16 +245,15 @@ const ReviewCard = ({ review, }) => {
   const [comments, setComments] = useState(review.comments);
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
-
+  const alertId = review._id;
 
   const handleDeleteConfirm = async () => {
     setBusy(true);
-    const { error, message } = await deleteReview(review._id);
+    const { error, alerts, message } = await deleteReview(review._id);
     setBusy(false);
     if (error) return updateNotification("error", error);
-
+    socket.emit('roomDelete', teacher._id, alerts);
     updateNotification("success", message);
-    refreshs = true;
     hideConfirmModal();
   };
 
@@ -255,12 +261,12 @@ const ReviewCard = ({ review, }) => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const content = {
       content: query
-    }
-    const alertId = review._id;
+    };
+
     const { error, alert } = await addComment(alertId, content);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Comment added successfully!");
-    setComments([...comments, alert.comments[alert.comments.length - 1]]);
+    socket.emit('roomComment', alertId, alert);
     setShowComments(true);
     
   };
@@ -273,17 +279,14 @@ const ReviewCard = ({ review, }) => {
     else setShowComments(true) };
 
 
-  // console.log("review", review)
-  if (!review) return null;
-
   const addLike = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const alertId = review._id;
     const { error, alert } = await likeAlert(alertId);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Like added successfully!"); 
-    if (alert.likes.length === 0) setLikes([]);
-    else setLikes([...alert.likes]);
+    socket.emit('roomLike', alertId, alert);
+
     const test =  alert.likes.filter((like) => like.user._id === profileId);
       
     if (test.length === 1 ) setLiked(true);
@@ -293,6 +296,25 @@ const ReviewCard = ({ review, }) => {
 
   const count = likes.length;
   const avatar = owner.avatar?.url;
+
+  useEffect(() => {
+    socket.emit('roomComment', alertId);
+    socket.on(`add${alertId}`, (alert) => {
+      if(!alert) return;
+      setComments([...comments, alert.comments[alert.comments.length - 1]]);
+    });
+  }, [comments]);
+
+  useEffect(() => {
+    socket.emit('roomLike', alertId);
+    socket.on(`like${alertId}`, (alert) => {
+      if(!alert) return;
+      if (alert.likes.length === 0) setLikes([]);
+      else setLikes([...alert.likes]);
+    });
+  }, [likes]);
+
+  if (!review) return null;
  
   return (
   <>

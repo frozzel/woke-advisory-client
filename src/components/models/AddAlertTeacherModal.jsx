@@ -17,6 +17,7 @@ export default function AddAlertTeacherlModal({ visible, onSuccess, onClose}) {
     
     updateNotification("success", message);
     onSuccess(alert);
+    setBusy(false);
     onClose();
   };
   return (
