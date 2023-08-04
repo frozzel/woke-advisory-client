@@ -134,7 +134,6 @@ const handleOnRatingSuccess = (pass) => {
   useEffect(() => {
     socket.emit('room', schoolId);
     socket.on('msg', (pass) => {
-      console.log("msg",pass);
       if(!pass) return;
       setReviews(() => [...reviews, pass]);
     });
@@ -143,7 +142,6 @@ const handleOnRatingSuccess = (pass) => {
   useEffect(() => {
     socket.emit('roomDelete', schoolId);
     socket.on('delete', (pass) => {
-      console.log("delete",pass);
       if(!pass) return;
       setReviews([...pass]);
     });
@@ -236,6 +234,7 @@ const ReviewCard = ({ review, }) => {
   const [comments, setComments] = useState(review.comments);
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
+  const alertId = review._id;
 
   const handleDeleteConfirm = async () => {
     setBusy(true);
@@ -252,11 +251,14 @@ const ReviewCard = ({ review, }) => {
     const content = {
       content: query
     }
-    const alertId = review._id;
+    // const alertId = review._id;
+    // console.log(alertId);
+    
     const { error, alert } = await addComment(alertId, content);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Comment added successfully!");
-    setComments([...comments, alert.comments[alert.comments.length - 1]]);
+    socket.emit('roomComment', alertId, alert);
+    // setComments([...comments, alert.comments[alert.comments.length - 1]]);
     setShowComments(true);
     
   };
@@ -268,7 +270,7 @@ const ReviewCard = ({ review, }) => {
     if(showComments) setShowComments(false)
     else setShowComments(true) };
 
-  if (!review) return null;
+  
 
   const addLike = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
@@ -287,7 +289,16 @@ const ReviewCard = ({ review, }) => {
 
   const count = likes.length;
   const avatar = owner.avatar?.url;
- 
+
+  useEffect(() => {
+    socket.emit('roomComment', alertId);
+    socket.on('add', (alert) => {
+      if(!alert) return;
+      setComments([...comments, alert.comments[alert.comments.length - 1]]);
+    });
+  }, [comments]);
+
+  if (!review) return null;
   return (
   <>
 
