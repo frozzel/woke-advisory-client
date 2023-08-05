@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import AppSearchForm from "../form/AppSearchForm";
 import { useState } from "react";
 import {CgProfile} from "react-icons/cg";
+import {TbMessageHeart} from "react-icons/tb";
 
 
 export default function Navbar() {
@@ -80,7 +81,7 @@ export default function Navbar() {
                       <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                   </div>
-                  <ul className="flex flex-col   min-h-[250px]">
+                  <ul className="flex flex-col  min-h-[250px]">
                     {/* <li className="border-b border-gray-400 my-8 uppercase">
                       <a href="/about">About</a>
                     </li>
@@ -93,9 +94,14 @@ export default function Navbar() {
                     <li >
                   {isLoggedIn ? (<>
                     <Link
-                className="flex items-center text-light-subtle dark:text-dark-subtle text-lg transition space-x-1"
+                className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
                 onClick={() => setIsNavOpen(false)}
-                to={"/profile/" + profile?.id}><CgProfile /><span>Profile</span></Link></>
+                to={"/profile/" + profile?.id}><CgProfile /><span>Profile</span></Link>
+                <Link
+                className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
+                onClick={() => setIsNavOpen(false)}
+                to={"/feed/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
+                </>
                   ) : ( null
                   )}
 
@@ -105,7 +111,7 @@ export default function Navbar() {
                 <button
                   onClick={handleLogout}
                   // className="text-white font-semibold text-lg pt-1"
-                  className="flex items-center text-light-subtle dark:text-dark-subtle text-lg transition space-x-1"
+                  className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
                 ><FiLogOut />
                   <span>
                     Logout
@@ -114,7 +120,7 @@ export default function Navbar() {
                 ) : (
                 <Link
                   // className="text-white font-semibold text-lg pt-1"
-                  className="flex items-center text-light-subtle dark:text-dark-subtle text-lg transition space-x-1"
+                  className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1"
                   to="/auth/signIn"
                   onClick={() => setIsNavOpen(false)}
                 ><FiLogIn />
@@ -130,15 +136,24 @@ export default function Navbar() {
               </section>
 
               <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
-                <li >
+                
                   {isLoggedIn ? (<>
+                    <li >
                     <Link
                 className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
-                to={"/profile/" + profile?.id}><CgProfile /><span>Profile</span></Link></>
+                to={"/profile/" + profile?.id}><CgProfile /><span>Profile</span></Link>
+                </li>
+                <li>
+                <Link
+                className="flex items-center text-light-subtle dark:text-dark-subtle text-lg transition space-x-1"
+                onClick={() => setIsNavOpen(false)}
+                to={"/feed/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
+                </li>
+                </>
                   ) : ( null
                   )}
 
-                </li>
+                
                 <li className="pr-1">
                 {isLoggedIn ? (<>
                 <button

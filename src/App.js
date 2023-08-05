@@ -23,6 +23,7 @@ import MovieReviewsSchool from './components/user/MovieReviewsSchool';
 import SingleTeacher from './components/user/SingleTeacher';
 import MovieReviewsTeacher from './components/user/MovieReviewsTeacher';
 import HomeTest from './components/HomeTest';
+import Feed from './components/user/Feed';
 
 
 export default function App() {
@@ -56,7 +57,7 @@ export default function App() {
           <Route path='/school/home' element={<SchoolHome />} />
           <Route path="/school/search" element={<SearchSchools />} />
           <Route path='*' element={<NotFound/>} />
-          <Route path='/hometest' element={<HomeTest/>} />
+          <Route path='/feed/:userId' element={<Feed/>} />
         
       </Routes>
      
