@@ -130,7 +130,8 @@ const handleOnRatingSuccess = (pass) => {
     socket.emit('roomDelete', schoolId);
     socket.on('delete', (pass) => {
       if(!pass) return;
-      setReviews([...pass]);
+      const alerts = reviews.filter((r) => r._id !== pass._id);
+      setReviews([...alerts]);
     });
   }, [reviews]);
 

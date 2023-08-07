@@ -8,7 +8,7 @@ import NotFoundText from "../NotFoundText";
 import EditRatingModalSchool from "../models/EditRatingModalSchool";
 import {Link} from "react-router-dom"
 import { getAlertsSchool, deleteReview, addComment } from "../../api/post";
-import AddAlertSchoolModal from "../models/AddAlertSchoolModal";
+import AddPostModal from "../models/AddPostModal";
 import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
 import {RiDeleteBack2Line} from "react-icons/ri"
@@ -16,6 +16,7 @@ import PostCommentForm from "../form/PostCommentForm";
 import { likeAlert } from "../../api/post";
 import io from 'socket.io-client';
 import {TbMessage2Plus} from "react-icons/tb"
+import {IoAlert} from "react-icons/io5"
 
 const socket = io(process.env.REACT_APP_API3);
 
@@ -31,23 +32,34 @@ export default function Feed() {
   const [selectedReview, setSelectedReview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [following, setFollowing] = useState([]);
+  const [schoolsFollowing, setSchoolsFollowing] = useState([]);
+  const [teachersFollowing, setTeachersFollowing] = useState([]);
+  const allAlerts = [...following, ...schoolsFollowing, ...teachersFollowing];
   
   const { userId } = useParams();
   const { authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
   const navigate = useNavigate();
+  const { profile } = authInfo;
   
   const { updateNotification } = useNotification();
 
 
 
   const fetchReviews = async () => {
-    const { alerts, error } = await getAlertsSchool(userId);
+    const { alerts, error, following, schoolsFollowing, teachersFollowing } = await getAlertsSchool(userId);
+    
     if (error) return console.log("Reviews Error:", error);
     setReviews([...alerts]);
+    setFollowing([...following]);
+    setSchoolsFollowing([...schoolsFollowing]);
+    setTeachersFollowing([...teachersFollowing]);
     
   };
- 
+
+  console.log("following",following, "Schools", schoolsFollowing, "teachers", teachersFollowing);
+
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
     
@@ -123,22 +135,57 @@ const handleOnRatingSuccess = (pass) => {
     socket.emit('room', userId);
     socket.on('msg', (pass) => {
       if(!pass) return;
-      setReviews(() => [...reviews, pass]);
+      setReviews(() => [pass, ...reviews]);
     });
   }, [reviews]);
+
+  useEffect(() => {
+    socket.emit('room', allAlerts);
+    socket.on('msg', (pass) => {
+      if(!pass) return;
+      setReviews(() => [pass, ...reviews]);
+    });
+  }, [following]);
+
+  
 
   useEffect(() => {
     socket.emit('roomDelete', userId);
     socket.on('delete', (pass) => {
       if(!pass) return;
-      setReviews([...pass]);
+      console.log("Delete Returns Socket",pass._id);
+
+      const alerts = reviews.filter((r) => r._id !== pass._id);
+
+      console.log("Delete Returns Filter",alerts);
+      setReviews([...alerts]);
     });
   }, [reviews]);
 
 
-
+  if (!isLoggedIn) {
+    return (<>
+      <div className="h-screen flex justify-center items-center dark:bg-primary bg-white ">
+      <p className="text-light-subtle dark:text-dark-subtle animate-pulse">
+      Please Login
+      </p>
+    </div>
+    </>
+    )
+}
+  if (profile.id !== userId) {
+    return (<>
+      <div className="h-screen flex justify-center items-center dark:bg-primary bg-white ">
+      <p className="text-light-subtle dark:text-dark-subtle animate-pulse">
+      You are not authorized to view this page
+      </p>
+    </div>
+    </>
+    )
+}
+  if (profile.id === userId) 
   return (<>
-    <AddAlertSchoolModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
+    <AddPostModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
 
     <div className="dark:bg-primary bg-white  pb-10">
       <Container className="xl:px-0  py-1">
@@ -210,7 +257,7 @@ const handleOnRatingSuccess = (pass) => {
 }
 
 const ReviewCard = ({ review, }) => {
-  const { owner, content, image, createdAt, school } = review;
+  const { owner, content, image, createdAt, school, teacher } = review;
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [busy, setBusy] = useState(false);
   const { authInfo } = useAuth();
@@ -229,7 +276,8 @@ const ReviewCard = ({ review, }) => {
     const { error, alerts, message } = await deleteReview(review._id);
     setBusy(false);
     if (error) return updateNotification("error", error);
-    socket.emit('roomDelete', school._id, alerts);
+    console.log("Delete Returns",alerts);
+    socket.emit('roomDelete', owner._id, alerts);
     updateNotification("success", message);
     hideConfirmModal();
   };
@@ -300,21 +348,31 @@ const ReviewCard = ({ review, }) => {
   <div className="bg-transparent border  max-w-lg border-light-subtle dark:border-dark-subtle">
     <div className="flex items-center  px-4 py-3 ">
     
-      
-      
-    {avatar ? (<img
+    {school ? (<div className="flex items-center justify-center ">
+        <IoAlert className="w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-highlight dark:bg-highlight-dark text-white text-xl md:text-4xl select-none"/>
+        </div>  
+        ): teacher ? (<div className="flex items-center justify-center ">
+        <IoAlert className="w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-warning text-white text-xl md:text-4xl select-none"/>
+        </div>
+        ): avatar ? (<img
                 className="w-16 h-16  rounded-full "
                 src={avatar}
                 alt="{name}"
-              />):( <div className="flex items-center justify-center w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
+              />):( <div className="flex items-center "><span className="w-16 h-16 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-2xl md:text-4xl select-none flex items-center justify-center">
         {getNameInitial(owner.name)}
+        </span>
         </div>)
             }
       
       <div className="ml-3 w-full">
       <Link to={`/profile/${owner._id}`}>
         <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
-        <span className="dark:text-highlight-dark text-highlight text-xs block">@{school?.SchoolName}</span>
+        {school ?  (<span className="dark:text-highlight-dark text-highlight text-xs block">@{school?.SchoolName}</span>
+        ): teacher ? (<span className="dark:text-highlight-dark text-highlight text-xs block">@{teacher?.name}</span>
+        ): null
+        }
+        
+        
         
         </Link>
       </div>

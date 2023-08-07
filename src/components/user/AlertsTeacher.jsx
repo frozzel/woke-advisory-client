@@ -157,7 +157,8 @@ export default function AlertsSchool() {
     socket.emit('roomDelete', teacherId);
     socket.on('delete', (pass) => {
       if(!pass) return;
-      setReviews([...pass]);
+      const alerts = reviews.filter((r) => r._id !== pass._id);
+      setReviews([...alerts]);
     });
   }, [reviews]);
 
