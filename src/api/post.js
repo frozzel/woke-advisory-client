@@ -28,10 +28,10 @@ export const getAlertsSchool = async (userId, userData) => {
     return catchError(error);
   }
 };
-export const deleteReview = async (alertId) => {
+export const deleteReview = async (alertId, path) => {
   const token = getToken();
   try {
-    const { data } = await client.delete(`/post/delete/${alertId}`, {
+    const { data } = await client.delete(`/${path}/delete/${alertId}`, {
       headers: {
         authorization: "Bearer " + token,
       },

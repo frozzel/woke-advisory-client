@@ -9,8 +9,10 @@ export default function ConfirmModal({
   subtitle,
   onConfirm,
   onCancel,
+  path,
 }) {
   const commonClass = "px-3 py-1 text-white rounded";
+ 
   return (
     <ModalContainer visible={visible} ignoreContainer>
       <div className="dark:bg-primary bg-white rounded p-3">
@@ -29,6 +31,7 @@ export default function ConfirmModal({
                 onClick={onConfirm}
                 type="button"
                 className={commonClass + " bg-red-400"}
+                path={path}
               >
                 Confirm
               </button>
@@ -36,6 +39,7 @@ export default function ConfirmModal({
                 onClick={onCancel}
                 type="button"
                 className={commonClass + " bg-blue-400"}
+                
               >
                 Cancel
               </button>

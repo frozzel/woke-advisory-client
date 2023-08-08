@@ -17,7 +17,7 @@ export default function UserFollowers({user}) {
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
-            Following: 
+            Followers: 
             </span>{" "}
             {user?.length}
           </h1>

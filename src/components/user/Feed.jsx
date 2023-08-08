@@ -151,11 +151,7 @@ const handleOnRatingSuccess = (pass) => {
     socket.emit('roomDelete', userId);
     socket.on('delete', (pass) => {
       if(!pass) return;
-      console.log("Delete Returns Socket",pass._id);
-
       const alerts = reviews.filter((r) => r._id !== pass._id);
-
-      console.log("Delete Returns Filter",alerts);
       setReviews([...alerts]);
     });
   }, [reviews]);
@@ -268,30 +264,30 @@ const ReviewCard = ({ review, }) => {
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
   const alertId = review._id;
-  // const [path, setPath] = useState('post');
+  const [path, setPath] = useState('post');
 
-  // const checkPath = (query) => {
-  // if (school !== undefined) {
-  //   setPath('alertsSchool');
-  //   handleSearchSubmit(query);
-  // }
-  // else if (teacher !== undefined ) {
-  //     setPath('alertsTeacher');
-  //     handleSearchSubmit(query);
-  // } else {
-  //     setPath('post');
-  //     handleSearchSubmit(query);
-  // }
-  // }
-  // console.log("Path",path);
+  const checkPath = (query) => {
+  if (school !== undefined) {
+    setPath('alertsSchool');
+    handleSearchSubmit(query);
+  }
+  else if (teacher !== undefined ) {
+      setPath('alertsTeacher');
+      handleSearchSubmit(query);
+  } else {
+      setPath('post');
+      handleSearchSubmit(query);
+  }
+  }
+  
   
   
   const handleDeleteConfirm = async () => {
+    await checkPath();
     setBusy(true);
-    const { error, alerts, message } = await deleteReview(review._id);
+    const { error, alerts, message } = await deleteReview(review._id, path);
     setBusy(false);
     if (error) return updateNotification("error", error);
-    console.log("Delete Returns",alerts);
     socket.emit('roomDelete', owner._id, alerts);
     updateNotification("success", message);
     hideConfirmModal();
@@ -323,7 +319,6 @@ const ReviewCard = ({ review, }) => {
   const addLikeSchool = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const path = 'alertsSchool';
-    console.log("Path",path);
     const { error, alert } = await likeAlert(alertId, path);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Like added successfully!"); 
@@ -338,7 +333,6 @@ const ReviewCard = ({ review, }) => {
   const addLikeTeacher = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const path = 'alertsTeacher';
-    console.log("Path",path);
     const { error, alert } = await likeAlert(alertId, path);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Like added successfully!"); 
@@ -353,7 +347,6 @@ const ReviewCard = ({ review, }) => {
   const addLike = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const path = 'post';
-    console.log("Path",path);
     const { error, alert } = await likeAlert(alertId, path);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Like added successfully!"); 
@@ -435,13 +428,16 @@ const ReviewCard = ({ review, }) => {
       
       <div className="flex w-full  object-right-top justify-end text-xl font-semibold antialiased dark:text-highlight-dark text-highlight  ">
         { owner._id === profileId ? (<>
-          <button onClick={displayConfirmModal} type="button">
+        {school ? (<button onClick={displayConfirmModal} path='alertSchool' type="button">
           <RiDeleteBack2Line />
-        </button>
-        {/* <button onClick={handleOnEditClick} type="button">
-          <BsPencilSquare />
-        </button> */}
-          </>):(null)
+          </button>
+          ) : teacher ? (<button onClick={displayConfirmModal} path='alertTeacher' type="button">
+            <RiDeleteBack2Line />
+            </button>
+            ) : (<button onClick={displayConfirmModal} path='post' type="button">
+              <RiDeleteBack2Line />
+              </button>
+              )}</>):(null)
           }
         
       </div>
@@ -510,15 +506,34 @@ const ReviewCard = ({ review, }) => {
  
       </div>
     </div>
+      {school ? (<ConfirmModal
+        visible={showConfirmModal}
+        onCancel={hideConfirmModal}
+        onConfirm={handleDeleteConfirm}
+        busy={busy}
+        title="Are you sure?"
+        path="alertSchool"
+        subtitle="This action will remove this review permanently."
+      />) : teacher ? (<ConfirmModal
 
+        visible={showConfirmModal}
+        onCancel={hideConfirmModal}
+        onConfirm={handleDeleteConfirm}
+        busy={busy}
+        title="Are you sure?"
+        path="alertTeacher"
+        subtitle="This action will remove this review permanently."
+      />) : (
       <ConfirmModal
         visible={showConfirmModal}
         onCancel={hideConfirmModal}
         onConfirm={handleDeleteConfirm}
         busy={busy}
         title="Are you sure?"
+        path="post"
         subtitle="This action will remove this review permanently."
       />
+      )}
 
     </>
   );
