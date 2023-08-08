@@ -62,11 +62,11 @@ export const getReviewByUser = async (userId) => {
     return catchError(error);
   }
 };
-export const addComment = async (alertId, query) => {
-
+export const addComment = async (alertId, query, path) => {
+ 
   const token = getToken();
   try {
-    const { data } = await client.post(`/post/addcomment/${alertId}`, query, {
+    const { data } = await client.post(`/${path}/addcomment/${alertId}`, query, {
       headers: {
         authorization: "Bearer " + token,
       },
@@ -77,11 +77,11 @@ export const addComment = async (alertId, query) => {
   }
 }
 
-export const likeAlert = async (alertId) => {
+export const likeAlert = async (alertId, path) => {
   
     const token = getToken();
     try {
-      const { data } = await client.post(`/post/addlike/${alertId}`, {}, {
+      const { data } = await client.post(`/${path}/addlike/${alertId}`, {}, {
         headers: {
           authorization: "Bearer " + token,
         },
