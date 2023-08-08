@@ -58,8 +58,6 @@ export default function Feed() {
     
   };
 
-  console.log("following",following, "Schools", schoolsFollowing, "teachers", teachersFollowing);
-
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
     
@@ -270,6 +268,23 @@ const ReviewCard = ({ review, }) => {
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
   const alertId = review._id;
+  // const [path, setPath] = useState('post');
+
+  // const checkPath = (query) => {
+  // if (school !== undefined) {
+  //   setPath('alertsSchool');
+  //   handleSearchSubmit(query);
+  // }
+  // else if (teacher !== undefined ) {
+  //     setPath('alertsTeacher');
+  //     handleSearchSubmit(query);
+  // } else {
+  //     setPath('post');
+  //     handleSearchSubmit(query);
+  // }
+  // }
+  // console.log("Path",path);
+  
   
   const handleDeleteConfirm = async () => {
     setBusy(true);
@@ -282,13 +297,13 @@ const ReviewCard = ({ review, }) => {
     hideConfirmModal();
   };
 
-  const handleSearchSubmit = async (query) => {
+  const handleSearchSubmit = async (query, path) => {
     if (!isLoggedIn) return navigate("/auth/signIn");
     const content = {
       content: query
     };
     
-    const { error, alert } = await addComment(alertId, content);
+    const { error, alert } = await addComment(alertId, content, path);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Comment added successfully!");
     socket.emit('roomComment', alertId, alert);
@@ -305,9 +320,11 @@ const ReviewCard = ({ review, }) => {
 
   
 
-  const addLike = async () => {
+  const addLikeSchool = async () => {
     if (!isLoggedIn) return navigate("/auth/signIn");
-    const { error, alert } = await likeAlert(alertId);
+    const path = 'alertsSchool';
+    console.log("Path",path);
+    const { error, alert } = await likeAlert(alertId, path);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Like added successfully!"); 
     socket.emit('roomLike', alertId, alert);
@@ -318,6 +335,37 @@ const ReviewCard = ({ review, }) => {
     else setLiked(false);
     
   };
+  const addLikeTeacher = async () => {
+    if (!isLoggedIn) return navigate("/auth/signIn");
+    const path = 'alertsTeacher';
+    console.log("Path",path);
+    const { error, alert } = await likeAlert(alertId, path);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "Like added successfully!"); 
+    socket.emit('roomLike', alertId, alert);
+
+    const test =  alert.likes.filter((like) => like.user._id === profileId);
+      
+    if (test.length === 1 ) setLiked(true);
+    else setLiked(false);
+    
+  };
+  const addLike = async () => {
+    if (!isLoggedIn) return navigate("/auth/signIn");
+    const path = 'post';
+    console.log("Path",path);
+    const { error, alert } = await likeAlert(alertId, path);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "Like added successfully!"); 
+    socket.emit('roomLike', alertId, alert);
+
+    const test =  alert.likes.filter((like) => like.user._id === profileId);
+      
+    if (test.length === 1 ) setLiked(true);
+    else setLiked(false);
+    
+  };
+  
 
   const count = likes.length;
   const avatar = owner.avatar?.url;
@@ -365,16 +413,23 @@ const ReviewCard = ({ review, }) => {
             }
       
       <div className="ml-3 w-full">
-      <Link to={`/profile/${owner._id}`}>
-        <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
-        {school ?  (<span className="dark:text-highlight-dark text-highlight text-xs block">@{school?.SchoolName}</span>
-        ): teacher ? (<span className="dark:text-highlight-dark text-highlight text-xs block">@{teacher?.name}</span>
-        ): null
-        }
+        {school ? (<Link to={`/school/${school._id}`}>
+          <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
+          <span className="dark:text-highlight-dark text-highlight text-xs block">@{school?.SchoolName}</span>
+          </Link>
+          ) : teacher ? (<Link to={`/teacher/${teacher._id}`}>
+            <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
+            <span className="dark:text-highlight-dark text-highlight text-xs block">@{teacher?.name}</span>
+            </Link>
+            ) : (<Link to={`/profile/${owner._id}`}>
+                  <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
+                  <span className="dark:text-highlight-dark text-highlight text-xs block">@{owner?.name}</span>
+                  </Link>
+      )}
         
         
         
-        </Link>
+        
       </div>
      
       
@@ -402,11 +457,21 @@ const ReviewCard = ({ review, }) => {
     </div>
     <div className="flex items-center justify-between mx-4 mt-3 mb-2">
       <div className="flex gap-5  dark:text-white text-secondary">
+        {school ? ( <>
+          { liked ?  (<button onClick={addLikeSchool} type="button"><FaHeart className="text-highlight-dark "/></button>
+        ):(<button  onClick={addLikeSchool} type="button"><FaRegHeart/></button>)
+        }</>
+
+        ) : teacher ? ( <>
+          { liked ?  (<button onClick={addLikeTeacher}  type="button"><FaHeart className="text-highlight-dark "/></button>
+        ):(<button onClick={addLikeTeacher}  type="button"><FaRegHeart/></button>)
+        }</>
+        ) : (<>
+        
         { liked ?  (<button onClick={addLike} type="button"><FaHeart className="text-highlight-dark "/></button>
-        ):(        <button onClick={addLike} type="button">
-        <FaRegHeart/>
-      </button>)
-        }
+        ):(<button onClick={addLike} type="button"><FaRegHeart/></button>)
+        }</>
+        )}
  
         
         
@@ -424,9 +489,13 @@ const ReviewCard = ({ review, }) => {
     </div>
     {showComments ? (<>
       <div className="p-2">
-
-<PostCommentForm placeholder='Comment on Alert' inputClassName="border-1 dark:border-dark-subtle border-light-subtle  bg-transparent text-sm outline-none dark:focus:border-white focus:border-primary transition text-light-subtle dark:text-dark-subtle w-full  text-sm lg:text-md  "
-        onSubmit={handleSearchSubmit} /> 
+{school? (<PostCommentForm placeholder='Comment on Alert' inputClassName="border-1 dark:border-dark-subtle border-light-subtle  bg-transparent text-sm outline-none dark:focus:border-white focus:border-primary transition text-light-subtle dark:text-dark-subtle w-full  text-sm lg:text-md  "
+        onSubmit={handleSearchSubmit} path="alertsSchool" />
+        ) : teacher ? (<PostCommentForm placeholder='Comment on Alert' inputClassName="border-1 dark:border-dark-subtle border-light-subtle  bg-transparent text-sm outline-none dark:focus:border-white focus:border-primary transition text-light-subtle dark:text-dark-subtle w-full  text-sm lg:text-md  "  
+        onSubmit={handleSearchSubmit} path="alertsTeacher" />
+        ) : (<PostCommentForm placeholder='Comment on Alert' inputClassName="border-1 dark:border-dark-subtle border-light-subtle  bg-transparent text-sm outline-none dark:focus:border-white focus:border-primary transition text-light-subtle dark:text-dark-subtle w-full  text-sm lg:text-md  "
+        onSubmit={handleSearchSubmit} path="post" />
+        )}
   </div>
     
       <div className="font-semibold text-sm mx-4 mt-2 mb-4 dark:text-white text-secondary " >Comments:</div>

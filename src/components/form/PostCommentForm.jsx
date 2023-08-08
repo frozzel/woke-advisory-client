@@ -9,12 +9,13 @@ export default function AppSearchForm({
   inputClassName = defaultInputStyle,
   onSubmit,
   onReset,
+  path,
 }) {
   const [content, setValue] = useState("");
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    onSubmit(content);
+    onSubmit(content , path);
   };
 
   const handleReset = () => {
