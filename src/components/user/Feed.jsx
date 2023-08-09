@@ -13,10 +13,17 @@ import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
 import {RiDeleteBack2Line} from "react-icons/ri"
 import PostCommentForm from "../form/PostCommentForm";
-import { likeAlert } from "../../api/post";
+import { likeAlert, searchUser } from "../../api/post";
 import io from 'socket.io-client';
 import {TbMessage2Plus} from "react-icons/tb"
 import {IoAlert} from "react-icons/io5"
+import UserFollowing from "./UserFollowing";
+import { getProfile } from "../../api/user";
+import UserFollowers from "./UserFollowers";
+import UserFollowSchool from "./UserFollowSchool";
+import UserFollowTeacher from "./UserFollowTeacher";
+import AppSearchForm from "../form/AppSearchForm";
+import UserList from "./UserList";
 
 const socket = io(process.env.REACT_APP_API3);
 
@@ -36,6 +43,11 @@ export default function Feed() {
   const [schoolsFollowing, setSchoolsFollowing] = useState([]);
   const [teachersFollowing, setTeachersFollowing] = useState([]);
   const allAlerts = [...following, ...schoolsFollowing, ...teachersFollowing];
+  const [user, setUser] = useState({});
+  const [query, setQuery] = useState("");
+  const [resultNotFound, setResultNotFound] = useState(false);
+  const [teachers, setTeachers] = useState([]);
+
   
   const { userId } = useParams();
   const { authInfo } = useAuth();
@@ -45,18 +57,40 @@ export default function Feed() {
   
   const { updateNotification } = useNotification();
 
-
-
   const fetchReviews = async () => {
     const { alerts, error, following, schoolsFollowing, teachersFollowing } = await getAlertsSchool(userId);
-    
     if (error) return console.log("Reviews Error:", error);
     setReviews([...alerts]);
     setFollowing([...following]);
     setSchoolsFollowing([...schoolsFollowing]);
     setTeachersFollowing([...teachersFollowing]);
-    
   };
+
+  const handleSearchSubmit = (query) => {
+      setQuery(query);
+  };
+
+      const searchUsers = async (query, userId) => {
+      const { error, results } = await searchUser(query, userId);
+        console.log(results);
+      if (error) return updateNotification("error", error);
+      if (!results.length) {
+        setResultNotFound(true);
+  
+        return setTeachers([]);
+      }
+    
+      setResultNotFound(false);
+      setTeachers([...results]);
+    };
+
+  const fetchProfile = async () => {
+    const { error, user } = await getProfile(userId);
+    
+      if (error) return updateNotification("error", error);
+
+      setUser(user);
+    };
 
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
@@ -145,6 +179,15 @@ const handleOnRatingSuccess = (pass) => {
     });
   }, [following]);
 
+  useEffect(() => {
+    if (userId)fetchProfile() && window.scrollTo(0, 0);
+  }, [userId]);
+
+  useEffect(() => {
+      if (query.trim()) searchUsers(query, userId);
+
+      }, [query, userId]);
+
   
 
   useEffect(() => {
@@ -181,8 +224,9 @@ const handleOnRatingSuccess = (pass) => {
   return (<>
     <AddPostModal visible={showAddModal} onClose={hideRatingModal} onSuccess={handleOnRatingSuccess} />
 
-    <div className="dark:bg-primary bg-white  pb-10">
+    <div className="dark:bg-primary bg-white  pb-10 ">
       <Container className="xl:px-0  py-1">
+        <div className="grid grid-cols-2 ">
         <div className="mb-2 text-left  ">
           { isLoggedIn ? (  <button onClick={handleAddTeacher}
                 className=" mt-3 ml-2 bg-transparent text-2xl hover:text-good hover:dark:text-good transition text-light-subtle dark:text-dark-subtle "
@@ -192,10 +236,15 @@ const handleOnRatingSuccess = (pass) => {
           }
     
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px] whitespace-nowrap">
             <span className="text-light-subtle dark:text-dark-subtle font-normal" >
-              {/* Alerts:     */}
+              {/* Alerts:     */}            <AppSearchForm
+            
+            onSubmit={handleSearchSubmit}
+            placeholder="Search Users..."
+            inputClassName="border-2 border-light-subtle dark:border-dark-subtle  p-1 rounded bg-transparent text-sm outline-none focus:border-secondary focus:dark:border-white transition text-light-subtle dark:text-white w-30 md:w-30 sm:w-auto  sm:text-sm"
+          />
             </span>{"    "}{" "}
         
           </h1>
@@ -229,6 +278,18 @@ const handleOnRatingSuccess = (pass) => {
             ))}
           </div>
         )}
+        <div className="">
+        <SearchTeachers 
+          query={query}
+          resultNotFound={resultNotFound}
+          schools={teachers}/>
+        <UserFollowing user={user.following}/>
+        <UserFollowers user={user.followers}/>
+        <UserFollowSchool user={user.schoolsFollowing}/>
+        <UserFollowTeacher user={user.teachersFollowing}/>
+        </div>
+        
+        </div>
       </Container>
 
       <ConfirmModal
@@ -246,7 +307,9 @@ const handleOnRatingSuccess = (pass) => {
         onSuccess={handleOnReviewUpdate}
         onClose={hideEditModal}
       />
-    </div></>
+    </div>
+    
+    </>
   );
 }
 
@@ -264,26 +327,32 @@ const ReviewCard = ({ review, }) => {
   const [likes, setLikes] = useState(review.likes);
   const [liked, setLiked] = useState(review.likes.filter((like) => like.user._id === profileId).length > 0);
   const alertId = review._id;
-  const [path, setPath] = useState('post');
 
-  const checkPath = (query) => {
-  if (school !== undefined) {
-    setPath('alertsSchool');
-    handleSearchSubmit(query);
-  }
-  else if (teacher !== undefined ) {
-      setPath('alertsTeacher');
-      handleSearchSubmit(query);
-  } else {
-      setPath('post');
-      handleSearchSubmit(query);
-  }
-  }
-  
-  
   
   const handleDeleteConfirm = async () => {
-    await checkPath();
+    const path = 'post';
+    setBusy(true);
+    const { error, alerts, message } = await deleteReview(review._id, path);
+    setBusy(false);
+    if (error) return updateNotification("error", error);
+    socket.emit('roomDelete', owner._id, alerts);
+    updateNotification("success", message);
+    hideConfirmModal();
+  };
+
+  const handleDeleteConfirmSchool = async () => {
+    const path = 'alertsSchool';
+    setBusy(true);
+    const { error, alerts, message } = await deleteReview(review._id, path);
+    setBusy(false);
+    if (error) return updateNotification("error", error);
+    socket.emit('roomDelete', owner._id, alerts);
+    updateNotification("success", message);
+    hideConfirmModal();
+  };
+
+  const handleDeleteConfirmTeacher = async () => {
+    const path = 'alertsTeacher';
     setBusy(true);
     const { error, alerts, message } = await deleteReview(review._id, path);
     setBusy(false);
@@ -386,7 +455,7 @@ const ReviewCard = ({ review, }) => {
 
 
     <div className=" ">
-  <div className="bg-transparent border  max-w-lg border-light-subtle dark:border-dark-subtle">
+  <div className="bg-transparent border  lg:max-w-[95%] max-w-full border-light-subtle dark:border-dark-subtle mr-1 ml-1 align-center">
     <div className="flex items-center  px-4 py-3 ">
     
     {school ? (<div className="flex items-center justify-center ">
@@ -509,7 +578,7 @@ const ReviewCard = ({ review, }) => {
       {school ? (<ConfirmModal
         visible={showConfirmModal}
         onCancel={hideConfirmModal}
-        onConfirm={handleDeleteConfirm}
+        onConfirm={handleDeleteConfirmSchool}
         busy={busy}
         title="Are you sure?"
         path="alertSchool"
@@ -518,7 +587,7 @@ const ReviewCard = ({ review, }) => {
 
         visible={showConfirmModal}
         onCancel={hideConfirmModal}
-        onConfirm={handleDeleteConfirm}
+        onConfirm={handleDeleteConfirmTeacher}
         busy={busy}
         title="Are you sure?"
         path="alertTeacher"
@@ -545,3 +614,22 @@ const CommentCard = ({ comment }) => {
   );
 
 }
+
+const SearchTeachers= ({query, schools, resultNotFound}) =>{
+  return (<>
+    <div className="dark:bg-primary bg-white  py-8">
+    <Container className="px-2 xl:p-0">
+    {query ? (<>
+       <h1 className="text-2xl dark:text-white text-secondary font-semibold mb-4">
+       Search Results:  <span className="text-light-subtle dark:text-dark-subtle"> <span></span> "{query}<span>"</span></span></h1>
+      <NotFoundText text="Record not found!" visible={resultNotFound} />
+      <UserList schools={schools}  />
+      </>):(null)}
+      
+    </Container>
+    </div>
+  
+  
+  </>
+  )
+  }

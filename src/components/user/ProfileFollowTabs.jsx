@@ -23,26 +23,26 @@ export default function ProfileReviewTabs({user}) {
             label: "Following",
             value: "Following",
             icon: FaUserGroup,
-            desc: <UserFollowing user={user.following}/>,
+            desc: <div className="py-8"><UserFollowing user={user.following}/></div>,
           },
         {
           label: "Followers",
           value: "Followers",
           icon: FaUsers,
-          desc: <UserFollowers user={user.followers}/>,
+          desc: <div className="py-8"><UserFollowers user={user.followers} /></div>,
         },
 
         {
           label: "Schools",
           value: "Schools",
           icon: FaSchoolCircleExclamation,
-          desc: <UserFollowSchool user={user.schoolsFollowing}/>,
+          desc: <div className="py-8"><UserFollowSchool user={user.schoolsFollowing}/></div>,
         },
         {
             label: "Teachers",
             value: "Teachers",
             icon: MdOutlineCastForEducation,
-            desc: <UserFollowTeacher user={user.teachersFollowing}/>,
+            desc: <div className="py-8"><UserFollowTeacher user={user.teachersFollowing}/></div>,
           },
       ];
   return (<>

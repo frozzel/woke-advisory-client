@@ -91,3 +91,14 @@ export const likeAlert = async (alertId, path) => {
       return catchError(error);
     }
 }
+
+export const searchUser = async (val, userId) => {
+
+  try {
+    const { data } = await client(`/post/search/`+userId+`/?name=` + val);
+    
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};

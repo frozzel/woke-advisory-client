@@ -8,7 +8,7 @@ export default function UserFollowSchool({user}) {
 
   return (
     <div className="dark:bg-primary bg-white  pb-10">
-      <Container className="xl:px-0 px-2 py-8">
+      <Container className="xl:px-0 px-2 ">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
@@ -52,7 +52,7 @@ const ReviewCard = ({ review, }) => {
                 className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover  "
                 src={avatar.url}
                 alt="{name}"
-              />):(<IoSchool className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2 "/>)
+              />):(<div className="flex items-center "><IoSchool className="w-18 h-18 text-2xl m-1 md:text-4xl md:m-2 text-primary dark:text-dark-subtle "/></div>)
             }
   
     <div className="px-2">
