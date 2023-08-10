@@ -24,6 +24,7 @@ import UserFollowSchool from "./UserFollowSchool";
 import UserFollowTeacher from "./UserFollowTeacher";
 import AppSearchForm from "../form/AppSearchForm";
 import UserList from "./UserList";
+import FeedTabs from "./FeedTabs";
 
 const socket = io(process.env.REACT_APP_API3);
 
@@ -43,10 +44,10 @@ export default function Feed() {
   const [schoolsFollowing, setSchoolsFollowing] = useState([]);
   const [teachersFollowing, setTeachersFollowing] = useState([]);
   const allAlerts = [...following, ...schoolsFollowing, ...teachersFollowing];
-  const [user, setUser] = useState({});
-  const [query, setQuery] = useState("");
-  const [resultNotFound, setResultNotFound] = useState(false);
-  const [teachers, setTeachers] = useState([]);
+  // const [user, setUser] = useState({});
+  // const [query, setQuery] = useState("Wally");
+  // const [resultNotFound, setResultNotFound] = useState(false);
+  // const [teachers, setTeachers] = useState([]);
 
   
   const { userId } = useParams();
@@ -66,31 +67,31 @@ export default function Feed() {
     setTeachersFollowing([...teachersFollowing]);
   };
 
-  const handleSearchSubmit = (query) => {
-      setQuery(query);
-  };
+  // const handleSearchSubmit = (query) => {
+  //     setQuery(query);
+  // };
 
-      const searchUsers = async (query, userId) => {
-      const { error, results } = await searchUser(query, userId);
-        console.log(results);
-      if (error) return updateNotification("error", error);
-      if (!results.length) {
-        setResultNotFound(true);
+    //   const searchUsers = async (query, userId) => {
+    //   const { error, results } = await searchUser(query, userId);
+    //     console.log(results);
+    //   if (error) return updateNotification("error", error);
+    //   if (!results.length) {
+    //     setResultNotFound(true);
   
-        return setTeachers([]);
-      }
+    //     return setTeachers([]);
+    //   }
     
-      setResultNotFound(false);
-      setTeachers([...results]);
-    };
+    //   setResultNotFound(false);
+    //   setTeachers([...results]);
+    // };
 
-  const fetchProfile = async () => {
-    const { error, user } = await getProfile(userId);
+  // const fetchProfile = async () => {
+  //   const { error, user } = await getProfile(userId);
     
-      if (error) return updateNotification("error", error);
+  //     if (error) return updateNotification("error", error);
 
-      setUser(user);
-    };
+  //     setUser(user);
+  //   };
 
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
@@ -179,14 +180,14 @@ const handleOnRatingSuccess = (pass) => {
     });
   }, [following]);
 
-  useEffect(() => {
-    if (userId)fetchProfile() && window.scrollTo(0, 0);
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId)fetchProfile() && window.scrollTo(0, 0);
+  // }, [userId]);
 
-  useEffect(() => {
-      if (query.trim()) searchUsers(query, userId);
+  // useEffect(() => {
+  //     if (query.trim()) searchUsers(query, userId);
 
-      }, [query, userId]);
+  //     }, [query, userId]);
 
   
 
@@ -226,7 +227,11 @@ const handleOnRatingSuccess = (pass) => {
 
     <div className="dark:bg-primary bg-white  pb-10 ">
       <Container className="xl:px-0  py-1">
-        <div className="grid grid-cols-2 ">
+       
+        {/* <FeedTabs  user={user}/> */}
+        
+
+        <div className="">
         <div className="mb-2 text-left  ">
           { isLoggedIn ? (  <button onClick={handleAddTeacher}
                 className=" mt-3 ml-2 bg-transparent text-2xl hover:text-good hover:dark:text-good transition text-light-subtle dark:text-dark-subtle "
@@ -236,15 +241,14 @@ const handleOnRatingSuccess = (pass) => {
           }
     
         </div>
-        <div className="flex justify-between items-center ">
+        <div className="lg:flex justify-between items-center hidden">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px] whitespace-nowrap">
             <span className="text-light-subtle dark:text-dark-subtle font-normal" >
-              {/* Alerts:     */}            <AppSearchForm
-            
+            {/* <AppSearchForm
             onSubmit={handleSearchSubmit}
-            placeholder="Search Users..."
+            placeholder="Search Username..."
             inputClassName="border-2 border-light-subtle dark:border-dark-subtle  p-1 rounded bg-transparent text-sm outline-none focus:border-secondary focus:dark:border-white transition text-light-subtle dark:text-white w-30 md:w-30 sm:w-auto  sm:text-sm"
-          />
+          /> */}
             </span>{"    "}{" "}
         
           </h1>
@@ -272,22 +276,23 @@ const handleOnRatingSuccess = (pass) => {
 
           </div>
         ) : (
-          <div className=" space-y-3  mt-3">
+          <div className=" space-y-3  mt-3 ">
             {reviews.map((review) => (
               <ReviewCard review={review} key={review._id} />
             ))}
           </div>
         )}
-        <div className="">
-        <SearchTeachers 
-          query={query}
-          resultNotFound={resultNotFound}
-          schools={teachers}/>
-        <UserFollowing user={user.following}/>
-        <UserFollowers user={user.followers}/>
-        <UserFollowSchool user={user.schoolsFollowing}/>
-        <UserFollowTeacher user={user.teachersFollowing}/>
-        </div>
+        {/* <div className="">
+          <SearchTeachers 
+            query={query}
+            resultNotFound={resultNotFound}
+            schools={teachers}/>
+          
+          <UserFollowing user={user.following}/>
+          <UserFollowers user={user.followers}/>
+          <UserFollowSchool user={user.schoolsFollowing}/>
+          <UserFollowTeacher user={user.teachersFollowing}/>
+        </div> */}
         
         </div>
       </Container>
@@ -455,7 +460,7 @@ const ReviewCard = ({ review, }) => {
 
 
     <div className=" ">
-  <div className="bg-transparent border  lg:max-w-[95%] max-w-full border-light-subtle dark:border-dark-subtle mr-1 ml-1 align-center">
+  <div className="bg-transparent border  lg:max-w-[95%] max-w-lg border-light-subtle dark:border-dark-subtle mr-1 ml-1 align-center">
     <div className="flex items-center  px-4 py-3 ">
     
     {school ? (<div className="flex items-center justify-center ">
@@ -485,7 +490,7 @@ const ReviewCard = ({ review, }) => {
             </Link>
             ) : (<Link to={`/profile/${owner._id}`}>
                   <span className="text-sm font-semibold antialiased block leading-tight dark:text-white text-secondary">{owner.name}</span>
-                  <span className="dark:text-highlight-dark text-highlight text-xs block">@{owner?.name}</span>
+                  <span className="dark:text-highlight-dark text-highlight text-xs block">@{owner?.username}</span>
                   </Link>
       )}
         

@@ -6,44 +6,33 @@ import {
     Tab,
     TabPanel,
   } from "@material-tailwind/react";
-import { BiMoviePlay } from "react-icons/bi";
-import {BiCameraMovie} from "react-icons/bi";
-import {IoSchool} from "react-icons/io5";
-import {FaRegAddressCard} from "react-icons/fa";
-import UserReviews from "./UserReviews";
-import UserReviewsTv from "./UserReviewsTv";
-import UserReviewsSchool from "./UserReviewsSchool";
-import UserReviewsTeacher from "./UserReviewsTeacher";
-import {FaUserGroup} from "react-icons/fa6";
+import { FaUserGroup } from "react-icons/fa6";
+import {MdOutlineCastForEducation} from "react-icons/md";
+import {MdOutlineRssFeed} from "react-icons/md";
+import FeedSearch from './FeedSearch';
+import Feed from './Feed';
 
-export default function ProfileReviewTabs() {
-    const [activeTab, setActiveTab] = React.useState("Movies");
+
+
+export default function FeedTabs({user}) {
+    const [activeTab, setActiveTab] = React.useState("Feed");
+
+
     const data = [
-        {
-            label: "Movies",
-            value: "Movies",
-            icon: FaUserGroup,
-            desc: <UserReviews/>,
-          },
-        {
-          label: "Tv Series",
-          value: "Tv Series",
-          icon: BiMoviePlay,
-          desc: <UserReviewsTv/>,
-        },
 
         {
-          label: "Schools",
-          value: "Schools",
-          icon: IoSchool,
-          desc: <UserReviewsSchool/>,
-        },
-        {
-            label: "Teachers",
-            value: "Teachers",
-            icon: FaRegAddressCard,
-            desc: <UserReviewsTeacher/>,
+            label: "Feed",
+            value: "Feed",
+            icon: MdOutlineRssFeed,
+            desc: <Feed />,
           },
+        {
+            label: "Following",
+            value: "Following",
+            icon: FaUserGroup,
+            desc: <FeedSearch user={user}/>,
+          },
+
       ];
   return (<>
     <Tabs value={activeTab}>

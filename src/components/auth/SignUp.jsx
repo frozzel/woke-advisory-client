@@ -23,6 +23,7 @@ const validateUserInfo = ({ name, email, password }) => {
   if (!email.trim()) return { ok: false, error: "Email is missing!" };
   if (!isValidEmail(email)) return { ok: false, error: "Invalid email!" };
 
+
   if (!password.trim()) return { ok: false, error: "Password is missing!" };
   if (password.length < 8)
     return { ok: false, error: "Password must be 8 characters long!" };
@@ -31,8 +32,6 @@ const validateUserInfo = ({ name, email, password }) => {
 };
 export default function SignUp() {
 
- 
-  
   const { authInfo} = useAuth();
   const { isLoggedIn} = authInfo;
 
@@ -40,6 +39,7 @@ export default function SignUp() {
     name: "",
     email: "",
     password: "",
+    username: "",
   });
 
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ export default function SignUp() {
     });
 
   }
-  const { name, email, password } = userInfo;
+  const { name, email, password, username } = userInfo;
 
   useEffect(() => {
     if(isLoggedIn) navigate('/');
@@ -80,6 +80,7 @@ export default function SignUp() {
           <Title >Sign Up</Title>
           <FormInput value={name} onChange={handleChange} label="Name" name="name"  placeholder="Your Name" />
           <FormInput value={email} onChange={handleChange} label="Email" name="email"  placeholder="your@email.com" />
+          <FormInput value={username} onChange={handleChange} label="Username" name="username"  placeholder="Unique Username" />
           <FormInput value={password} onChange={handleChange} type='password' label="Password" name="password"  placeholder="********" />
           <Submit value="Sign Up"></Submit>
           <div className="flex justify-between">

@@ -39,7 +39,7 @@ export default function UserFollowing({user}) {
 
 const ReviewCard = ({ review, }) => {
   if (!review) return null;
-  const { name, _id, avatar, bio } = review;
+  const { name, _id, avatar, bio, username } = review;
 
   const trimTitle = (text = "") => {
     if (text.length <= 120) return text;
@@ -67,8 +67,8 @@ const ReviewCard = ({ review, }) => {
           {name}
           </h1>
           </Link>
-          <p className="text-primary dark:text-white opacity-70 whitespace-nowrap md:whitespace-nowrap">
-          Bio: {trimTitle(bio)}
+          <p className=" text-highlight dark:text-highlight-dark opacity-70 whitespace-nowrap md:whitespace-nowrap">
+          @{trimTitle(username)}
           </p>
     
     </div>

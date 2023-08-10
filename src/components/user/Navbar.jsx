@@ -100,7 +100,7 @@ export default function Navbar() {
                 <Link
                 className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
                 onClick={() => setIsNavOpen(false)}
-                to={"/feed/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
+                to={"/linkup/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
                 </>
                   ) : ( null
                   )}
@@ -147,7 +147,7 @@ export default function Navbar() {
                 <Link
                 className="flex items-center text-light-subtle dark:text-dark-subtle text-lg transition space-x-1"
                 onClick={() => setIsNavOpen(false)}
-                to={"/feed/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
+                to={"/linkup/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
                 </li>
                 </>
                   ) : ( null
