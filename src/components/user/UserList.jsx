@@ -12,10 +12,9 @@ const getNameInitial = (name = "") => {
   };
 
 export default function UserList({ title, schools = [] }) {
-  console.log(schools)
   
   if (!schools.length) return null;
-
+  
   return (
     <div>
       {title ? (
@@ -23,47 +22,50 @@ export default function UserList({ title, schools = [] }) {
           {title}
         </h1>
       ) : null}
-      <GridContainer>
+      {/* <GridContainer> */}
         {schools.map((school) => {
-          return <ListItem key={school.id} school={school} />;
+          return <ListItem key={school._id} school={school} />;
         })}
-      </GridContainer>
+      {/* </GridContainer> */}
     </div>
   );
 }
 
 const ListItem = ({ school }) => {
-    console.log(school)
   
     if (!school) return null;
-    const {name, avatar, about, grade, classType, id, reviewsTeacher} = school
+    const {name, avatar, id, username, } = school
     
     return (
-    <>
-      <Link to={`/teacher/${id}`}>
+      <>
       
-      <div className="flex flex-row space-x-3 mb-5">
-        <div className='  flex md:justify-center mb-2'>
-              {avatar ? (<img
-                  className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover rounded-full "
-                  src={avatar.url}
-                  alt="{name}"
-                />):( <div className="flex items-center justify-center w-20 h-20 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px] rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl md:text-4xl select-none">
-          {getNameInitial(name)}
-        </div>)
-              }
-            </div>
-        <div className=" ">
-          <h1 className="dark:text-white text-secondary font-semibold text-lg">
-            {name}
-          </h1>
-          <p className="text-light-subtle dark:text-dark-subtle">Grade: {grade} </p>
-          <p className="text-light-subtle dark:text-dark-subtle text-xs">Class Type: {classType}</p>
-         {/* <RatingStar rating={reviewsTeacher.ratingAvg} /> */}
-        </div>
+      <div className="bg-white shadow dark:shadow-white dark:bg-secondary rounded h-19 overflow-hidden">
+      <div className="flex relative ">
+              {avatar ? (<div className="flex items-center "><img
+                      className="w-20 h-20 md:min-w-[60px] md:min-h-[60px] md:max-w-[280px] aspect-square object-cover  "
+                      src={avatar.url}
+                      alt="{name}"
+                    /></div>):( <div className="flex items-center "><span className="w-20 h-20 md:min-w-[60px]  md:max-w-[280px] md:min-h-[60px]  md:max-h-[280px]  bg-light-subtle dark:bg-dark-subtle text-white text-2xl md:text-4xl select-none flex items-center justify-center">
+                    {getNameInitial(name)}
+                    </span>
+                    </div>)
+                  }
+        
+          <div className="px-2">
+                <Link to={"/profile/" + id} className="  hover:underline">  
+                <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
+                {name}
+                </h1>
+                </Link>
+                <p className="text-highlight dark:text-highlight-dark opacity-70 whitespace-nowrap md:whitespace-normal">
+                @{trimTitle(username)}
+                </p>
+          
+          </div>
+      
       </div>
-     
-      </Link>
-      </>
+      </div>
+      
+               </>
     );
   };

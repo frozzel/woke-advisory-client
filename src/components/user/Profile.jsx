@@ -105,8 +105,8 @@ export default function Profile() {
         </>
         )
     }
-    const { name, avatar, bio, schoolsFollowing, teachersFollowing, followers  } = user;
-    const userFollowing = user.following;
+    const { name, avatar, bio, username} = user;
+    
     
 
     if (userId === profile.id) {
@@ -127,6 +127,7 @@ export default function Profile() {
           </div>
           <div className=''>
               <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
+              <p className="text-highlight dark:text-highlight-dark flex justify-center lg:justify-normal">@{username}</p>
               <p className="text-light-subtle dark:text-dark-subtle flex  p-1 mb-3">{bio}</p>
               <button onClick={handleOnEditClick}
                 className="h-6 w-24 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded-full "
@@ -178,6 +179,7 @@ export default function Profile() {
           </div>
           <div className=''>
               <h1 className="text-dark dark:text-white font-semibold text-4xl mb-3 lg:mb-1 flex justify-center lg:justify-normal" >{name}</h1>
+              <p className="text-highlight dark:text-highlight-dark flex justify-center lg:justify-normal">@{username}</p>
               <p className="text-light-subtle dark:text-dark-subtle flex  p-1 mb-3">{bio}</p>
               <div className="grid grid-cols-2  mt-2">
       {isLoggedIn  ? (<>
