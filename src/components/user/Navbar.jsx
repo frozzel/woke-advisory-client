@@ -11,6 +11,10 @@ import AppSearchForm from "../form/AppSearchForm";
 import { useState } from "react";
 import {CgProfile} from "react-icons/cg";
 import {TbMessageHeart} from "react-icons/tb";
+import { Tooltip } from "@material-tailwind/react";
+import { AiFillHome } from "react-icons/ai";
+import { FaSchool } from "react-icons/fa";
+import { BiSolidCameraMovie } from "react-icons/bi";
 
 
 export default function Navbar() {
@@ -82,23 +86,35 @@ export default function Navbar() {
                     </svg>
                   </div>
                   <ul className="flex flex-col  min-h-[250px]">
-                    {/* <li className="border-b border-gray-400 my-8 uppercase">
-                      <a href="/about">About</a>
-                    </li>
-                    <li className="border-b border-gray-400 my-8 uppercase">
-                      <a href="/portfolio">Portfolio</a>
-                    </li>
-                    <li className="border-b border-gray-400 my-8 uppercase">
-                      <a href="/contact">Contact</a>
-                    </li> */}
+                  <li>
+                    <Link
+                        className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
+                        onClick={() => setIsNavOpen(false)}
+                        to={"/"}><AiFillHome /><span>Home</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                        className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
+                        onClick={() => setIsNavOpen(false)}
+                        to={"/school/home"}><FaSchool /><span>Schools</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                        className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
+                        onClick={() => setIsNavOpen(false)}
+                        to={"/movie/home"}><BiSolidCameraMovie /><span>Movies</span>
+                    </Link>
+                  </li>
                     <li >
                   {isLoggedIn ? (<>
                     <Link
-                className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
+                className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
                 onClick={() => setIsNavOpen(false)}
                 to={"/profile/" + profile?.id}><CgProfile /><span>Profile</span></Link>
                 <Link
-                className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
+                className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
                 onClick={() => setIsNavOpen(false)}
                 to={"/linkup/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
                 </>
@@ -111,7 +127,7 @@ export default function Navbar() {
                 <button
                   onClick={handleLogout}
                   // className="text-white font-semibold text-lg pt-1"
-                  className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-2"
+                  className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
                 ><FiLogOut />
                   <span>
                     Logout
@@ -120,7 +136,7 @@ export default function Navbar() {
                 ) : (
                 <Link
                   // className="text-white font-semibold text-lg pt-1"
-                  className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1"
+                  className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
                   to="/auth/signIn"
                   onClick={() => setIsNavOpen(false)}
                 ><FiLogIn />
@@ -135,47 +151,78 @@ export default function Navbar() {
                 </div>
               </section>
 
-              <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
+              <ul className="DESKTOP-MENU hidden space-x-8 lg:flex ">
+                <li className="place-self-center "> 
+                <Tooltip content="Home" className="z-40 bg-secondary rounded-full" placement="bottom">
+                    <Link
+                    className="flex  place-self-center text-dark-subtle text-lg hover:text-white transition space-x-1"
+                    to={"/"}><AiFillHome />
+                    </Link>
+                </Tooltip>
+                </li>
+                <li className="place-self-center "> 
+                <Tooltip content="Schools" className="z-40 bg-secondary rounded-full" placement="bottom">
+                    <Link
+                    className="flex  place-self-center text-dark-subtle text-lg hover:text-white transition space-x-1"
+                    to={"/school/home"}><FaSchool />
+                    </Link>
+                </Tooltip>
+                </li>
+                <li className="place-self-center "> 
+                <Tooltip content="Movies" className="z-40 bg-secondary rounded-full" placement="bottom">
+                    <Link
+                    className="flex  place-self-center text-dark-subtle text-lg hover:text-white transition space-x-1"
+                    to={"/movie/home"}><BiSolidCameraMovie />
+                    </Link>
+                </Tooltip>
+                </li>
                 
                   {isLoggedIn ? (<>
-                    <li >
-                    <Link
-                className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
-                to={"/profile/" + profile?.id}><CgProfile /><span>Profile</span></Link>
-                </li>
-                <li>
-                <Link
-                className="flex items-center text-light-subtle dark:text-dark-subtle text-lg transition space-x-1"
-                onClick={() => setIsNavOpen(false)}
-                to={"/linkup/" + profile?.id}><TbMessageHeart /><span>Linkup</span></Link>
-                </li>
+                    <li className="place-self-center "> 
+                        <Tooltip content="Profile" className="z-40 bg-secondary rounded-full" placement="bottom">
+                            <Link
+                            className="flex  place-self-center text-dark-subtle text-lg hover:text-white transition space-x-1"
+                            to={"/profile/" + profile?.id}><CgProfile />
+                            </Link>
+                        </Tooltip>
+                    </li>
+                    <li className="place-self-center ">
+                        <Tooltip content="Linkup" className="z-40 bg-secondary rounded-full" placement="bottom">
+                            <Link
+                            className="flex  place-self-center text-dark-subtle text-lg hover:text-white transition space-x-1"
+                            to={"/linkup/" + profile?.id}><TbMessageHeart />
+                            </Link>
+                        </Tooltip>
+                    </li>
+                
                 </>
                   ) : ( null
                   )}
 
                 
-                <li className="pr-1">
+                <li className="pr-1 place-self-center">
                 {isLoggedIn ? (<>
+                  <Tooltip content="Logout" className="z-40 bg-secondary rounded-full" placement="bottom">
+  
+                        
                 <button
                   onClick={handleLogout}
                   // className="text-white font-semibold text-lg pt-1"
                   className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
                 ><FiLogOut />
-                  <span>
-                    Logout
-                  </span>
-                </button></>
+              
+                </button>
+                </Tooltip>
+                </>
                 ) : (
+                  <Tooltip content="Login" className="z-40 bg-secondary rounded-full" placement="bottom">
                 <Link
                   // className="text-white font-semibold text-lg pt-1"
                   className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
                   to="/auth/signIn"
                 ><FiLogIn />
-                <span>
-                  Login     
-                </span>
-                  
                 </Link>
+                </Tooltip>
               )}
                 </li>
  
@@ -186,34 +233,7 @@ export default function Navbar() {
             </nav>
 
 
-            {/* <li className="pr-1">
-            {isLoggedIn ? (<>
-                <button
-                  onClick={handleLogout}
-                  // className="text-white font-semibold text-lg pt-1"
-                  className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
-                ><FiLogOut />
-                  <span>
-                    Logout
-                  </span>
-                </button>
-                <Link
-                className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
-                to={"/profile/" + profile.id}>Profile</Link></>
-              ) : (
-                <Link
-                  // className="text-white font-semibold text-lg pt-1"
-                  className="flex items-center text-dark-subtle text-lg hover:text-white transition space-x-1"
-                  to="/auth/signIn"
-                ><FiLogIn />
-                <span>
-                  Login     
-                </span>
-                  
-                </Link>
-              )}
-            </li>
-          </ul> */}
+        
         </div>
       </Container>
     </div>

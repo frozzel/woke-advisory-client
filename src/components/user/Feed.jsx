@@ -13,18 +13,12 @@ import { useNavigate } from "react-router-dom";
 import {FaHeart, FaRegHeart, FaRegComment} from "react-icons/fa"
 import {RiDeleteBack2Line} from "react-icons/ri"
 import PostCommentForm from "../form/PostCommentForm";
-import { likeAlert, searchUser } from "../../api/post";
+import { likeAlert } from "../../api/post";
 import io from 'socket.io-client';
 import {TbMessage2Plus} from "react-icons/tb"
 import {IoAlert} from "react-icons/io5"
-import UserFollowing from "./UserFollowing";
-import { getProfile } from "../../api/user";
-import UserFollowers from "./UserFollowers";
-import UserFollowSchool from "./UserFollowSchool";
-import UserFollowTeacher from "./UserFollowTeacher";
-import AppSearchForm from "../form/AppSearchForm";
 import UserList from "./UserList";
-import FeedTabs from "./FeedTabs";
+
 
 const socket = io(process.env.REACT_APP_API3);
 
@@ -44,10 +38,7 @@ export default function Feed() {
   const [schoolsFollowing, setSchoolsFollowing] = useState([]);
   const [teachersFollowing, setTeachersFollowing] = useState([]);
   const allAlerts = [...following, ...schoolsFollowing, ...teachersFollowing];
-  // const [user, setUser] = useState({});
-  // const [query, setQuery] = useState("Wally");
-  // const [resultNotFound, setResultNotFound] = useState(false);
-  // const [teachers, setTeachers] = useState([]);
+
 
   
   const { userId } = useParams();
@@ -67,31 +58,6 @@ export default function Feed() {
     setTeachersFollowing([...teachersFollowing]);
   };
 
-  // const handleSearchSubmit = (query) => {
-  //     setQuery(query);
-  // };
-
-    //   const searchUsers = async (query, userId) => {
-    //   const { error, results } = await searchUser(query, userId);
-    //     console.log(results);
-    //   if (error) return updateNotification("error", error);
-    //   if (!results.length) {
-    //     setResultNotFound(true);
-  
-    //     return setTeachers([]);
-    //   }
-    
-    //   setResultNotFound(false);
-    //   setTeachers([...results]);
-    // };
-
-  // const fetchProfile = async () => {
-  //   const { error, user } = await getProfile(userId);
-    
-  //     if (error) return updateNotification("error", error);
-
-  //     setUser(user);
-  //   };
 
   const handleOnEditClick = () => {
     const { id, content, rating} = profileOwnersReview;
@@ -180,15 +146,6 @@ const handleOnRatingSuccess = (pass) => {
     });
   }, [following]);
 
-  // useEffect(() => {
-  //   if (userId)fetchProfile() && window.scrollTo(0, 0);
-  // }, [userId]);
-
-  // useEffect(() => {
-  //     if (query.trim()) searchUsers(query, userId);
-
-  //     }, [query, userId]);
-
   
 
   useEffect(() => {
@@ -244,11 +201,7 @@ const handleOnRatingSuccess = (pass) => {
         <div className="lg:flex justify-between items-center hidden">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px] whitespace-nowrap">
             <span className="text-light-subtle dark:text-dark-subtle font-normal" >
-            {/* <AppSearchForm
-            onSubmit={handleSearchSubmit}
-            placeholder="Search Username..."
-            inputClassName="border-2 border-light-subtle dark:border-dark-subtle  p-1 rounded bg-transparent text-sm outline-none focus:border-secondary focus:dark:border-white transition text-light-subtle dark:text-white w-30 md:w-30 sm:w-auto  sm:text-sm"
-          /> */}
+
             </span>{"    "}{" "}
         
           </h1>
@@ -282,17 +235,7 @@ const handleOnRatingSuccess = (pass) => {
             ))}
           </div>
         )}
-        {/* <div className="">
-          <SearchTeachers 
-            query={query}
-            resultNotFound={resultNotFound}
-            schools={teachers}/>
-          
-          <UserFollowing user={user.following}/>
-          <UserFollowers user={user.followers}/>
-          <UserFollowSchool user={user.schoolsFollowing}/>
-          <UserFollowTeacher user={user.teachersFollowing}/>
-        </div> */}
+
         
         </div>
       </Container>

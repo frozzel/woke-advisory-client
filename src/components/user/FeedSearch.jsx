@@ -1,7 +1,7 @@
 import React from 'react'
 import AppSearchForm from "../form/AppSearchForm";
 import { searchUser } from '../../api/post';
-import { useAuth, useNotification } from "../../hooks";
+import {  useNotification } from "../../hooks";
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Container from '../Container';
@@ -13,7 +13,7 @@ import UserFollowers from './UserFollowers';
 import UserFollowing from "./UserFollowing";
 
 export default function FeedSearch({user}) {
-    const [query, setQuery] = React.useState("Dodgy");
+    const [query, setQuery] = React.useState("Dod");
     const [teachers, setTeachers] = React.useState([]);
     const [resultNotFound, setResultNotFound] = React.useState(false);
 
