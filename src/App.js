@@ -22,7 +22,7 @@ import SingleSchool from './components/user/SingleSchool';
 import MovieReviewsSchool from './components/user/MovieReviewsSchool';
 import SingleTeacher from './components/user/SingleTeacher';
 import MovieReviewsTeacher from './components/user/MovieReviewsTeacher';
-import Feed from './components/user/Feed';
+import MovieHome from './components/MovieHome';
 import LinkUp from './components/user/LinkUp';
 
 
@@ -55,6 +55,7 @@ export default function App() {
           <Route path="/movie/search" element={<SearchMovies />} />
           <Route path="/profile/:userId" element={<Profile />} />
           <Route path='/school/home' element={<SchoolHome />} />
+          <Route path='/movie/home' element={<MovieHome />} />
           <Route path="/school/search" element={<SearchSchools />} />
           <Route path='*' element={<NotFound/>} />
           <Route path='/linkup/:userId' element={<LinkUp/>} />
