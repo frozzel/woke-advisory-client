@@ -7,7 +7,6 @@ import {
     TabPanel,
   } from "@material-tailwind/react";
 import { FaUserGroup } from "react-icons/fa6";
-import {MdOutlineCastForEducation} from "react-icons/md";
 import {MdOutlineRssFeed} from "react-icons/md";
 import FeedSearch from './FeedSearch';
 import Feed from './Feed';
@@ -58,7 +57,7 @@ export default function FeedTabs({user}) {
     </TabsHeader>
     <TabsBody>
       {data.map(({ value, desc }) => (
-        <TabPanel key={value} value={value} className='dark:text-dark-subtle'>
+        <TabPanel key={value} value={value} className='dark:text-dark-subtle '>
           {desc}
         </TabPanel>
       ))}

@@ -36,19 +36,19 @@ export default function ProfileReviewTabs({user}) {
           label: "Schools",
           value: "Schools",
           icon: FaSchoolCircleExclamation,
-          desc: <div className="py-8"><UserFollowSchool user={user.schoolsFollowing}/></div>,
+          desc: <div className="py-8 "><UserFollowSchool user={user.schoolsFollowing}/></div>,
         },
         {
             label: "Teachers",
             value: "Teachers",
             icon: MdOutlineCastForEducation,
-            desc: <div className="py-8"><UserFollowTeacher user={user.teachersFollowing}/></div>,
+            desc: <div className="py-8 "><UserFollowTeacher user={user.teachersFollowing}/></div>,
           },
       ];
   return (<>
-    <Tabs value={activeTab}>
+    <Tabs value={activeTab} className="z-0">
     <TabsHeader
-      className="rounded-none border-b border-blue-gray-50 dark:border-dark-subtle dark:text-dark-subtle bg-transparent p-0 pt-10"
+      className="rounded-none border-b border-blue-gray-50 dark:border-dark-subtle dark:text-dark-subtle bg-transparent p-0 pt-10 "
       indicatorProps={{
         className: "bg-transparent border-b-2 border-blue-500 dark:border-white shadow-none rounded-none",
       }}

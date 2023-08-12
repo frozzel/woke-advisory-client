@@ -10,9 +10,9 @@ const getNameInitial = (name = "") => {
 export default function UserFollowing({user}) {
 
   return (
-    <div className="dark:bg-primary bg-white  pb-10">
+    <div className="dark:bg-primary bg-white  pb-10 ">
       <Container className="xl:px-0 px-2 ">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
             Following: 
@@ -39,7 +39,7 @@ export default function UserFollowing({user}) {
 
 const ReviewCard = ({ review, }) => {
   if (!review) return null;
-  const { name, _id, avatar, bio, username } = review;
+  const { name, _id, avatar, username } = review;
 
   const trimTitle = (text = "") => {
     if (text.length <= 120) return text;

@@ -87,7 +87,7 @@ export default function UserReviews() {
       <Container className="xl:px-0 px-2 py-8">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold dark:text-white text-secondary md:text-xl lg:text-2xl sm:text-[10px]">
-            <span className="text-light-subtle dark:text-dark-subtle font-normal">
+            <span className="text-light-subtle dark:text-dark-subtle font-normal ">
               Movie Reviews: 
             </span>{" "}
             {movieTitle}
