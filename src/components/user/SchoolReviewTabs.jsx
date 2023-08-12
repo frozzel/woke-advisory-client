@@ -73,7 +73,7 @@ export default function SchoolReviewTabs({refresh}) {
     </TabsHeader>
     <TabsBody>
       {data.map(({ value, desc }) => (
-        <TabPanel key={value} value={value} className='dark:text-dark-subtle'>
+        <TabPanel key={value} value={value} className='dark:text-dark-subtle '>
           {desc}
         </TabPanel>
       ))}

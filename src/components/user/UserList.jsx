@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import GridContainer from "../GridContainer";
-import RatingStar from "../RatingStar";
+
 
 const trimTitle = (text = "") => {
   if (text.length <= 20) return text;
@@ -34,7 +33,7 @@ export default function UserList({ title, schools = [] }) {
 const ListItem = ({ school }) => {
   
     if (!school) return null;
-    const {name, avatar, id, username, } = school
+    const {name, avatar, _id, username, } = school
     
     return (
       <>
@@ -52,7 +51,7 @@ const ListItem = ({ school }) => {
                   }
         
           <div className="px-2">
-                <Link to={"/profile/" + id} className="  hover:underline">  
+                <Link to={"/profile/" + _id} className="  hover:underline">  
                 <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
                 {name}
                 </h1>

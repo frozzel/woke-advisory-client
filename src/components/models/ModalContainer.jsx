@@ -14,7 +14,7 @@ export default function ModalContainer({
     if (ignoreContainer) return children;
 
     return (
-      <div className="dark:bg-primary bg-white rounded w-[50rem] h-[40rem] overflow-auto p-2 custom-scroll-bar">
+      <div className="dark:bg-primary bg-white rounded w-[50rem] h-[40rem] overflow-auto p-2 custom-scroll-bar ">
         {children}
       </div>
     );
