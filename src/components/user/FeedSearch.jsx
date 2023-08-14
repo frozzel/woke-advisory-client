@@ -13,7 +13,7 @@ import UserFollowers from './UserFollowers';
 import UserFollowing from "./UserFollowing";
 
 export default function FeedSearch({user}) {
-    const [query, setQuery] = React.useState("Dod");
+    const [query, setQuery] = React.useState("Creator");
     const [teachers, setTeachers] = React.useState([]);
     const [resultNotFound, setResultNotFound] = React.useState(false);
 
