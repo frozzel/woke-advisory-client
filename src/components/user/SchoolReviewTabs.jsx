@@ -8,13 +8,13 @@ import {
   } from "@material-tailwind/react";
 
 import {FaRegAddressCard} from "react-icons/fa";
-import UserReviewsTv from "./UserReviewsTv";
 import MovieReviewsSchool from './MovieReviewsSchool';
 import TeacherCreate from './TeacherCreate';
 import { FaRadiation } from "react-icons/fa";
 import { TbAlertTriangleFilled } from "react-icons/tb";
 import { MdHowToVote } from "react-icons/md";
 import AlertsSchool from './AlertsSchool';
+import Campaigns from './Campaigns';
 
 
 export default function SchoolReviewTabs({refresh}) {
@@ -43,9 +43,7 @@ export default function SchoolReviewTabs({refresh}) {
           label: "Campaigns",
           value: "Campaigns",
           icon: MdHowToVote,
-          desc: `We're not always in the position that we want to be at.
-          We're constantly growing. We're constantly making mistakes. We're
-          constantly trying to express ourselves and actualize our dreams.`,
+          desc: <Campaigns />,
         },
 
       ];
