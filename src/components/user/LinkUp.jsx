@@ -59,7 +59,7 @@ export default function LinkUp() {
                 <Feed/>
                 <FeedSearch user={user}/>
                 </div>
-                <div className="lg:hidden h-screen">
+                <div className="lg:hidden ">
                     <FeedTabs user={user}/>
                 </div>
                 

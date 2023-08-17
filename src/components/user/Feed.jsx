@@ -523,8 +523,6 @@ const ReviewCard = ({ review, }) => {
  
       </div>
     </div>
-
-    <div className="dark:bg-primary bg-white  pb-10 h-screen"></div>
       {school ? (<ConfirmModal
         visible={showConfirmModal}
         onCancel={hideConfirmModal}
@@ -564,3 +562,22 @@ const CommentCard = ({ comment }) => {
   );
 
 }
+
+const SearchTeachers= ({query, schools, resultNotFound}) =>{
+  return (<>
+    <div className="dark:bg-primary bg-white  py-8">
+    <Container className="px-2 xl:p-0">
+    {query ? (<>
+       <h1 className="text-2xl dark:text-white text-secondary font-semibold mb-4">
+       Search Results:  <span className="text-light-subtle dark:text-dark-subtle"> <span></span> "{query}<span>"</span></span></h1>
+      <NotFoundText text="Record not found!" visible={resultNotFound} />
+      <UserList schools={schools}  />
+      </>):(null)}
+      
+    </Container>
+    </div>
+  
+  
+  </>
+  )
+  }
