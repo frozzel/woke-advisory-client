@@ -24,7 +24,7 @@ export default function UserFollowers({user}) {
 
         </div>
 
-        <NotFoundText text="Not Following Anyone!" visible={!user?.length} />
+        <NotFoundText text="No Followers!" visible={!user?.length} />
 
       <div className="space-y-3 mt-3">
       {user?.map((review) => (

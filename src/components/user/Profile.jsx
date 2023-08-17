@@ -153,7 +153,7 @@ export default function Profile() {
       />
 
         <div className="z-10"><ProfileReviewTabs /></div>
-        <div className="z-10 "><ProfileFollowTabs  user={user}/></div>
+        {/* <div className="z-0 "><ProfileFollowTabs  user={user}/></div> */}
          
       </Container>
       
