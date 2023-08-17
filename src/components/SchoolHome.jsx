@@ -43,7 +43,7 @@ export default function SchoolHome() {
   return (
     <div className="dark:bg-primary bg-white min-h-screen">
     <Container className="px-2 xl:p-0">
-                        <div className="dark:text-white text-primary text-lg pt-2 outline-none"></div>
+      <div className="dark:text-white text-primary text-lg pt-2 outline-none"></div>
         <HeroSlideshowNews />
         <NotVerified />
         <div className="space-y-3 pt-3">

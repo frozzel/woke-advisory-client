@@ -45,7 +45,7 @@ export default function Navbar() {
               </button>
             </li>
             <li>
-              <AppSearchForm placeholder='Search Movies & TV' inputClassName="border-2 border-dark-subtle pr-1 rounded bg-transparent text-sm outline-none focus:border-white transition text-white sm:w-auto w-40 text-sm lg:text-md  "
+              <AppSearchForm placeholder='Search' inputClassName="border-2 border-dark-subtle pr-1 rounded bg-transparent text-sm outline-none focus:border-white transition text-white sm:w-auto w-40 text-sm lg:text-md  "
               onSubmit={handleSearchSubmit} />
               {/* <input
                 type="text"
@@ -93,13 +93,13 @@ export default function Navbar() {
                         to={"/"}><AiFillHome /><span>Home</span>
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                         className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
                         onClick={() => setIsNavOpen(false)}
                         to={"/school/home"}><FaSchool /><span>Schools</span>
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link
                         className="flex items-center text-light-subtle dark:text-dark-subtle text-6xl transition space-x-1 mb-4"
@@ -160,14 +160,14 @@ export default function Navbar() {
                     </Link>
                 </Tooltip>
                 </li>
-                <li className="place-self-center "> 
+                {/* <li className="place-self-center "> 
                 <Tooltip content="Schools" className="z-40 bg-secondary rounded-full" placement="bottom">
                     <Link
                     className="flex  place-self-center text-dark-subtle text-lg hover:text-white transition space-x-1"
                     to={"/school/home"}><FaSchool />
                     </Link>
                 </Tooltip>
-                </li>
+                </li> */}
                 <li className="place-self-center "> 
                 <Tooltip content="Movies" className="z-40 bg-secondary rounded-full" placement="bottom">
                     <Link

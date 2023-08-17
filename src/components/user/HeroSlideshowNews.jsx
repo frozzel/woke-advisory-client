@@ -127,6 +127,7 @@ export default function HeroSlidShowNews() {
     <div className="w-full flex">
       {/* Slide show section */}
       <div className="md:w-4/5 w-full aspect-video relative  overflow-hidden outline-none">
+        
         {/* current slide */}
         <Slide
           ref={slideRef}
