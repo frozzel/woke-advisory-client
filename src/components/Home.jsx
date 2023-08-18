@@ -92,7 +92,7 @@ export default function Home() {
         </div>
                   <div className="dark:text-highlight-dark text-highlight text-lg  outline-none text-center md:text-left">
           <IoSchool className="inline-block w-6 h-6 mr-2 mb-2" /> Search Schools
-        <AppSearchForm placeholder='example "Hope"' inputClassName="border-2 border-light-subtle dark:border-dark-subtle  p-1 rounded bg-transparent text-sm outline-none focus:border-secondary focus:dark:border-white transition text-light-subtle dark:text-white sm:w-auto w-80 sm:text-lg"
+        <AppSearchForm placeholder='example "Loudoun County High"' inputClassName="border-2 border-light-subtle dark:border-dark-subtle  p-1 rounded bg-transparent text-sm outline-none focus:border-secondary focus:dark:border-white transition text-light-subtle dark:text-white sm:w-auto w-80 sm:text-lg"
               onSubmit={handleSearchSubmit} />
               </div>
         
